@@ -730,21 +730,6 @@
             />
           </div>
 
-          <div class="form-group">
-            <label class="field-label" for="patInput">Token de Acceso GitHub (Repo Privado)</label>
-            <input
-              type="password"
-              id="patInput"
-              class="form-input"
-              placeholder="github_pat_..."
-              required
-              autocomplete="off"
-            />
-            <span class="field-hint">
-              Se conecta directo al repositorio <code>Uanify/propuesta-tombstone-mes</code> (<code>ops-data/ops-status.json</code>). No se envía a ningún servidor externo.
-            </span>
-          </div>
-
           <div class="form-group" style="flex-direction: row; align-items: center; gap: 8px; margin-bottom: 18px">
             <input type="checkbox" id="rememberChk" checked style="width: 17px; height: 17px; accent-color: var(--brand)" />
             <label for="rememberChk" style="font-size: 0.8rem; color: var(--body)">
@@ -753,22 +738,8 @@
           </div>
 
           <button type="submit" id="btnConnect" class="btn-primary btn-full">
-            Conectar al Panel Privado
+            Entrar al Panel
           </button>
-
-          <div class="accordion-box">
-            <button type="button" class="accordion-btn" onclick="toggleHelpAccordion()">
-              <span>¿Cómo crear tu token gratis ($0 USD) en 30 segundos?</span>
-              <span id="helpChevron">+</span>
-            </button>
-            <div id="helpContent" class="accordion-content">
-              <ol>
-                <li>En GitHub ve a <strong>Settings → Developer settings → Personal access tokens → Fine-grained tokens</strong>.</li>
-                <li>En <em>Repository access</em> elige <strong>Only select repositories</strong> y selecciona <code>Uanify/propuesta-tombstone-mes</code>.</li>
-                <li>En <em>Repository permissions → Contents</em> elige <strong>Read and write</strong>, genera y pégalo arriba.</li>
-              </ol>
-            </div>
-          </div>
         </form>
       </section>
     </main>
@@ -1146,12 +1117,12 @@
     <div id="modalSave" class="modal-backdrop">
       <div class="modal-box">
         <div class="modal-header">
-          <h3>Guardar Cambios en GitHub Privado</h3>
+          <h3>Guardar o Exportar Avances</h3>
           <button type="button" class="modal-close" onclick="closeModal('modalSave')">✕</button>
         </div>
         <form class="modal-body" onsubmit="commitToGitHub(event)">
           <p class="field-hint" style="margin-bottom: 12px">
-            Se enviará un commit a <code>Uanify/propuesta-tombstone-mes/ops-data/ops-status.json</code> validando el SHA para no sobrescribir avances de otra sesión.
+            Sincroniza directo a <code>Uanify/propuesta-tombstone-mes/ops-data/ops-status.json</code> (validando SHA), o bien descarga/copia el JSON para pasarlo a Claude o Antigravity.
           </p>
           <div class="form-group">
             <label class="field-label" for="commitMessageInput">Mensaje breve del avance</label>
@@ -1163,9 +1134,22 @@
               required
             />
           </div>
-          <div class="modal-footer" style="padding: 14px 0 0; border-top: 1px solid var(--border); background: transparent">
-            <button type="button" class="btn-secondary" onclick="closeModal('modalSave')">Cancelar</button>
-            <button type="submit" id="btnConfirmPush" class="btn-primary">Confirmar y Guardar</button>
+          <div class="form-group">
+            <label class="field-label" for="savePatInput">Token GitHub (opcional para escribir directo al repo)</label>
+            <input
+              type="password"
+              id="savePatInput"
+              class="form-input"
+              placeholder="github_pat_... (solo si deseas push directo desde aquí)"
+              autocomplete="off"
+            />
+          </div>
+          <div class="modal-footer" style="padding: 14px 0 0; border-top: 1px solid var(--border); background: transparent; flex-wrap: wrap">
+            <div style="display: flex; gap: 8px">
+              <button type="button" class="btn-secondary btn-sm" onclick="downloadLocalBackup()">Descargar JSON</button>
+              <button type="button" class="btn-secondary btn-sm" onclick="copyFullJson()">Copiar JSON</button>
+            </div>
+            <button type="submit" id="btnConfirmPush" class="btn-primary btn-sm">Confirmar y Guardar</button>
           </div>
         </form>
       </div>
@@ -1270,16 +1254,14 @@
         const sel = document.getElementById("actorSelect").value;
         const customName = document.getElementById("customActorName").value.trim();
         activeActor = sel === "Colaborador" ? customName || "Colaborador" : sel;
-        authToken = document.getElementById("patInput").value.trim();
-        if (!authToken) return;
 
         const btn = document.getElementById("btnConnect");
         btn.disabled = true;
-        btn.textContent = "Conectando...";
+        btn.textContent = "Cargando...";
 
         const ok = await fetchFromGitHub(false);
         btn.disabled = false;
-        btn.textContent = "Conectar al Panel Privado";
+        btn.textContent = "Entrar al Panel";
 
         if (ok) {
           if (document.getElementById("rememberChk").checked) {
@@ -1290,7 +1272,7 @@
           document.getElementById("loginView").style.display = "none";
           document.getElementById("appShell").classList.add("active");
           document.getElementById("activeActorPill").textContent = activeActor;
-          showToast("Conectado al repositorio privado de seguimiento.", "success");
+          showToast("Panel cargado correctamente.", "success");
         }
       }
 
@@ -1302,49 +1284,77 @@
         setDirty(false);
         document.getElementById("appShell").classList.remove("active");
         document.getElementById("loginView").style.display = "flex";
-        document.getElementById("patInput").value = "";
       }
 
       async function fetchFromGitHub(notify) {
         try {
           const url = `https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/contents/${FILE_PATH}?t=${Date.now()}`;
-          const res = await fetch(url, {
-            headers: {
-              Authorization: `Bearer ${authToken}`,
-              Accept: "application/vnd.github+json",
-            },
-          });
+          const headers = { Accept: "application/vnd.github+json" };
+          if (authToken) headers.Authorization = `Bearer ${authToken}`;
 
-          if (!res.ok) {
-            if (res.status === 401 || res.status === 403) {
-              showToast("Token inválido o sin permiso de lectura en Uanify/propuesta-tombstone-mes.", "error");
-            } else {
-              showToast(`Error al leer GitHub (${res.status}). Verifica acceso al repo privado.`, "error");
-            }
-            return false;
+          const res = await fetch(url, { headers });
+
+          if (res.ok) {
+            const data = await res.json();
+            currentSha = data.sha;
+            state = JSON.parse(decodeUtf8Base64(data.content));
+            setDirty(false);
+            renderAll();
+            if (notify) showToast("Estado actualizado desde GitHub.", "success");
+            return true;
           }
 
-          const data = await res.json();
-          currentSha = data.sha;
-          state = JSON.parse(decodeUtf8Base64(data.content));
-          setDirty(false);
-          renderAll();
-          if (notify) showToast("Estado actualizado desde GitHub.", "success");
-          return true;
+          // Fallback estático cuando la API pública excede rate-limit sin token
+          const fallbackRes = await fetch(`./${FILE_PATH}?t=${Date.now()}`);
+          if (fallbackRes.ok) {
+            state = await fallbackRes.json();
+            currentSha = "";
+            setDirty(false);
+            renderAll();
+            if (notify) showToast("Estado cargado desde copia publicada (solo lectura sin token).", "info");
+            return true;
+          }
+
+          showToast(`No se pudo cargar el estado (${res.status}).`, "error");
+          return false;
         } catch (err) {
-          showToast("Error de red al consultar GitHub API.", "error");
+          showToast("Error de red al cargar los datos del proyecto.", "error");
           return false;
         }
       }
 
       function openSaveModal() {
         if (!state) return;
+        const patEl = document.getElementById("savePatInput");
+        if (patEl) patEl.value = authToken || "";
         openModal("modalSave");
+      }
+
+      async function copyFullJson() {
+        if (!state) return;
+        try {
+          await navigator.clipboard.writeText(JSON.stringify(state, null, 2));
+          showToast("JSON completo copiado al portapapeles.", "success");
+        } catch {
+          showToast("No se pudo acceder al portapapeles.", "warning");
+        }
       }
 
       async function commitToGitHub(e) {
         e.preventDefault();
         if (!state) return;
+        const enteredToken = (document.getElementById("savePatInput")?.value || "").trim();
+        if (enteredToken) {
+          authToken = enteredToken;
+          if (localStorage.getItem(SESSION_KEY)) {
+            localStorage.setItem(SESSION_KEY, JSON.stringify({ actor: activeActor, token: authToken }));
+          }
+        }
+        if (!authToken) {
+          showToast("Para guardar directo en GitHub pega tu token arriba, o usa Descargar / Copiar JSON.", "warning");
+          return;
+        }
+
         const msg = document.getElementById("commitMessageInput").value.trim() || "Actualización operativa";
         const btn = document.getElementById("btnConfirmPush");
         btn.disabled = true;
@@ -1355,6 +1365,16 @@
 
         try {
           const url = `https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/contents/${FILE_PATH}`;
+          if (!currentSha) {
+            const headRes = await fetch(`${url}?t=${Date.now()}`, {
+              headers: { Authorization: `Bearer ${authToken}`, Accept: "application/vnd.github+json" },
+            });
+            if (headRes.ok) {
+              const headData = await headRes.json();
+              currentSha = headData.sha;
+            }
+          }
+
           const res = await fetch(url, {
             method: "PUT",
             headers: {
@@ -1840,9 +1860,9 @@
         if (!saved) return;
         try {
           const parsed = JSON.parse(saved);
-          if (parsed && parsed.token && parsed.actor) {
+          if (parsed && parsed.actor) {
             activeActor = parsed.actor;
-            authToken = parsed.token;
+            authToken = parsed.token || "";
             const ok = await fetchFromGitHub(false);
             if (ok) {
               document.getElementById("loginView").style.display = "none";
