@@ -1,0 +1,2168 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Propuesta Técnica y Comercial · Sistema MES — Tombstone Hats</title>
+    <meta
+      name="description"
+      content="Propuesta Técnica y Comercial del Sistema MES, Tablero Andon en Vivo y Conector SQL CONTPAQi Comercial para Tombstone Hats en San Francisco del Rincón, Guanajuato."
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400&family=Inter+Tight:wght@200;300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        --bg: #f5f2ee;
+        --surface: #ffffff;
+        --card: #faf8f5;
+        --fg: #1e1b18;
+        --body: #3f3a36;
+        --muted: #6e665f;
+        --border: #e5ded6;
+        --primary: #8b5e3c;
+        --primary-soft: rgba(139, 94, 60, 0.11);
+        --primary-on-dark: #d9a773;
+        --ok: #15803d;
+        --rail-w: 256px;
+        --ease: cubic-bezier(0.22, 1, 0.36, 1);
+      }
+
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+
+      html {
+        scroll-behavior: smooth;
+        scroll-snap-type: y mandatory;
+        background: var(--bg);
+        color: var(--fg);
+        font-family: "Inter Tight", system-ui, -apple-system, sans-serif;
+        letter-spacing: -0.01em;
+      }
+
+      html.doc-mode {
+        scroll-snap-type: none;
+        background: #ece7e0;
+      }
+
+      body {
+        background: var(--bg);
+        color: var(--fg);
+        overflow-x: hidden;
+      }
+
+      a,
+      button,
+      label,
+      input[type="checkbox"] {
+        cursor: pointer !important;
+      }
+
+      /* Top progress line */
+      .progress-bar {
+        position: fixed;
+        top: 0;
+        left: var(--rail-w);
+        right: 0;
+        height: 3px;
+        background: var(--primary);
+        transform-origin: left;
+        transform: scaleX(0.1428);
+        transition: transform 0.35s var(--ease);
+        z-index: 120;
+      }
+
+      /* ===================================================================
+         LEFT VERTICAL SIDEBAR (ÍNDICE VERTICAL FIJO A LA IZQUIERDA)
+         =================================================================== */
+      .left-rail {
+        position: fixed;
+        top: 0;
+        left: 0;
+        bottom: 0;
+        width: var(--rail-w);
+        z-index: 100;
+        background: var(--card);
+        border-right: 1px solid var(--border);
+        padding: 24px 18px 20px;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        gap: 16px;
+      }
+
+      .rail-top {
+        display: flex;
+        flex-direction: column;
+        gap: 15px;
+      }
+
+      .brand-block {
+        padding: 0 6px;
+      }
+      .brand {
+        font-size: 1.55rem;
+        font-weight: 600;
+        letter-spacing: -0.05em;
+        color: var(--fg);
+        text-decoration: none;
+        display: inline-block;
+        line-height: 1.05;
+      }
+      .brand span {
+        color: var(--primary);
+      }
+      .brand-sub {
+        font-family: "JetBrains Mono", monospace;
+        font-size: 0.62rem;
+        text-transform: uppercase;
+        letter-spacing: 0.14em;
+        color: var(--muted);
+        margin-top: 4px;
+      }
+
+      /* Switcher Presentación / Documento */
+      .mode-switch {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 4px;
+        background: #eae4dc;
+        padding: 4px;
+        border-radius: 10px;
+      }
+      .mode-btn {
+        border: none;
+        background: transparent;
+        padding: 7px 8px;
+        border-radius: 7px;
+        font-family: "Inter Tight", sans-serif;
+        font-size: 0.73rem;
+        font-weight: 500;
+        color: var(--muted);
+        transition: all 0.2s;
+      }
+      .mode-btn.active {
+        background: #ffffff;
+        color: var(--fg);
+        box-shadow: 0 2px 8px rgba(30, 27, 24, 0.09);
+      }
+
+      /* Vertical Nav Links */
+      .rail-nav-label {
+        font-family: "JetBrains Mono", monospace;
+        font-size: 0.61rem;
+        text-transform: uppercase;
+        letter-spacing: 0.16em;
+        color: var(--muted);
+        padding: 0 8px;
+        margin-bottom: 4px;
+      }
+
+      .rail-nav {
+        display: flex;
+        flex-direction: column;
+        gap: 3px;
+      }
+
+      .rail-link {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        padding: 8px 10px;
+        border-radius: 10px;
+        text-decoration: none;
+        font-size: 0.79rem;
+        font-weight: 500;
+        color: var(--muted);
+        border-left: 2px solid transparent;
+        transition: all 0.2s var(--ease);
+      }
+      .rail-link:hover {
+        color: var(--fg);
+        background: rgba(30, 27, 24, 0.04);
+      }
+      .rail-link.active {
+        color: var(--primary);
+        background: var(--primary-soft);
+        border-left-color: var(--primary);
+        font-weight: 600;
+      }
+      .rail-num {
+        font-family: "JetBrains Mono", monospace;
+        font-size: 0.67rem;
+        opacity: 0.78;
+        min-width: 18px;
+      }
+
+      .rail-bottom {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        border-top: 1px solid var(--border);
+        padding-top: 14px;
+      }
+
+      .rail-controls {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        background: #ffffff;
+        border: 1px solid var(--border);
+        border-radius: 10px;
+        padding: 5px 8px;
+      }
+      .ctrl-btn {
+        width: 28px;
+        height: 28px;
+        border-radius: 7px;
+        border: 1px solid transparent;
+        background: transparent;
+        color: var(--fg);
+        font-size: 0.82rem;
+        display: grid;
+        place-items: center;
+        transition: all 0.2s;
+      }
+      .ctrl-btn:hover {
+        background: var(--primary);
+        color: #ffffff;
+      }
+      .slide-counter {
+        font-family: "JetBrains Mono", monospace;
+        font-size: 0.7rem;
+        letter-spacing: 0.08em;
+        color: var(--muted);
+      }
+
+      .btn-demo {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 6px;
+        min-height: 40px;
+        padding: 0 14px;
+        border-radius: 10px;
+        font-size: 0.73rem;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+        text-decoration: none;
+        background: var(--fg);
+        color: #faf8f5;
+        transition: all 0.25s var(--ease);
+      }
+      .btn-demo:hover {
+        background: var(--primary);
+        color: #ffffff;
+      }
+
+      /* ===================================================================
+         MAIN CONTENT AREA (A LA DERECHA DEL ÍNDICE VERTICAL)
+         =================================================================== */
+      .deck-view,
+      .formal-doc-wrapper {
+        margin-left: var(--rail-w);
+        width: calc(100% - var(--rail-w));
+      }
+
+      .slide {
+        min-height: 100svh;
+        width: 100%;
+        scroll-snap-align: start;
+        scroll-snap-stop: always;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        padding: 46px 4.2vw;
+        border-bottom: 1px solid var(--border);
+        position: relative;
+        overflow: hidden;
+      }
+
+      .container {
+        width: min(1240px, 100%);
+        margin: 0 auto;
+        position: relative;
+        z-index: 2;
+      }
+
+      /* Slide Headers */
+      .slide-header {
+        display: flex;
+        align-items: flex-end;
+        justify-content: space-between;
+        gap: 24px;
+        margin-bottom: 24px;
+        padding-bottom: 16px;
+        border-bottom: 1px solid var(--border);
+      }
+      .slide-dark .slide-header {
+        border-bottom-color: rgba(255, 255, 255, 0.14);
+      }
+
+      .eyebrow {
+        font-family: "JetBrains Mono", monospace;
+        font-size: 0.7rem;
+        font-weight: 500;
+        text-transform: uppercase;
+        letter-spacing: 0.2em;
+        color: var(--primary);
+        margin-bottom: 8px;
+      }
+      .section-title {
+        font-size: clamp(2rem, 4.1vw, 3.65rem);
+        font-weight: 500;
+        line-height: 0.94;
+        letter-spacing: -0.045em;
+        color: var(--fg);
+      }
+      .section-title .dot {
+        color: var(--primary);
+      }
+      .section-title em {
+        font-family: "Cormorant Garamond", Georgia, serif;
+        font-style: italic;
+        font-weight: 400;
+        color: var(--primary);
+      }
+
+      .header-sub {
+        max-width: 370px;
+        font-size: 0.87rem;
+        line-height: 1.48;
+        color: var(--muted);
+        text-align: right;
+      }
+
+      /* SLIDE 1: HERO */
+      .slide-hero {
+        background: #1c1815;
+        color: #faf8f5;
+        justify-content: space-between;
+        padding: 40px 4.2vw;
+      }
+      .hero-bg {
+        position: absolute;
+        inset: 0;
+        background:
+          radial-gradient(circle at 78% 24%, rgba(139, 94, 60, 0.36) 0%, transparent 48%),
+          radial-gradient(circle at 18% 80%, rgba(217, 167, 115, 0.16) 0%, transparent 44%),
+          repeating-linear-gradient(
+            90deg,
+            rgba(255, 255, 255, 0.025) 0px,
+            rgba(255, 255, 255, 0.025) 1px,
+            transparent 1px,
+            transparent 72px
+          ),
+          repeating-linear-gradient(
+            0deg,
+            rgba(255, 255, 255, 0.025) 0px,
+            rgba(255, 255, 255, 0.025) 1px,
+            transparent 1px,
+            transparent 72px
+          ),
+          linear-gradient(135deg, #1b1613 0%, #27201b 52%, #181411 100%);
+        animation: slowZoom 22s ease-out forwards;
+      }
+      @keyframes slowZoom {
+        from {
+          transform: scale(1.06);
+        }
+        to {
+          transform: scale(1);
+        }
+      }
+      .hero-overlay {
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(
+          to top,
+          rgba(24, 20, 17, 0.9) 0%,
+          rgba(24, 20, 17, 0.25) 55%,
+          rgba(24, 20, 17, 0.48) 100%
+        );
+      }
+      .hero-content {
+        position: relative;
+        z-index: 2;
+        width: min(1240px, 100%);
+        margin: 0 auto;
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+      }
+      .telemetry-strip {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 16px;
+        padding: 12px 0;
+        border-top: 1px solid rgba(255, 255, 255, 0.22);
+        border-bottom: 1px solid rgba(255, 255, 255, 0.22);
+        font-family: "JetBrains Mono", monospace;
+        font-size: 0.67rem;
+        text-transform: uppercase;
+        letter-spacing: 0.12em;
+        color: #e2dad1;
+      }
+      .hero-title {
+        font-size: clamp(3rem, 7.6vw, 6.8rem);
+        font-weight: 200;
+        line-height: 0.88;
+        letter-spacing: -0.05em;
+        text-transform: uppercase;
+        margin: 16px 0 14px;
+      }
+      .hero-title em {
+        font-family: "Cormorant Garamond", Georgia, serif;
+        font-style: italic;
+        color: var(--primary-on-dark);
+        text-transform: none;
+      }
+
+      .hero-kpi-bar {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 14px;
+        margin-top: 16px;
+      }
+      .hero-kpi {
+        background: rgba(38, 32, 27, 0.76);
+        border: 1px solid rgba(255, 255, 255, 0.18);
+        backdrop-filter: blur(14px);
+        border-radius: 16px;
+        padding: 16px 18px;
+      }
+      .hero-kpi-val {
+        font-family: "JetBrains Mono", monospace;
+        font-size: 1.3rem;
+        font-weight: 500;
+        color: var(--primary-on-dark);
+      }
+      .hero-kpi-lbl {
+        font-size: 0.78rem;
+        color: #e5ded6;
+        margin-top: 4px;
+      }
+
+      /* Grids & Visual Cards */
+      .grid-12 {
+        display: grid;
+        grid-template-columns: repeat(12, 1fr);
+        gap: 16px;
+      }
+      .col-3 {
+        grid-column: span 3;
+      }
+      .col-4 {
+        grid-column: span 4;
+      }
+      .col-5 {
+        grid-column: span 5;
+      }
+      .col-6 {
+        grid-column: span 6;
+      }
+      .col-7 {
+        grid-column: span 7;
+      }
+      .col-8 {
+        grid-column: span 8;
+      }
+      .col-12 {
+        grid-column: span 12;
+      }
+
+      .stat-card {
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: 18px;
+        padding: 20px 20px;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        gap: 10px;
+        transition: transform 0.3s var(--ease), box-shadow 0.3s var(--ease);
+      }
+      .stat-card:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 16px 36px -24px rgba(30, 27, 24, 0.22);
+      }
+      .stat-card.dark {
+        background: #231e1a;
+        border-color: #231e1a;
+        color: #faf8f5;
+      }
+      .big-stat {
+        font-size: clamp(1.75rem, 2.9vw, 2.55rem);
+        font-weight: 500;
+        letter-spacing: -0.05em;
+        line-height: 0.96;
+        color: var(--primary);
+      }
+      .stat-card.dark .big-stat {
+        color: var(--primary-on-dark);
+      }
+      .stat-title {
+        font-size: 0.98rem;
+        font-weight: 600;
+        color: var(--fg);
+      }
+      .stat-card.dark .stat-title {
+        color: #ffffff;
+      }
+      .stat-desc {
+        font-size: 0.8rem;
+        line-height: 1.45;
+        color: var(--muted);
+      }
+      .stat-card.dark .stat-desc {
+        color: #d6cec5;
+      }
+
+      .badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 4px 11px;
+        border-radius: 999px;
+        font-family: "JetBrains Mono", monospace;
+        font-size: 0.63rem;
+        text-transform: uppercase;
+        letter-spacing: 0.12em;
+        background: var(--primary-soft);
+        color: var(--primary);
+        width: fit-content;
+      }
+      .badge.dark-badge {
+        background: rgba(217, 167, 115, 0.16);
+        color: var(--primary-on-dark);
+      }
+
+      /* Pill tags */
+      .chip-list {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 7px;
+      }
+      .chip {
+        padding: 5px 11px;
+        border-radius: 999px;
+        font-size: 0.73rem;
+        font-weight: 500;
+        background: var(--bg);
+        border: 1px solid var(--border);
+        color: var(--fg);
+      }
+
+      /* Comparison Mini-Grid */
+      .compare-grid {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 10px;
+        font-size: 0.77rem;
+        line-height: 1.42;
+      }
+      .compare-cell {
+        padding: 11px 13px;
+        border-radius: 12px;
+        background: var(--card);
+        border: 1px solid var(--border);
+      }
+      .compare-cell-title {
+        font-weight: 600;
+        color: var(--fg);
+        margin-bottom: 5px;
+        font-size: 0.8rem;
+      }
+      .compare-old {
+        color: var(--muted);
+        margin-bottom: 4px;
+      }
+      .compare-new {
+        color: var(--ok);
+        font-weight: 500;
+      }
+
+      /* Stage / Process Cards */
+      .stage-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 12px;
+      }
+      .stage-card {
+        background: #ffffff;
+        border: 1px solid var(--border);
+        border-radius: 15px;
+        padding: 16px 17px;
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+      }
+      .stage-top {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        font-family: "JetBrains Mono", monospace;
+        font-size: 0.66rem;
+        color: var(--primary);
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+      }
+      .stage-card h3 {
+        font-size: 0.98rem;
+        font-weight: 600;
+        color: var(--fg);
+      }
+      .stage-card p {
+        font-size: 0.78rem;
+        color: var(--muted);
+        line-height: 1.44;
+      }
+
+      /* Timeline Steps */
+      .timeline-grid {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 15px;
+      }
+      .phase-card {
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: 18px;
+        padding: 22px 19px;
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        gap: 14px;
+      }
+      .phase-num {
+        font-family: "JetBrains Mono", monospace;
+        font-size: 0.69rem;
+        text-transform: uppercase;
+        letter-spacing: 0.14em;
+        color: var(--primary);
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+      }
+      .phase-week {
+        background: #231e1a;
+        color: #faf8f5;
+        padding: 3px 10px;
+        border-radius: 999px;
+        font-size: 0.63rem;
+      }
+      .phase-card h3 {
+        font-size: 1.12rem;
+        font-weight: 600;
+        line-height: 1.2;
+      }
+      .phase-card p {
+        font-size: 0.81rem;
+        color: var(--muted);
+        line-height: 1.48;
+      }
+
+      /* Dark Slide & Interactive Quote */
+      .slide-dark {
+        background: #211c18;
+        color: #f5f2ee;
+      }
+      .slide-dark .eyebrow,
+      .slide-dark .section-title .dot,
+      .slide-dark .section-title em {
+        color: var(--primary-on-dark);
+      }
+      .slide-dark .section-title {
+        color: #f5f2ee;
+      }
+      .slide-dark .header-sub {
+        color: #bfb6ad;
+      }
+
+      .module-toggle {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+        padding: 11px 15px;
+        border-radius: 13px;
+        border: 1px solid #3c342e;
+        background: rgba(255, 255, 255, 0.035);
+        transition: all 0.22s;
+        margin-bottom: 8px;
+      }
+      .module-toggle.active {
+        border-color: var(--primary-on-dark);
+        background: rgba(217, 167, 115, 0.12);
+      }
+      .module-toggle input {
+        width: 17px;
+        height: 17px;
+        accent-color: var(--primary);
+        flex-shrink: 0;
+      }
+      .mono-price {
+        font-family: "JetBrains Mono", monospace;
+        font-weight: 500;
+        font-size: 0.86rem;
+        white-space: nowrap;
+      }
+
+      .quote-box {
+        background: #faf8f5;
+        color: #1e1b18;
+        border-radius: 20px;
+        padding: 24px 24px;
+        box-shadow: 0 28px 64px rgba(0, 0, 0, 0.34);
+      }
+      .quote-total {
+        font-size: clamp(2rem, 3.6vw, 3rem);
+        font-weight: 600;
+        letter-spacing: -0.05em;
+        color: var(--primary);
+        line-height: 1;
+        margin: 8px 0 4px;
+      }
+
+      /* ===================================================================
+         FORMAL PROPOSAL DOCUMENT (propuesta_comercial_tombstone_mes.md)
+         =================================================================== */
+      .formal-doc-wrapper {
+        display: none;
+        padding: 44px 4vw 64px;
+      }
+      html.doc-mode .deck-view {
+        display: none !important;
+      }
+      html.doc-mode .formal-doc-wrapper {
+        display: block;
+      }
+
+      .formal-sheet {
+        max-width: 960px;
+        margin: 0 auto;
+        background: #ffffff;
+        border: 1px solid var(--border);
+        border-radius: 16px;
+        padding: 50px 56px;
+        box-shadow: 0 24px 60px -28px rgba(30, 27, 24, 0.25);
+        color: var(--fg);
+      }
+
+      .doc-letterhead {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        gap: 24px;
+        padding-bottom: 22px;
+        border-bottom: 2px solid var(--fg);
+        margin-bottom: 26px;
+      }
+      .doc-brand {
+        font-size: 1.95rem;
+        font-weight: 600;
+        letter-spacing: -0.05em;
+        color: var(--fg);
+      }
+      .doc-brand span {
+        color: var(--primary);
+      }
+      .doc-meta-box {
+        text-align: right;
+        font-family: "JetBrains Mono", monospace;
+        font-size: 0.71rem;
+        color: var(--muted);
+        line-height: 1.6;
+      }
+
+      .doc-h1 {
+        font-size: 1.8rem;
+        font-weight: 600;
+        letter-spacing: -0.035em;
+        line-height: 1.16;
+        color: var(--fg);
+        margin-bottom: 18px;
+      }
+
+      .doc-meta-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 14px;
+        background: var(--card);
+        border: 1px solid var(--border);
+        border-radius: 12px;
+        padding: 16px 20px;
+        margin-bottom: 30px;
+      }
+      .doc-meta-item small {
+        display: block;
+        font-family: "JetBrains Mono", monospace;
+        font-size: 0.64rem;
+        text-transform: uppercase;
+        letter-spacing: 0.12em;
+        color: var(--muted);
+      }
+      .doc-meta-item strong {
+        display: block;
+        font-size: 0.88rem;
+        color: var(--fg);
+        margin-top: 3px;
+      }
+      .doc-meta-item strong.accent {
+        color: var(--primary);
+      }
+
+      .doc-section {
+        margin-bottom: 28px;
+        padding-bottom: 24px;
+        border-bottom: 1px solid var(--border);
+        scroll-margin-top: 28px;
+      }
+      .doc-section:last-child {
+        border-bottom: none;
+        margin-bottom: 0;
+        padding-bottom: 0;
+      }
+
+      .doc-h2 {
+        font-size: 1.18rem;
+        font-weight: 600;
+        letter-spacing: -0.02em;
+        color: var(--fg);
+        margin-bottom: 12px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+      .doc-h2::before {
+        content: "";
+        display: inline-block;
+        width: 8px;
+        height: 8px;
+        border-radius: 999px;
+        background: var(--primary);
+      }
+
+      .doc-h3 {
+        font-size: 0.95rem;
+        font-weight: 600;
+        color: var(--fg);
+        margin: 14px 0 8px;
+      }
+
+      .doc-p {
+        font-size: 0.91rem;
+        line-height: 1.6;
+        color: var(--body);
+        margin-bottom: 10px;
+      }
+
+      .doc-list {
+        padding-left: 20px;
+        display: flex;
+        flex-direction: column;
+        gap: 7px;
+      }
+      .doc-list li {
+        font-size: 0.9rem;
+        line-height: 1.58;
+        color: var(--body);
+      }
+      .doc-list strong {
+        color: var(--fg);
+      }
+
+      .doc-quote {
+        margin: 12px 0;
+        padding: 11px 16px;
+        border-left: 3px solid var(--primary);
+        background: var(--primary-soft);
+        border-radius: 0 8px 8px 0;
+        font-size: 0.86rem;
+        color: var(--fg);
+        line-height: 1.5;
+      }
+
+      .doc-table-wrap {
+        width: 100%;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+      }
+
+      .doc-table {
+        width: 100%;
+        border-collapse: collapse;
+        margin: 12px 0 16px;
+        font-size: 0.85rem;
+      }
+      .doc-table th {
+        text-align: left;
+        font-family: "JetBrains Mono", monospace;
+        font-size: 0.66rem;
+        text-transform: uppercase;
+        letter-spacing: 0.11em;
+        color: var(--muted);
+        background: var(--card);
+        padding: 10px 12px;
+        border-top: 1px solid var(--border);
+        border-bottom: 1px solid var(--fg);
+      }
+      .doc-table td {
+        padding: 11px 12px;
+        border-bottom: 1px solid var(--border);
+        color: var(--body);
+        vertical-align: top;
+        line-height: 1.48;
+      }
+      .doc-table tr.total-row td {
+        background: var(--card);
+        font-weight: 600;
+        color: var(--fg);
+      }
+      .doc-table .num-col {
+        text-align: right;
+        font-family: "JetBrains Mono", monospace;
+        white-space: nowrap;
+        color: var(--fg);
+      }
+
+      code {
+        font-family: "JetBrains Mono", monospace;
+        font-size: 0.84em;
+        background: var(--card);
+        padding: 2px 6px;
+        border-radius: 4px;
+        border: 1px solid var(--border);
+      }
+
+      @media (max-width: 1040px) {
+        html {
+          scroll-snap-type: none;
+        }
+        .left-rail {
+          position: static;
+          width: 100%;
+          border-right: none;
+          border-bottom: 1px solid var(--border);
+        }
+        .progress-bar {
+          left: 0;
+        }
+        .deck-view,
+        .formal-doc-wrapper {
+          margin-left: 0;
+          width: 100%;
+        }
+        .telemetry-strip,
+        .hero-kpi-bar,
+        .timeline-grid,
+        .compare-grid,
+        .stage-grid,
+        .doc-meta-grid {
+          grid-template-columns: 1fr;
+        }
+        .col-3,
+        .col-4,
+        .col-5,
+        .col-6,
+        .col-7,
+        .col-8 {
+          grid-column: span 12;
+        }
+        .slide-header {
+          flex-direction: column;
+          align-items: flex-start;
+        }
+        .header-sub {
+          text-align: left;
+          max-width: 100%;
+        }
+        .formal-sheet {
+          padding: 26px 18px;
+        }
+        .doc-letterhead {
+          flex-direction: column;
+          gap: 10px;
+        }
+        .doc-meta-box {
+          text-align: left;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="progress-bar" id="progressBar"></div>
+
+    <!-- =================================================================== -->
+    <!-- ÍNDICE VERTICAL FIJO A LA IZQUIERDA -->
+    <!-- =================================================================== -->
+    <aside class="left-rail" aria-label="Índice de la propuesta">
+      <div class="rail-top">
+        <div class="brand-block">
+          <a href="#s1" onclick="setDocMode(false)" class="brand">Tombstone<span>.</span></a>
+          <div class="brand-sub">Sistema MES · Uanify</div>
+        </div>
+
+        <div class="mode-switch" role="tablist" aria-label="Cambiar modo de lectura">
+          <button type="button" id="btnDeckMode" onclick="setDocMode(false)" class="mode-btn active">
+            Presentación
+          </button>
+          <button type="button" id="btnDocMode" onclick="setDocMode(true)" class="mode-btn">
+            Documento
+          </button>
+        </div>
+
+        <!-- Índice vertical para Modo Presentación (7 Láminas) -->
+        <div id="deckIndex">
+          <div class="rail-nav-label">Láminas</div>
+          <nav class="rail-nav" aria-label="Láminas de la presentación">
+            <a href="#s1" data-nav="0" class="rail-link active">
+              <span class="rail-num">01</span>
+              <span>Portada</span>
+            </a>
+            <a href="#s2" data-nav="1" class="rail-link">
+              <span class="rail-num">02</span>
+              <span>Hoy vs. Nuevo MES</span>
+            </a>
+            <a href="#s3" data-nav="2" class="rail-link">
+              <span class="rail-num">03</span>
+              <span>Flujo T1–T6 &amp; Cierre</span>
+            </a>
+            <a href="#s4" data-nav="3" class="rail-link">
+              <span class="rail-num">04</span>
+              <span>Calidad, Fotos &amp; Destajo</span>
+            </a>
+            <a href="#s5" data-nav="4" class="rail-link">
+              <span class="rail-num">05</span>
+              <span>CONTPAQi SQL &amp; Cloud</span>
+            </a>
+            <a href="#s6" data-nav="5" class="rail-link">
+              <span class="rail-num">06</span>
+              <span>Entrega (12 Sem)</span>
+            </a>
+            <a href="#s7" data-nav="6" class="rail-link">
+              <span class="rail-num">07</span>
+              <span>Inversión Modular</span>
+            </a>
+          </nav>
+        </div>
+
+        <!-- Índice vertical para Modo Documento Formal -->
+        <div id="docIndex" style="display: none">
+          <div class="rail-nav-label">Secciones</div>
+          <nav class="rail-nav" aria-label="Secciones de la propuesta formal">
+            <a href="#d1" class="rail-link"><span class="rail-num">01</span><span>Diagnóstico &amp; Comparativo</span></a>
+            <a href="#d2" class="rail-link"><span class="rail-num">02</span><span>Loteo &amp; Terminales T1–T6</span></a>
+            <a href="#d3" class="rail-link"><span class="rail-num">03</span><span>Calidad C1–C5 &amp; Cierre</span></a>
+            <a href="#d4" class="rail-link"><span class="rail-num">04</span><span>Destajo, Paros &amp; Fotos</span></a>
+            <a href="#d5" class="rail-link"><span class="rail-num">05</span><span>CONTPAQi SQL &amp; Cloud</span></a>
+            <a href="#d6" class="rail-link"><span class="rail-num">06</span><span>Cronograma (12 Sem)</span></a>
+            <a href="#d7" class="rail-link"><span class="rail-num">07</span><span>Inversión &amp; Pagos</span></a>
+          </nav>
+        </div>
+      </div>
+
+      <div class="rail-bottom">
+        <div class="rail-controls" id="slideControls">
+          <button type="button" class="ctrl-btn" onclick="stepSlide(-1)" title="Lámina anterior (↑ / ←)">←</button>
+          <span class="slide-counter" id="slideCounter">01 / 07</span>
+          <button type="button" class="ctrl-btn" onclick="stepSlide(1)" title="Siguiente lámina (↓ / →)">→</button>
+          <button type="button" class="ctrl-btn" onclick="toggleFull()" title="Pantalla completa">⛶</button>
+        </div>
+
+        <a
+          href="https://uanify.github.io/uanify-mes-sombreros/"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="btn-demo"
+        >
+          Ver Demo en Vivo ↗
+        </a>
+      </div>
+    </aside>
+
+    <!-- =================================================================== -->
+    <!-- VISTA 1: PRESENTACIÓN EJECUTIVA (7 LÁMINAS CONCISAS) -->
+    <!-- =================================================================== -->
+    <main class="deck-view">
+      <!-- LÁMINA 01: PORTADA -->
+      <section id="s1" class="slide slide-hero">
+        <div class="hero-bg"></div>
+        <div class="hero-overlay"></div>
+
+        <div class="hero-content">
+          <div class="telemetry-strip">
+            <span>Propuesta Técnica &amp; Comercial</span>
+            <span>Cliente · Tombstone Hats</span>
+            <span>San Francisco del Rincón, Gto.</span>
+            <span style="text-align: right">CONTPAQi 11.3.1 · Turno Único</span>
+          </div>
+
+          <div style="margin: auto 0; padding: 26px 0">
+            <span class="badge dark-badge">Sistema MES + Tablero Andon en Vivo + Puente SQL ($0 Licencias SDK)</span>
+            <h1 class="hero-title">
+              Control de Planta <em>&amp;</em><br />Trazabilidad QR.
+            </h1>
+            <p style="max-width: 660px; font-size: 1.12rem; color: #e5ded6; font-weight: 300; line-height: 1.5">
+              Digitalización integral desde la unión copa-falda en Prensas hasta el sombrero embarcado y su descarga automática en <strong>CONTPAQi Comercial</strong>, sin recapturas manuales.
+            </p>
+          </div>
+
+          <div class="hero-kpi-bar">
+            <div class="hero-kpi">
+              <div class="hero-kpi-val">$0 SDK</div>
+              <div class="hero-kpi-lbl">Puente directo SQL CONTPAQi</div>
+            </div>
+            <div class="hero-kpi">
+              <div class="hero-kpi-val">5 KPIs Vivos</div>
+              <div class="hero-kpi-lbl">WIP, Piezas, BOM, C1–C5 y OTIF</div>
+            </div>
+            <div class="hero-kpi">
+              <div class="hero-kpi-val">6 Estaciones</div>
+              <div class="hero-kpi-lbl">Terminales T1–T6 + Modo Rampa</div>
+            </div>
+            <div class="hero-kpi">
+              <div class="hero-kpi-val">12 Semanas</div>
+              <div class="hero-kpi-lbl">Implementación llave en mano</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- LÁMINA 02: DIAGNÓSTICO Y COMPARATIVO DIRECTO (HOY VS. NUEVA SOLUCIÓN) -->
+      <section id="s2" class="slide">
+        <div class="container">
+          <div class="slide-header">
+            <div>
+              <p class="eyebrow">01 — Diagnóstico Operativo: Situación Actual vs. Nueva Solución</p>
+              <h2 class="section-title">Cero papel, cero recaptura <em>&amp;</em> control vivo<span class="dot">.</span></h2>
+            </div>
+            <p class="header-sub">
+              Cada indicador nace de un escaneo óptico QR en piso al salir del departamento: nadie recaptura datos en oficina.
+            </p>
+          </div>
+
+          <div class="grid-12">
+            <div class="stat-card dark col-3">
+              <span class="badge dark-badge">Ahorro en Licencias</span>
+              <div class="big-stat">$0 MXN</div>
+              <div class="stat-title">Enlace SQL sin SDK</div>
+              <p class="stat-desc">Conecta pedidos, BOM, producto terminado e insumos sin consumir licencias de CONTPAQi.</p>
+            </div>
+
+            <div class="stat-card col-3">
+              <span class="badge">14 Departamentos</span>
+              <div class="big-stat">&lt; 1 seg</div>
+              <div class="stat-title">Visibilidad WIP por Pulmón</div>
+              <p class="stat-desc">Alertas visuales en ámbar y rojo cuando un almacén intermedio acumula cuellos de botella.</p>
+            </div>
+
+            <div class="stat-card col-3">
+              <span class="badge">Catálogo Maestro</span>
+              <div class="big-stat">Auto</div>
+              <div class="stat-title">Loteo Heredado por Modelo</div>
+              <p class="stat-desc">La división en lotes (60 pzas) y sublotes (15 pzas) viene predefinida por producto, no orden por orden.</p>
+            </div>
+
+            <div class="stat-card col-3">
+              <span class="badge">Corte de Viernes</span>
+              <div class="big-stat">1 Clic</div>
+              <div class="stat-title">Pre-Nómina a Excel</div>
+              <p class="stat-desc">Elimina de 4 a 6 horas semanales de conteo manual de libretas y disputas por piezas trabajadas.</p>
+            </div>
+
+            <div class="stat-card col-12" style="padding: 16px 20px; gap: 12px">
+              <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px">
+                <div style="display: flex; align-items: center; gap: 12px">
+                  <span class="badge">Comparativo Directo</span>
+                  <strong style="font-size: 0.9rem">Qué cambia en Tombstone Hats frente a la operación manual actual</strong>
+                </div>
+                <span style="font-family: 'JetBrains Mono', monospace; font-size: 0.7rem; color: var(--primary); font-weight: 600">
+                  5 KPIs Rectores en Tiempo Real
+                </span>
+              </div>
+
+              <div class="compare-grid">
+                <div class="compare-cell">
+                  <div class="compare-cell-title">1. Rastreo de Lotes y WIP</div>
+                  <div class="compare-old"><strong>Hoy:</strong> Recorridos a pie y conteo visual de torres en nave.</div>
+                  <div class="compare-new"><strong>Nuevo MES:</strong> Mapa vivo de 14 almacenes buffer por orden y talla.</div>
+                </div>
+                <div class="compare-cell">
+                  <div class="compare-cell-title">2. Sincronización CONTPAQi</div>
+                  <div class="compare-old"><strong>Hoy:</strong> Doble captura manual de órdenes, entradas y consumos.</div>
+                  <div class="compare-new"><strong>Nuevo MES:</strong> Puente SQL automático con Folio MES en observaciones.</div>
+                </div>
+                <div class="compare-cell">
+                  <div class="compare-cell-title">3. Calidad y Rechazos (C1–C5)</div>
+                  <div class="compare-old"><strong>Hoy:</strong> Lotes frenados o defectos sin historial de causa raíz.</div>
+                  <div class="compare-new"><strong>Nuevo MES:</strong> Reproceso, Segunda o Merma sin frenar piezas buenas.</div>
+                </div>
+                <div class="compare-cell">
+                  <div class="compare-cell-title">4. Destajo de 108 Operadores</div>
+                  <div class="compare-old"><strong>Hoy:</strong> Libretas físicas y conciliación manual cada viernes.</div>
+                  <div class="compare-new"><strong>Nuevo MES:</strong> Firma en cada escaneo y corte `.xlsx` instantáneo.</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- LÁMINA 03: FLUJO EXTREMO A EXTREMO (T1 A T6) Y PROTOCOLO DE CIERRE -->
+      <section id="s3" class="slide" style="background: var(--card)">
+        <div class="container">
+          <div class="slide-header">
+            <div>
+              <p class="eyebrow">02 — Recorrido Productivo en Nave (Terminales T1 a T6)</p>
+              <h2 class="section-title">Del pedido en CONTPAQi al <em>cierre en 1 clic</em><span class="dot">.</span></h2>
+            </div>
+            <p class="header-sub">
+              Tarjetas viajeras impresas en hoja carta estándar dentro de fundas plásticas cosidas: cero impresoras especiales.
+            </p>
+          </div>
+
+          <div class="grid-12">
+            <div class="col-7" style="display: flex; flex-direction: column; gap: 12px">
+              <div class="stage-grid">
+                <div class="stage-card">
+                  <div class="stage-top"><span>Paso 01</span><span>Oficina Ingeniería</span></div>
+                  <h3>Ingesta SQL &amp; Loteo por Producto</h3>
+                  <p>Sincroniza pedidos autorizados, asigna fecha compromiso OTIF, hereda lotes/sublotes del modelo e imprime tarjetas QR en hoja carta.</p>
+                </div>
+
+                <div class="stage-card">
+                  <div class="stage-top"><span>Paso 02</span><span>Terminales T1 · T2 · T3</span></div>
+                  <h3>Prensas, Endopado y Pintura</h3>
+                  <p>Copa + falda nacen como lote en Prensas (T1). Avanza en torres por baño con alambre (T2), refuerzo y cabina de pintura con C2 y C3 (T3).</p>
+                </div>
+
+                <div class="stage-card">
+                  <div class="stage-top"><span>Paso 03</span><span>Terminal T4 · Rampa</span></div>
+                  <h3>Hidráulicas y Modo Rampa</h3>
+                  <p>Al escanear el lote madre (60 pzas) en Modo Rampa, el sistema archiva esa tarjeta y activa la trazabilidad individual de sublotes (15 pzas).</p>
+                </div>
+
+                <div class="stage-card">
+                  <div class="stage-top"><span>Paso 04</span><span>Terminales T5 · T6</span></div>
+                  <h3>Adorno, Filtro C5 y Embarque</h3>
+                  <p>Verifica semáforo de tafiletes/toquillas (T5), coteja contra fotos oficiales, aprueba en C5 y consolida cajas máster en Embarque (T6).</p>
+                </div>
+              </div>
+
+              <div class="stat-card" style="padding: 15px 18px">
+                <div style="display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap">
+                  <div>
+                    <span class="badge">Regla de Piso en Almacenes Intermedios</span>
+                    <p style="font-size: 0.81rem; color: var(--body); margin-top: 5px">
+                      Al depositar el lote en el pulmón de salida y escanear su QR, <strong>sale del WIP actual, entra al siguiente departamento y registra la firma del operador</strong>.
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="stat-card dark col-5" style="justify-content: space-between">
+              <div>
+                <span class="badge dark-badge">Cierre Definitivo de Lote · Tablet T6</span>
+                <h3 style="font-size: 1.38rem; font-weight: 500; margin-top: 10px; line-height: 1.16">
+                  Cómo se liquida una orden de Adorno a CONTPAQi.
+                </h3>
+                <p class="stat-desc" style="margin-top: 6px">
+                  Proceso estructurado por actor que cierra producción, WIP, destajo e inventario comercial al mismo tiempo:
+                </p>
+              </div>
+
+              <div style="background: #faf8f5; color: #1e1b18; border-radius: 14px; padding: 15px; display: flex; flex-direction: column; gap: 7px">
+                <div style="font-family: 'JetBrains Mono', monospace; font-size: 0.63rem; text-transform: uppercase; letter-spacing: 0.13em; color: var(--primary)">
+                  4 Pasos de Liquidación Final
+                </div>
+                <div style="background: #ffffff; border: 1px solid var(--border); border-radius: 9px; padding: 8px 11px; font-size: 0.77rem; color: var(--body)">
+                  <strong>1. Inspector (C5):</strong> Escanea y aprueba cada sublote contra fotos oficiales.
+                </div>
+                <div style="background: #ffffff; border: 1px solid var(--border); border-radius: 9px; padding: 8px 11px; font-size: 0.77rem; color: var(--body)">
+                  <strong>2. Embarque:</strong> Reagrupa sublotes liberados en cajas máster de la orden.
+                </div>
+                <div style="background: #ffffff; border: 1px solid var(--border); border-radius: 9px; padding: 8px 11px; font-size: 0.77rem; color: var(--body)">
+                  <strong>3. Supervisor (1 Clic):</strong> Emite <strong>Vale QR</strong>, saca lote de WIP y marca OTIF.
+                </div>
+                <div style="background: #ffffff; border: 1px solid var(--border); border-radius: 9px; padding: 8px 11px; font-size: 0.77rem; color: var(--ok); font-weight: 500">
+                  <strong>4. Puente SQL:</strong> Entrada PT (Folio MES en observaciones) + Salida MP vs. BOM.
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- LÁMINA 04: CALIDAD C1-C5, VALOR AGREGADO Y DESTAJO -->
+      <section id="s4" class="slide">
+        <div class="container">
+          <div class="slide-header">
+            <div>
+              <p class="eyebrow">03 &amp; 04 — Calidad sin Detener Línea &amp; Herramientas de Alto ROI</p>
+              <h2 class="section-title">Filtros C1–C5, fichas con fotos <em>&amp;</em> destajo<span class="dot">.</span></h2>
+            </div>
+            <p class="header-sub">
+              Las piezas conformes continúan su avance sin congelar el lote mientras cada defecto queda trazado a su estación origen.
+            </p>
+          </div>
+
+          <div class="grid-12">
+            <div class="stat-card col-6" style="border-color: var(--primary); background: #ffffff">
+              <div style="display: flex; align-items: center; justify-content: space-between; gap: 10px; flex-wrap: wrap">
+                <span class="badge">5 Puntos Oficiales de Inspección</span>
+                <span style="font-family: 'JetBrains Mono', monospace; font-size: 0.7rem; color: var(--primary)">C1 · C2 · C3 · C4 · C5</span>
+              </div>
+
+              <div>
+                <h3 style="font-size: 1.4rem; font-weight: 600; letter-spacing: -0.025em">
+                  Aprobar o Rechazar con 3 Destinos Controlados
+                </h3>
+                <p class="stat-desc" style="margin-top: 6px">
+                  El inspector únicamente aprueba o rechaza. Ante no conformidad, Supervisión o Ingeniería de Calidad dictamina en pantalla:
+                </p>
+              </div>
+
+              <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 9px; background: var(--card); padding: 12px; border-radius: 12px; border: 1px solid var(--border)">
+                <div>
+                  <strong style="font-size: 0.75rem; text-transform: uppercase; color: var(--primary)">1. Reproceso</strong>
+                  <p style="font-size: 0.75rem; color: var(--body); margin-top: 3px">
+                    Retorna a la estación causante (Refuerzo, Pintura, Alineado o Adorno).
+                  </p>
+                </div>
+                <div>
+                  <strong style="font-size: 0.75rem; text-transform: uppercase; color: #b45309">2. Segunda</strong>
+                  <p style="font-size: 0.75rem; color: var(--body); margin-top: 3px">
+                    Separa piezas a almacén de remate; el lote principal sigue avanzando.
+                  </p>
+                </div>
+                <div>
+                  <strong style="font-size: 0.75rem; text-transform: uppercase; color: #b91c1c">3. Merma</strong>
+                  <p style="font-size: 0.75rem; color: var(--body); margin-top: 3px">
+                    Baja definitiva con causa raíz registrada contra lote y orden.
+                  </p>
+                </div>
+              </div>
+
+              <div class="chip-list">
+                <span class="chip">C1 Cuadros Corte</span>
+                <span class="chip">C2 Refuerzo (T3)</span>
+                <span class="chip">C3 Pintura (T3)</span>
+                <span class="chip">C4 Hidráulicas (T4)</span>
+                <span class="chip">C5 Final (T6)</span>
+              </div>
+            </div>
+
+            <div class="col-6" style="display: flex; flex-direction: column; gap: 12px">
+              <div class="stat-card" style="padding: 15px 18px">
+                <span class="badge">Mejora de Alto Valor 01 · Terminal T5</span>
+                <h3 style="font-size: 1.03rem; font-weight: 600">Semáforo Preventivo de Tafiletes y Toquillas</h3>
+                <p class="stat-desc">Muestra disponibilidad en vivo (Verde / Ámbar / Rojo) por talla y modelo antes de iniciar un lote en Adorno, evitando líneas detenidas por falta de habilitación.</p>
+              </div>
+
+              <div class="stat-card" style="padding: 15px 18px">
+                <span class="badge">Mejora de Alto Valor 02 · AWS S3</span>
+                <h3 style="font-size: 1.03rem; font-weight: 600">Ficha Técnica Visual Multiperspectiva</h3>
+                <p class="stat-desc">Despliega en Adorno y Calidad Final fotografías oficiales en alta resolución de la muestra aprobada (copa, falda, herraje, toquilla y doblado).</p>
+              </div>
+
+              <div class="stat-card" style="padding: 15px 18px">
+                <span class="badge">Mejora de Alto Valor 03 · Cero Login Operarios</span>
+                <h3 style="font-size: 1.03rem; font-weight: 600">Bitácora de Paros + Pre-Nómina Viernes a Excel</h3>
+                <p class="stat-desc">Cronómetro vivo de máquina detenida (horma, vapor, falla) y cálculo semanal automático <code>piezas × $/pza</code> exportable a Excel sin que el operador use celular.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- LÁMINA 05: ARQUITECTURA HÍBRIDA CLOUD + PUENTE SQL LOCAL & SEGURIDAD -->
+      <section id="s5" class="slide" style="background: var(--card)">
+        <div class="container">
+          <div class="slide-header">
+            <div>
+              <p class="eyebrow">05 &amp; 06 — Ingeniería Cloud, Enlace SQL Local &amp; Seguridad RBAC</p>
+              <h2 class="section-title">Arquitectura blindada <em>&amp;</em> alta velocidad<span class="dot">.</span></h2>
+            </div>
+            <p class="header-sub">
+              CONTPAQi permanece resguardado en la red local de la fábrica mientras la nube sirve pantallas y fotos en menos de 1 segundo.
+            </p>
+          </div>
+
+          <div class="grid-12">
+            <div class="stat-card dark col-4">
+              <span class="badge dark-badge">01 · Red Local Planta</span>
+              <div class="big-stat">SQL Bridge</div>
+              <div class="stat-title">CONTPAQi Comercial 11.3.1 ($0 SDK)</div>
+              <p class="stat-desc">Vistas y Stored Procedures con usuario SQL restringido en LAN; la base fiscal jamás se expone a internet.</p>
+              <div class="chip-list" style="margin-top: 4px">
+                <span class="chip" style="background: rgba(255,255,255,0.08); border-color: #3c342e; color: #fff">Pedidos y BOM</span>
+                <span class="chip" style="background: rgba(255,255,255,0.08); border-color: #3c342e; color: #fff">Entrada PT + Folio MES</span>
+                <span class="chip" style="background: rgba(255,255,255,0.08); border-color: #3c342e; color: #fff">Descarga MP</span>
+              </div>
+            </div>
+
+            <div class="stat-card col-4" style="background: #ffffff">
+              <span class="badge">02 · Cloud Hosting (AWS)</span>
+              <div class="big-stat">~$1,200</div>
+              <div class="stat-title">MXN / mes (Pago Directo Cloud)</div>
+              <p class="stat-desc">Instancia de aplicación, PostgreSQL gestionada con respaldos diarios cifrados, bucket S3 para fotos y SSL incluido.</p>
+              <div class="chip-list" style="margin-top: 4px">
+                <span class="chip">AWS EC2 / Container</span>
+                <span class="chip">PostgreSQL + Snapshots</span>
+                <span class="chip">AWS S3 Fotos</span>
+                <span class="chip">HTTPS / SSL</span>
+              </div>
+            </div>
+
+            <div class="stat-card col-4" style="background: #ffffff">
+              <span class="badge">03 · Control de Acceso RBAC</span>
+              <div class="big-stat">PIN 4 Díg</div>
+              <div class="stat-title">3 Perfiles Estrictos de Planta</div>
+              <p class="stat-desc">Firma rápida de turno con ocultamiento total de módulos no autorizados según área y responsabilidad.</p>
+              <div class="chip-list" style="margin-top: 4px">
+                <span class="chip">1. Ingeniero Admin</span>
+                <span class="chip">2. Supervisor por Área</span>
+                <span class="chip">3. Inspector C1–C5</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- LÁMINA 06: METODOLOGÍA Y CRONOGRAMA (12 SEMANAS) -->
+      <section id="s6" class="slide">
+        <div class="container">
+          <div class="slide-header">
+            <div>
+              <p class="eyebrow">07 — Metodología de Implementación &amp; Garantía</p>
+              <h2 class="section-title">En piso productivo en <em>12 semanas</em><span class="dot">.</span></h2>
+            </div>
+            <p class="header-sub">
+              Despliegue gradual validado directamente en nave con supervisión e inspección de calidad reales.
+            </p>
+          </div>
+
+          <div class="timeline-grid">
+            <div class="phase-card">
+              <div class="phase-num">
+                <span>Fase 01</span>
+                <span class="phase-week">8 Semanas</span>
+              </div>
+              <div>
+                <h3>Desarrollo e Integraciones</h3>
+                <p style="margin-top: 8px">Construcción de módulos MES, mapa de almacenes WIP, consola táctil QR y puente SQL con CONTPAQi.</p>
+              </div>
+              <span class="badge">Semanas 1 – 8</span>
+            </div>
+
+            <div class="phase-card">
+              <div class="phase-num">
+                <span>Fase 02</span>
+                <span class="phase-week">1 Semana</span>
+              </div>
+              <div>
+                <h3>Pruebas UAT en Planta</h3>
+                <p style="margin-top: 8px">Despliegue piloto en nave con usuarios reales y validación operativa de tarjetas viajeras QR.</p>
+              </div>
+              <span class="badge">Semana 9</span>
+            </div>
+
+            <div class="phase-card">
+              <div class="phase-num">
+                <span>Fase 03</span>
+                <span class="phase-week">2 Semanas</span>
+              </div>
+              <div>
+                <h3>Refinamiento Operativo</h3>
+                <p style="margin-top: 8px">Ajustes de ergonomía táctil, afinación de vistas Andon y verificación de movimientos SQL en CONTPAQi.</p>
+              </div>
+              <span class="badge">Semanas 10 – 11</span>
+            </div>
+
+            <div class="phase-card" style="border-color: var(--primary); background: #ffffff">
+              <div class="phase-num">
+                <span>Fase 04</span>
+                <span class="phase-week" style="background: var(--primary)">1 Semana</span>
+              </div>
+              <div>
+                <h3>Pruebas Finales y Go-Live</h3>
+                <p style="margin-top: 8px">Capacitación práctica a personal clave y arranque productivo oficial en las 6 estaciones de nave.</p>
+              </div>
+              <span class="badge">Semana 12 · Arranque</span>
+            </div>
+          </div>
+
+          <div class="stat-card" style="margin-top: 16px; padding: 15px 20px; flex-direction: row; align-items: center; justify-content: space-between; flex-wrap: wrap">
+            <div style="display: flex; align-items: center; gap: 12px">
+              <span class="badge">Garantía Post-Arranque</span>
+              <strong style="font-size: 0.89rem">3 semanas de soporte correctivo directo incluidas a partir del Go-Live formal.</strong>
+            </div>
+            <span style="font-size: 0.77rem; color: var(--muted)">
+              *Si la planta decide no contratar póliza mensual, recibe código y scripts para operación autónoma.
+            </span>
+          </div>
+        </div>
+      </section>
+
+      <!-- LÁMINA 07: CALCULADORA INTERACTIVA DE INVERSIÓN MODULAR -->
+      <section id="s7" class="slide slide-dark">
+        <div class="container">
+          <div class="slide-header">
+            <div>
+              <p class="eyebrow">08 — Modelo Comercial, Inversión Modular &amp; Pagos</p>
+              <h2 class="section-title">Inversión modular <em>transparente</em><span class="dot">.</span></h2>
+            </div>
+            <p class="header-sub">
+              Personaliza los módulos especializados y el equipamiento de piso para simular la inversión en tiempo real.
+            </p>
+          </div>
+
+          <div class="grid-12" style="align-items: start">
+            <div class="col-7">
+              <p style="font-family: 'JetBrains Mono', monospace; font-size: 0.66rem; text-transform: uppercase; letter-spacing: 0.14em; color: var(--primary-on-dark); margin-bottom: 6px">
+                A. Núcleo Operativo MES + Implementación en Planta (Base Requerida)
+              </p>
+              <div class="module-toggle active" style="cursor: default !important; margin-bottom: 12px">
+                <div>
+                  <strong style="font-size: 0.94rem; color: #ffffff">Plataforma Base MES (Módulos 1, 2, 3 y 8)</strong>
+                  <p style="font-size: 0.75rem; color: #d6cec5; margin-top: 3px; line-height: 1.42">
+                    Programación, loteo por producto e impresión QR ($17,500) · Tablero Andon y 5 KPIs ($20,000) · Terminal táctil T1–T6, Modo Rampa y paros ($20,000) · Configuración cloud, UAT y arranque ($12,500).
+                  </p>
+                </div>
+                <span class="mono-price" style="color: #ffffff; font-size: 0.96rem">$70,000 MXN</span>
+              </div>
+
+              <p style="font-family: 'JetBrains Mono', monospace; font-size: 0.66rem; text-transform: uppercase; letter-spacing: 0.14em; color: var(--primary-on-dark); margin-bottom: 6px">
+                B. Módulos Especializados del MVP &amp; Equipamiento de Piso
+              </p>
+
+              <label class="module-toggle active" id="row-mod1">
+                <div style="display: flex; align-items: center; gap: 11px">
+                  <input type="checkbox" checked onchange="recalcQuote()" id="mod1" data-price="12500" data-kind="sw" />
+                  <div>
+                    <strong style="color: #ffffff; font-size: 0.87rem">4. Filtros de Calidad C1–C5 (Reproceso, Segunda y Merma)</strong>
+                    <p style="font-size: 0.73rem; color: #d6cec5">Aprobación/rechazo en línea y dictamen supervisado con trazabilidad de causa raíz.</p>
+                  </div>
+                </div>
+                <span class="mono-price" style="color: var(--primary-on-dark)">+$12,500 MXN</span>
+              </label>
+
+              <label class="module-toggle active" id="row-mod2">
+                <div style="display: flex; align-items: center; gap: 11px">
+                  <input type="checkbox" checked onchange="recalcQuote()" id="mod2" data-price="10000" data-kind="sw" />
+                  <div>
+                    <strong style="color: #ffffff; font-size: 0.87rem">5. Semáforo de Subensambles (T5) y Fichas con Fotos</strong>
+                    <p style="font-size: 0.73rem; color: #d6cec5">Control de buffer de tafiletes/toquillas por talla y visor multiperspectiva en AWS S3.</p>
+                  </div>
+                </div>
+                <span class="mono-price" style="color: var(--primary-on-dark)">+$10,000 MXN</span>
+              </label>
+
+              <label class="module-toggle active" id="row-mod3">
+                <div style="display: flex; align-items: center; gap: 11px">
+                  <input type="checkbox" checked onchange="recalcQuote()" id="mod3" data-price="7500" data-kind="sw" />
+                  <div>
+                    <strong style="color: #ffffff; font-size: 0.87rem">6. Pre-Nómina Automática de Destajo (Excel)</strong>
+                    <p style="font-size: 0.73rem; color: #d6cec5">Firma digital por operador en cada escaneo, cálculo $/pza y corte semanal de viernes.</p>
+                  </div>
+                </div>
+                <span class="mono-price" style="color: var(--primary-on-dark)">+$7,500 MXN</span>
+              </label>
+
+              <label class="module-toggle active" id="row-mod4">
+                <div style="display: flex; align-items: center; gap: 11px">
+                  <input type="checkbox" checked onchange="recalcQuote()" id="mod4" data-price="10000" data-kind="sw" />
+                  <div>
+                    <strong style="color: #ffffff; font-size: 0.87rem">7. Conector Bidireccional CONTPAQi Comercial SQL</strong>
+                    <p style="font-size: 0.73rem; color: #d6cec5">Lectura directa de pedidos/BOM y escritura de PT (Folio MES) y MP ($0 licencias SDK).</p>
+                  </div>
+                </div>
+                <span class="mono-price" style="color: var(--primary-on-dark)">+$10,000 MXN</span>
+              </label>
+
+              <label class="module-toggle active" id="row-mod5">
+                <div style="display: flex; align-items: center; gap: 11px">
+                  <input type="checkbox" checked onchange="recalcQuote()" id="mod5" data-price="20000" data-kind="hw" />
+                  <div>
+                    <strong style="color: #ffffff; font-size: 0.87rem">Hardware Base: 6 Estaciones Táctiles (T1–T6)</strong>
+                    <p style="font-size: 0.73rem; color: #d6cec5">6 Tablets Android 11" + fundas uso rudo + soportes de mesa (adquiribles directo por planta).</p>
+                  </div>
+                </div>
+                <span class="mono-price" style="color: var(--primary-on-dark)">+$20,000 MXN</span>
+              </label>
+            </div>
+
+            <div class="quote-box col-5">
+              <div style="display: flex; align-items: center; justify-content: space-between">
+                <span class="badge">Inversión Inicial Estimada</span>
+                <span style="font-family: 'JetBrains Mono', monospace; font-size: 0.67rem; color: var(--muted)">+ IVA · Llave en Mano</span>
+              </div>
+              <div class="quote-total" id="totalAmount">$130,000 MXN</div>
+              <p style="font-size: 0.77rem; color: var(--muted); font-weight: 500" id="packageLabel">
+                MVP Integral ($110,000 Software + $20,000 Hardware 6 Tablets)
+              </p>
+
+              <div style="margin-top: 14px; padding-top: 12px; border-top: 1px solid var(--border)">
+                <div style="font-family: 'JetBrains Mono', monospace; font-size: 0.62rem; text-transform: uppercase; letter-spacing: 0.11em; color: var(--muted); margin-bottom: 7px">
+                  Esquema de Pagos sobre Desarrollo (<span id="swSubLabel">$110,000 MXN</span>)
+                </div>
+                <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px">
+                  <div style="background: #ffffff; border: 1px solid var(--border); padding: 9px 10px; border-radius: 11px">
+                    <span style="font-family: 'JetBrains Mono', monospace; font-size: 0.6rem; text-transform: uppercase; color: var(--muted)">40% Anticipo</span>
+                    <div style="font-size: 0.96rem; font-weight: 600; color: var(--fg); margin-top: 2px" id="anticipoAmount">$44,000</div>
+                  </div>
+                  <div style="background: #ffffff; border: 1px solid var(--border); padding: 9px 10px; border-radius: 11px">
+                    <span style="font-family: 'JetBrains Mono', monospace; font-size: 0.6rem; text-transform: uppercase; color: var(--muted)">30% UAT Piso</span>
+                    <div style="font-size: 0.96rem; font-weight: 600; color: var(--fg); margin-top: 2px" id="uatAmount">$33,000</div>
+                  </div>
+                  <div style="background: #ffffff; border: 1px solid var(--border); padding: 9px 10px; border-radius: 11px">
+                    <span style="font-family: 'JetBrains Mono', monospace; font-size: 0.6rem; text-transform: uppercase; color: var(--muted)">30% Go-Live</span>
+                    <div style="font-size: 0.96rem; font-weight: 600; color: var(--fg); margin-top: 2px" id="entregaAmount">$33,000</div>
+                  </div>
+                </div>
+              </div>
+
+              <div style="margin-top: 14px; display: flex; flex-direction: column; gap: 7px; font-size: 0.75rem; color: var(--body)">
+                <div style="display: flex; justify-content: space-between; border-bottom: 1px solid var(--border); padding-bottom: 5px">
+                  <span>Licencias SDK CONTPAQi Comercial</span>
+                  <strong style="color: var(--ok)">$0 MXN (Puente SQL)</strong>
+                </div>
+                <div style="display: flex; justify-content: space-between; border-bottom: 1px solid var(--border); padding-bottom: 5px">
+                  <span>Infraestructura Cloud AWS (pago directo)</span>
+                  <strong>~$1,200 MXN / mes</strong>
+                </div>
+                <div style="display: flex; justify-content: space-between">
+                  <span>Póliza Soporte Uanify (opcional post-garantía)</span>
+                  <strong style="color: var(--primary)">$6,000 MXN / mes</strong>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <!-- =================================================================== -->
+    <!-- VISTA 2: PROPUESTA ÍNTEGRA FORMATEADA (MODO DOCUMENTO) -->
+    <!-- =================================================================== -->
+    <section class="formal-doc-wrapper" aria-label="Propuesta Técnica y Comercial Completa">
+      <article class="formal-sheet">
+        <header class="doc-letterhead">
+          <div>
+            <div class="doc-brand">Tombstone Hats<span>.</span></div>
+            <p style="font-size: 0.8rem; color: var(--muted); margin-top: 4px">
+              Planta Matriz · San Francisco del Rincón, Guanajuato · Clúster Sombrerero Industrial
+            </p>
+          </div>
+          <div class="doc-meta-box">
+            <div>PROPUESTA TÉCNICA Y COMERCIAL</div>
+            <div>SISTEMA MES &amp; TABLERO ANDON · UANIFY</div>
+          </div>
+        </header>
+
+        <h1 class="doc-h1">
+          Propuesta Técnica y Comercial: Sistema MES, Tablero Andon en Vivo &amp; Integración SQL CONTPAQi — Tombstone Hats
+        </h1>
+
+        <div class="doc-meta-grid">
+          <div class="doc-meta-item">
+            <small>Cliente</small>
+            <strong>Tombstone Hats (Planta Matriz)</strong>
+          </div>
+          <div class="doc-meta-item">
+            <small>Alcance Operativo</small>
+            <strong>Trazabilidad QR T1–T6, 5 KPIs, Calidad C1–C5 y Destajo</strong>
+          </div>
+          <div class="doc-meta-item">
+            <small>Licenciamiento ERP Externo</small>
+            <strong class="accent">$0 MXN en SDKs (Puente Nativo SQL Server)</strong>
+          </div>
+        </div>
+
+        <!-- 1. Diagnóstico y Comparativo -->
+        <div class="doc-section" id="d1">
+          <h2 class="doc-h2">1. Resumen Ejecutivo y Comparativo: Situación Actual vs. Nueva Solución</h2>
+          <p class="doc-p">
+            Esta propuesta define la arquitectura, flujos operativos y alcance funcional del <strong>Sistema MES (Manufacturing Execution System) para Tombstone Hats</strong>, digitalizando la producción desde la unión de copa y falda en Prensas hasta el embarque final y conectándola de forma bidireccional con <strong>CONTPAQi Comercial 11.3.1</strong>.
+          </p>
+          <p class="doc-p">
+            El objetivo rector es que Dirección General e Ingeniería visualicen en tiempo real los <strong>5 Indicadores Clave de Desempeño (KPIs)</strong> de la fábrica (<em>Inventario WIP, Piezas por área, Consumo real vs. BOM, Reprocesos C1–C5 y Cumplimiento OTIF</em>) sin depender de conteos manuales ni recapturas:
+          </p>
+
+          <div class="doc-table-wrap">
+            <table class="doc-table">
+              <thead>
+                <tr>
+                  <th>Dimensión</th>
+                  <th>Situación Actual en Planta</th>
+                  <th>Nueva Solución Tombstone MES</th>
+                  <th>Beneficio Directo</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><strong>Visibilidad WIP</strong></td>
+                  <td>Recorridos físicos por pasillos y conteo manual de torres en 14 áreas.</td>
+                  <td><strong>Tablero Andon en Vivo + Mapa de 14 Almacenes Buffer</strong> al instante.</td>
+                  <td>Detección inmediata de cuellos de botella con semáforos ámbar/rojo.</td>
+                </tr>
+                <tr>
+                  <td><strong>Enlace CONTPAQi 11</strong></td>
+                  <td>Captura manual de órdenes y recaptura de entradas/consumos en oficina.</td>
+                  <td><strong>Microservicio Puente SQL ($0 licencias SDK)</strong> para pedidos, BOM, PT y MP.</td>
+                  <td>Cero recaptura administrativa y trazabilidad con Folio MES en partidas.</td>
+                </tr>
+                <tr>
+                  <td><strong>Partición de Lotes</strong></td>
+                  <td>Cálculo y llenado repetitivo de papeletas en cada orden de producción.</td>
+                  <td><strong>Loteo Automático Heredado por Producto</strong> + tarjetas QR en hoja carta.</td>
+                  <td>Cada modelo define sus lotes (60 pzas) y sublotes (15 pzas) de origen.</td>
+                </tr>
+                <tr>
+                  <td><strong>Calidad (C1–C5)</strong></td>
+                  <td>Rechazos sin métrica centralizada o lotes frenados por piezas con detalle.</td>
+                  <td><strong>Dictamen Digital (Reproceso, Segunda o Merma)</strong> sin detener el lote conforme.</td>
+                  <td>Flujo continuo hacia empaque y estadística exacta de causa raíz.</td>
+                </tr>
+                <tr>
+                  <td><strong>Habilitación Adorno</strong></td>
+                  <td>Lotes iniciados sin tafiletes completos o variaciones frente a la muestra.</td>
+                  <td><strong>Semáforo de Subensambles (T5) + Ficha Técnica con Fotos Oficiales.</strong></td>
+                  <td>Cero paros por faltantes en Adorno y apego visual al estándar aprobado.</td>
+                </tr>
+                <tr>
+                  <td><strong>Pre-Nómina Destajo</strong></td>
+                  <td>4 a 6 horas cada viernes conciliando libretas físicas y aclaraciones.</td>
+                  <td><strong>Firma Digital por Escaneo + Exportación Nativa a Excel en 1 Clic.</strong></td>
+                  <td>Corte semanal exacto, auditado por lote/estación y libre de disputas.</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- 2. Loteo y Terminales T1-T6 -->
+        <div class="doc-section" id="d2">
+          <h2 class="doc-h2">2. Ingesta de Órdenes, Loteo por Producto y Terminales T1–T6</h2>
+          <ul class="doc-list">
+            <li>
+              <strong>Inicio del Seguimiento en Prensas (T1):</strong> El lote nace formalmente en el MES cuando copa y falda se unen en Prensas calientes. El proceso previo (Corte, Endopado inicial y Entallado de lienzos) carga su consumo de materia prima directamente a la orden de producción.
+            </li>
+            <li>
+              <strong>Loteo Automático a Nivel Producto e Impresión en Hoja Carta:</strong> Ingeniería consulta e inicializa en el MES la orden proveniente de CONTPAQi Comercial. La subdivisión de lotes madre y sublotes se determina automáticamente a partir de la configuración maestra de cada modelo de sombrero. Desde la misma vista se imprimen las tarjetas viajeras oficiales con código QR en papel carta estándar para insertarse en fundas plásticas cosidas.
+            </li>
+            <li>
+              <strong>División en Sublotes en Hidráulicas (T4 · Modo Rampa):</strong> El lote viaja completo desde Prensas hasta Alineado en Hidráulicas (T4), donde mediante escaneo en Modo Rampa se archiva la tarjeta madre y se activan los sublotes individuales hasta Producto Liberado.
+            </li>
+            <li>
+              <strong>Regla de Escaneo en Salida:</strong> Se ejecuta al concluir el proceso departamental y depositar las piezas en el almacén intermedio, transfiriendo el WIP al siguiente departamento y registrando al operador responsable.
+            </li>
+          </ul>
+
+          <div class="doc-table-wrap">
+            <table class="doc-table">
+              <thead>
+                <tr>
+                  <th>Terminal</th>
+                  <th>Estación en Nave</th>
+                  <th>Procesos y Controles que Registra</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><strong>T1</strong></td>
+                  <td><strong>Prensas</strong></td>
+                  <td>Unión copa-falda (nacimiento del lote), horma asignada, alambrado, replanchado y refaldeo.</td>
+                </tr>
+                <tr>
+                  <td><strong>T2</strong></td>
+                  <td><strong>Patio Endopado</strong></td>
+                  <td>Baño con alambre (endopado y rigidizado térmico).</td>
+                </tr>
+                <tr>
+                  <td><strong>T3</strong></td>
+                  <td><strong>Refuerzo y Pintura</strong></td>
+                  <td>Refuerzo a pistola, <strong>Filtro C2</strong>, cabina de pintura, <strong>Filtro C3</strong> y acabado de brillo.</td>
+                </tr>
+                <tr>
+                  <td><strong>T4</strong></td>
+                  <td><strong>Hidráulicas y Rampa</strong></td>
+                  <td>Alineado hidráulico, <strong>división en sublotes (Modo Rampa)</strong>, <strong>Filtro C4</strong> y pre-adorno.</td>
+                </tr>
+                <tr>
+                  <td><strong>T5</strong></td>
+                  <td><strong>Toquilla y Tafilete</strong></td>
+                  <td>Entregas de subensambles a Adorno con semáforo preventivo por talla y modelo.</td>
+                </tr>
+                <tr>
+                  <td><strong>T6</strong></td>
+                  <td><strong>Calidad Final y Embarque</strong></td>
+                  <td>Adorno final, <strong>Filtro C5</strong>, consolidación en cajas, <strong>Liquidación en 1 Clic</strong> y Vale QR.</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- 3. Calidad C1-C5 y Cierre -->
+        <div class="doc-section" id="d3">
+          <h2 class="doc-h2">3. Puntos de Control de Calidad (C1–C5) y Flujo Final de Cierre</h2>
+          <h3 class="doc-h3">3.1 Estructura de Decisión en Filtros Oficiales</h3>
+          <p class="doc-p">
+            El <strong>Inspector de Calidad</strong> evalúa las piezas en <strong>C1 (Cuadros)</strong>, <strong>C2 (Refuerzo)</strong>, <strong>C3 (Pintura)</strong>, <strong>C4 (Hidráulicas)</strong> y <strong>C5 (Inspección Final)</strong> con dos acciones exclusivas: <strong>Aprobar</strong> o <strong>Rechazar</strong>. Ante una no conformidad, Supervisión o Ingeniería de Calidad dictamina en pantalla:
+          </p>
+          <ul class="doc-list">
+            <li><strong>Reproceso:</strong> Selecciona la estación anterior causante a la que retorna para corrección.</li>
+            <li><strong>Segunda:</strong> El lote principal no se detiene; se registran las piezas separadas a remate y su causa raíz.</li>
+            <li><strong>Merma:</strong> Registro definitivo de descarte con su causa de falla asociada a la orden.</li>
+          </ul>
+
+          <h3 class="doc-h3">3.2 Protocolo de Cierre de Lote: de Adorno a CONTPAQi Comercial</h3>
+          <ul class="doc-list">
+            <li><strong>1. Inspección Final (Filtro C5 en T6):</strong> Escaneo de cada sublote y cotejo contra la Ficha Técnica Visual con fotografías oficiales; las piezas conformes quedan liberadas a empaque.</li>
+            <li><strong>2. Empaque y Reagrupación:</strong> Consolidación física de sublotes aprobados en cajas máster de la Orden de Producción.</li>
+            <li><strong>3. Despacho y Liquidación en Piso (1 Clic en T6):</strong> Emisión del <strong>Vale de Salida Oficial con QR</strong>, extracción automática del lote del WIP en el Tablero Andon, actualización del <strong>KPI 5 (OTIF)</strong> y cierre de firmas de destajo.</li>
+            <li><strong>4. Escritura Automática en CONTPAQi Comercial 11:</strong> Registro de <strong>Entrada de Producto Terminado</strong> insertando el <strong>Folio del Lote MES en Observaciones</strong> y <strong>Descarga de Materia Prima</strong> consumida contra la lista de materiales (BOM).</li>
+          </ul>
+        </div>
+
+        <!-- 4. Destajo, Paros y Subensambles -->
+        <div class="doc-section" id="d4">
+          <h2 class="doc-h2">4. Pre-Nómina a Destajo, Bitácora de Paros y Fichas con Fotos</h2>
+          <ul class="doc-list">
+            <li>
+              <strong>Pre-Nómina Semanal a Destajo (Corte Automático de Viernes):</strong> Los operadores de piso no requieren cuentas ni teléfonos en nave. Al escanear la salida del departamento, la supervisión selecciona al operador responsable (<em>firma digital de destajo</em>); el sistema multiplica las piezas validadas por su tarifa fija (<code>$/pza</code>) y exporta el corte semanal en <strong>Microsoft Excel (<code>.xlsx</code> / <code>.csv</code>) en un clic</strong>.
+            </li>
+            <li>
+              <strong>Bitácora Táctil de Paros Productivos:</strong> Registro en vivo de estación/máquina, operador, duración y motivo (cambio de horma, falta de vapor en caldera, falta de subensambles, falla mecánica o descanso) conectado al Tablero Andon.
+            </li>
+            <li>
+              <strong>Semáforo de Buffer en Adorno (T5) &amp; Fotos Oficiales:</strong> Semáforo preventivo de existencias de tafiletes y toquillas por talla/modelo antes de iniciar ensamble, acompañado de fotografías multiperspectiva en alta resolución de la muestra autorizada.
+            </li>
+          </ul>
+        </div>
+
+        <!-- 5. Puente SQL, Cloud y Seguridad -->
+        <div class="doc-section" id="d5">
+          <h2 class="doc-h2">5. Arquitectura Cloud, Puente SQL CONTPAQi y Seguridad RBAC</h2>
+          <ul class="doc-list">
+            <li><strong>Puente Local CONTPAQi ($0 Costo en Licencias SDK):</strong> Servicio local en el servidor Windows de planta que interactúa con Microsoft SQL Server vía Vistas y Procedimientos Almacenados dedicados, manteniendo la base de datos comercial resguardada en la red interna.</li>
+            <li><strong>Perfiles de Acceso RBAC con PIN de 4 Dígitos:</strong> <strong>Ingeniero (Admin Mayor)</strong> con control y auditoría total; <strong>Supervisor de Planta</strong> acotado estrictamente a sus almacenes y estaciones; e <strong>Inspector de Calidad</strong> enfocado en dictamen C1–C5.</li>
+            <li><strong>Conectividad y Autonomía Garantizada:</strong> Operación 100% en línea sobre red Wi-Fi estable en nave. En caso de no contratar póliza mensual post-garantía, se entregan código, contenedores y scripts de base de datos para operación independiente.</li>
+          </ul>
+
+          <div class="doc-table-wrap">
+            <table class="doc-table">
+              <thead>
+                <tr>
+                  <th>Servicio Cloud (Facturación Directa Proveedor)</th>
+                  <th>Función en el Sistema MES</th>
+                  <th class="num-col">Costo Mensual Est.</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><strong>AWS S3 (Simple Storage Service)</strong></td>
+                  <td>Almacenamiento de alta durabilidad para fotografías oficiales por modelo</td>
+                  <td class="num-col">$5 – $12 USD / mes</td>
+                </tr>
+                <tr>
+                  <td><strong>Cómputo Cloud (EC2 / Container)</strong></td>
+                  <td>Servidor de aplicación web y APIs de alta disponibilidad</td>
+                  <td class="num-col">$22 – $38 USD / mes</td>
+                </tr>
+                <tr>
+                  <td><strong>Base de Datos Gestionada PostgreSQL</strong></td>
+                  <td>Transacciones en tiempo real con snapshots diarios automáticos</td>
+                  <td class="num-col">$18 – $30 USD / mes</td>
+                </tr>
+                <tr>
+                  <td><strong>Dominio Web &amp; Certificados SSL</strong></td>
+                  <td>Cifrado HTTPS en <code>mes.tombstonehats.com</code></td>
+                  <td class="num-col">$0 USD (Incluido)</td>
+                </tr>
+                <tr class="total-row">
+                  <td><strong>Total Estimado de Operación Cloud</strong></td>
+                  <td><em>Facturado directo por el proveedor cloud a Tombstone Hats</em></td>
+                  <td class="num-col" style="color: var(--primary)">$45 – $80 USD / mes<br /><small>(~$900 – $1,600 MXN)</small></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- 6. Cronograma -->
+        <div class="doc-section" id="d6">
+          <h2 class="doc-h2">6. Metodología de Entrega y Cronograma (12 Semanas)</h2>
+          <div class="doc-table-wrap">
+            <table class="doc-table">
+              <thead>
+                <tr>
+                  <th>Fase</th>
+                  <th class="num-col">Duración</th>
+                  <th>Actividades y Entregables Clave</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><strong>Fase 1: Desarrollo e Integraciones</strong></td>
+                  <td class="num-col">8 semanas</td>
+                  <td>Construcción de módulos MES, vistas de almacén WIP, terminal QR y puente SQL CONTPAQi.</td>
+                </tr>
+                <tr>
+                  <td><strong>Fase 2: Pruebas UAT en Planta</strong></td>
+                  <td class="num-col">1 semana</td>
+                  <td>Despliegue piloto en piso con usuarios reales y validación de tarjetas viajeras QR.</td>
+                </tr>
+                <tr>
+                  <td><strong>Fase 3: Refinamiento</strong></td>
+                  <td class="num-col">2 semanas</td>
+                  <td>Ajustes de ergonomía táctil, afinación de vistas y validación de descargas SQL.</td>
+                </tr>
+                <tr>
+                  <td><strong>Fase 4: Pruebas Finales y Go-Live</strong></td>
+                  <td class="num-col">1 semana</td>
+                  <td>Capacitación operativa y puesta en marcha oficial en nave industrial.</td>
+                </tr>
+                <tr class="total-row">
+                  <td><strong>TOTAL IMPLEMENTACIÓN</strong></td>
+                  <td class="num-col" style="color: var(--primary)">12 semanas</td>
+                  <td><strong>Entrega formal del sistema operando en piso (+ 3 semanas de garantía directa).</strong></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- 7. Modelo Comercial, Inversión y Póliza -->
+        <div class="doc-section" id="d7">
+          <h2 class="doc-h2">7. Modelo Comercial, Inversión Modular, Pagos y Póliza Opcional</h2>
+
+          <h3 class="doc-h3">7.1 Inversión en Desarrollo de Software por Módulo</h3>
+          <div class="doc-table-wrap">
+            <table class="doc-table">
+              <thead>
+                <tr>
+                  <th>Módulo del Sistema</th>
+                  <th>Alcance Incluido</th>
+                  <th class="num-col">Inversión (MXN)</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><strong>1. Programación, loteo e impresión</strong></td>
+                  <td>Lectura de pedidos SQL, fecha compromiso, loteo automático por producto y hoja carta de tarjetas QR.</td>
+                  <td class="num-col">$17,500 MXN</td>
+                </tr>
+                <tr>
+                  <td><strong>2. Tablero Andon y 5 KPIs</strong></td>
+                  <td>WIP en vivo por departamento, avance hora por hora, semáforos y bitácora de paros.</td>
+                  <td class="num-col">$20,000 MXN</td>
+                </tr>
+                <tr>
+                  <td><strong>3. Terminal táctil de piso (T1–T6)</strong></td>
+                  <td>Escaneo QR de salida de almacén, Modo Rampa (sublotes) y consola táctil ergonómica.</td>
+                  <td class="num-col">$20,000 MXN</td>
+                </tr>
+                <tr>
+                  <td><strong>4. Filtros de calidad C1–C5</strong></td>
+                  <td>Aprobar/rechazar en línea y dictamen: reproceso a estación, segunda o merma.</td>
+                  <td class="num-col">$12,500 MXN</td>
+                </tr>
+                <tr>
+                  <td><strong>5. Subensambles y fichas técnicas</strong></td>
+                  <td>Semáforo de tafiletes y toquillas por talla, y visor de fotos oficiales autorizadas.</td>
+                  <td class="num-col">$10,000 MXN</td>
+                </tr>
+                <tr>
+                  <td><strong>6. Pre-nómina de destajo</strong></td>
+                  <td>Firma por operador, cálculo automático $/pza y pre-reporte semanal exportable a Excel.</td>
+                  <td class="num-col">$7,500 MXN</td>
+                </tr>
+                <tr>
+                  <td><strong>7. Conector CONTPAQi Comercial</strong></td>
+                  <td>Lectura directa de pedidos y BOM, escritura de producto terminado y MP ($0 licencias SDK).</td>
+                  <td class="num-col">$10,000 MXN</td>
+                </tr>
+                <tr>
+                  <td><strong>8. Implementación y arranque en planta</strong></td>
+                  <td>Configuración cloud, pruebas en nave (UAT), capacitación a supervisores y puesta en marcha.</td>
+                  <td class="num-col">$12,500 MXN</td>
+                </tr>
+                <tr class="total-row">
+                  <td><strong>TOTAL DESARROLLO DEL MVP</strong></td>
+                  <td><strong>Solución integral de software MES para planta</strong></td>
+                  <td class="num-col" style="color: var(--primary)">$110,000 MXN</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <h3 class="doc-h3">7.2 Resumen Consolidado y Esquema de Pagos</h3>
+          <div class="doc-table-wrap">
+            <table class="doc-table">
+              <thead>
+                <tr>
+                  <th>Tipo de Inversión</th>
+                  <th>Concepto</th>
+                  <th class="num-col">Monto (MXN)</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><strong>Pago Único (Proyecto Inicial)</strong></td>
+                  <td>Desarrollo completo del MVP de Software<br />Hardware base recomendado: 6 Tablets Android 11" + fundas uso rudo + soportes <em>(adquisición directa opcional)</em></td>
+                  <td class="num-col">$110,000 MXN<br />$20,000 MXN</td>
+                </tr>
+                <tr class="total-row">
+                  <td><strong>TOTAL INICIAL DE INVERSIÓN</strong></td>
+                  <td><strong>Puesta en marcha completa en las 6 estaciones de nave</strong></td>
+                  <td class="num-col" style="color: var(--primary)">$130,000 MXN + IVA</td>
+                </tr>
+                <tr>
+                  <td><strong>Mensual (Post-Garantía)</strong></td>
+                  <td>Póliza opcional de mantenimiento y soporte técnico Uanify<br />Operación estimada de infraestructura en la nube AWS <em>(pago directo a proveedor)</em></td>
+                  <td class="num-col">$6,000 MXN / mes<br />~$1,200 MXN / mes</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <ul class="doc-list">
+            <li><strong>Esquema de Pagos sobre Desarrollo de Software ($110,000 MXN + IVA):</strong> <strong>40% Anticipo</strong> al arranque de Fase 1 ($44,000 MXN) · <strong>30% al iniciar UAT en Planta</strong> en Semana 9 ($33,000 MXN) · <strong>30% Contra Entrega y Go-Live</strong> en Semana 12 ($33,000 MXN).</li>
+            <li><strong>Alcance de la Póliza Opcional ($6,000 MXN + IVA / mes, inicia tras las 3 semanas de garantía):</strong> Incluye monitoreo proactivo de servidor y puente SQL CONTPAQi, respaldos diarios cifrados en nube, optimización de consultas para escaneo en <code>&lt;1s</code>, mesa de ayuda prioritaria vía WhatsApp/llamada para Ingeniería y Supervisores, y ajustes menores continuos en vistas táctiles y tarjetas QR. Nuevos módulos estructurales se cotizan por alcance acordado.</li>
+          </ul>
+        </div>
+      </article>
+    </section>
+
+    <script>
+      const slides = Array.from(document.querySelectorAll(".slide"));
+      const deckLinks = Array.from(document.querySelectorAll("#deckIndex .rail-link"));
+      const counterEl = document.getElementById("slideCounter");
+      const progressEl = document.getElementById("progressBar");
+      const btnDeckMode = document.getElementById("btnDeckMode");
+      const btnDocMode = document.getElementById("btnDocMode");
+      const deckIndex = document.getElementById("deckIndex");
+      const docIndex = document.getElementById("docIndex");
+      const slideControls = document.getElementById("slideControls");
+      let currentIdx = 0;
+      let isDocMode = false;
+
+      function setDocMode(val) {
+        isDocMode = val;
+        document.documentElement.classList.toggle("doc-mode", isDocMode);
+        btnDeckMode.classList.toggle("active", !isDocMode);
+        btnDocMode.classList.toggle("active", isDocMode);
+        deckIndex.style.display = isDocMode ? "none" : "block";
+        docIndex.style.display = isDocMode ? "block" : "none";
+        slideControls.style.display = isDocMode ? "none" : "flex";
+        window.scrollTo({ top: 0, behavior: "smooth" });
+      }
+
+      function updateActiveSlide() {
+        if (isDocMode) return;
+        const mid = window.innerHeight * 0.45;
+        let active = 0;
+        slides.forEach((s, i) => {
+          const rect = s.getBoundingClientRect();
+          if (rect.top <= mid) active = i;
+        });
+        currentIdx = active;
+        deckLinks.forEach((a, i) => a.classList.toggle("active", i === active));
+        counterEl.textContent = `0${active + 1} / 0${slides.length}`;
+        progressEl.style.transform = `scaleX(${(active + 1) / slides.length})`;
+      }
+
+      window.addEventListener("scroll", updateActiveSlide, { passive: true });
+
+      function goSlide(idx) {
+        if (isDocMode) setDocMode(false);
+        const target = slides[Math.max(0, Math.min(slides.length - 1, idx))];
+        if (target) target.scrollIntoView({ behavior: "smooth" });
+      }
+
+      function stepSlide(dir) {
+        goSlide(currentIdx + dir);
+      }
+
+      function toggleFull() {
+        if (!document.fullscreenElement) {
+          document.documentElement.requestFullscreen?.();
+        } else {
+          document.exitFullscreen?.();
+        }
+      }
+
+      window.addEventListener("keydown", (e) => {
+        if (isDocMode) return;
+        if (["INPUT", "TEXTAREA"].includes(document.activeElement?.tagName)) return;
+        if (["ArrowDown", "ArrowRight", "PageDown", " "].includes(e.key)) {
+          e.preventDefault();
+          stepSlide(1);
+        } else if (["ArrowUp", "ArrowLeft", "PageUp"].includes(e.key)) {
+          e.preventDefault();
+          stepSlide(-1);
+        }
+      });
+
+      function fmt(n) {
+        return "$" + n.toLocaleString("es-MX") + " MXN";
+      }
+
+      function fmtShort(n) {
+        return "$" + n.toLocaleString("es-MX");
+      }
+
+      function recalcQuote() {
+        let swTotal = 70000;
+        let hwTotal = 0;
+        let swMods = 0;
+
+        ["mod1", "mod2", "mod3", "mod4", "mod5"].forEach((id) => {
+          const el = document.getElementById(id);
+          const row = document.getElementById("row-" + id);
+          if (el && el.checked) {
+            const price = Number(el.dataset.price);
+            if (el.dataset.kind === "hw") {
+              hwTotal += price;
+            } else {
+              swTotal += price;
+              swMods++;
+            }
+            row.classList.add("active");
+          } else if (row) {
+            row.classList.remove("active");
+          }
+        });
+
+        const grandTotal = swTotal + hwTotal;
+        document.getElementById("totalAmount").textContent = fmt(grandTotal);
+        document.getElementById("swSubLabel").textContent = fmt(swTotal);
+        document.getElementById("anticipoAmount").textContent = fmtShort(Math.round(swTotal * 0.4));
+        document.getElementById("uatAmount").textContent = fmtShort(Math.round(swTotal * 0.3));
+        document.getElementById("entregaAmount").textContent = fmtShort(swTotal - Math.round(swTotal * 0.4) - Math.round(swTotal * 0.3));
+
+        const hwText = hwTotal > 0 ? " + $20,000 Hardware 6 Tablets" : " (Solo Software · Hardware directo)";
+        if (swMods === 4) {
+          document.getElementById("packageLabel").textContent = `MVP Integral (${fmt(swTotal)} Software${hwText})`;
+        } else if (swMods === 0) {
+          document.getElementById("packageLabel").textContent = `Núcleo Operativo Base (${fmt(swTotal)} Software${hwText})`;
+        } else {
+          document.getElementById("packageLabel").textContent = `Núcleo Base + ${swMods} módulo(s) (${fmt(swTotal)} Software${hwText})`;
+        }
+      }
+    </script>
+  </body>
+</html>
