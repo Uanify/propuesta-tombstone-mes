@@ -1,0 +1,277 @@
+{
+  "schemaVersion": "1.0.0",
+  "meta": {
+    "projectName": "Tombstone Hats MES · Implementación Productiva",
+    "client": "Tombstone Hats (San Francisco del Rincón, Gto.)",
+    "projectStatus": "Esperando Confirmación",
+    "currentPhase": "Fase 0 · Pre-Arranque",
+    "startDate": null,
+    "targetGoLiveDate": null,
+    "warrantyEndDate": null,
+    "lastUpdated": "2026-11-24T01:40:00-06:00",
+    "lastUpdatedBy": "Andrés · Antigravity",
+    "links": {
+      "demo": "https://uanify.github.io/uanify-mes-sombreros/",
+      "proposal": "https://uanify.github.io/propuesta-tombstone-mes/",
+      "appRepo": "https://github.com/Uanify/uanify-mes-sombreros"
+    }
+  },
+  "prereqs": [
+    {
+      "id": "PR-01",
+      "title": "Acceso a Microsoft SQL Server (CONTPAQi Comercial 11.3.1)",
+      "detail": "Usuario dedicado en red LAN con permisos de lectura de pedidos/BOM y ejecución de SPs para entrada PT y salida MP.",
+      "status": "pending",
+      "owner": "Cliente · TI / Soporte CONTPAQi",
+      "notes": "Indispensable para iniciar integración real del Módulo 7."
+    },
+    {
+      "id": "PR-02",
+      "title": "Cobertura Wi-Fi estable en las 6 estaciones de nave",
+      "detail": "Validar señal continua en T1 Prensas, T2 Endopado, T3 Pintura, T4 Hidráulicas/Rampa, T5 Tafiletes y T6 Embarque.",
+      "status": "pending",
+      "owner": "Cliente · Planta",
+      "notes": "El sistema opera 100% en línea sin modo offline."
+    },
+    {
+      "id": "PR-03",
+      "title": "Adquisición de 6 Tablets Android 11\" + Fundas Uso Rudo + Soportes",
+      "detail": "Hardware base para estaciones T1–T6 con cámara trasera funcional para lectura QR ($20,000 MXN est.).",
+      "status": "pending",
+      "owner": "Cliente · Compras",
+      "notes": "Entregar ficha técnica recomendada al confirmar arranque."
+    },
+    {
+      "id": "PR-04",
+      "title": "Catálogo de Productos y Reglas de Subdivisión (Lotes / Sublotes)",
+      "detail": "Definir por modelo/producto el tamaño de lote madre (ej. 60 pzas) y cantidad de sublotes (ej. 4 x 15 pzas) + rutas.",
+      "status": "pending",
+      "owner": "Cliente · Ingeniería",
+      "notes": "La subdivisión ahora se hereda automáticamente desde el producto."
+    },
+    {
+      "id": "PR-05",
+      "title": "Padrón oficial de 108 Operadores y Tarifas de Destajo ($/pza)",
+      "detail": "Lista con No. nómina, nombre, departamento fijo, máquina asignada y tarifa fija en pesos por operación.",
+      "status": "pending",
+      "owner": "Cliente · RH / Ingeniería",
+      "notes": "Necesario para alimentar el Módulo 6 (Pre-nómina de viernes)."
+    },
+    {
+      "id": "PR-06",
+      "title": "Fotografías oficiales multiperspectiva de muestras autorizadas",
+      "detail": "Fotos por modelo (frente, copa, falda, toquilla, herraje, tafilete) para cargar al bucket AWS S3.",
+      "status": "pending",
+      "owner": "Cliente · Calidad / Adorno",
+      "notes": "Para habilitar las fichas técnicas visuales en Adorno y C5."
+    }
+  ],
+  "tasks": [
+    {
+      "id": "T-01",
+      "phase": "Fase 0 · Arranque",
+      "module": "Comercial & Kickoff",
+      "title": "Confirmación formal del cliente, firma de alcance y cobro de 40% anticipo",
+      "status": "todo",
+      "assignee": "Ambos",
+      "priority": "alta",
+      "aiLock": null,
+      "notes": "Al confirmar, actualizar startDate y targetGoLiveDate (12 semanas)."
+    },
+    {
+      "id": "T-02",
+      "phase": "Fase 0 · Arranque",
+      "module": "Infraestructura Cloud",
+      "title": "Aprovisionamiento de cuenta AWS (EC2/Container, PostgreSQL RDS, S3, SSL)",
+      "status": "todo",
+      "assignee": "Andrés",
+      "priority": "alta",
+      "aiLock": null,
+      "notes": "Facturación directa a cuenta de Tombstone Hats (~$1,200 MXN/mes)."
+    },
+    {
+      "id": "T-03",
+      "phase": "Fase 1 · Desarrollo (Sem 1–8)",
+      "module": "Módulo 1 · Programación y QR",
+      "title": "Backend de Órdenes, Loteo Automático por Producto e Impresión QR Hoja Carta",
+      "status": "todo",
+      "assignee": "Andrés",
+      "priority": "alta",
+      "aiLock": null,
+      "notes": "Heredar subdivisión lotes/sublotes desde el catálogo maestro de productos."
+    },
+    {
+      "id": "T-04",
+      "phase": "Fase 1 · Desarrollo (Sem 1–8)",
+      "module": "Módulo 2 · Andon y 5 KPIs",
+      "title": "API en tiempo real de WIP (14 almacenes), Piezas, BOM, C1–C5 y OTIF",
+      "status": "todo",
+      "assignee": "Ricardo",
+      "priority": "alta",
+      "aiLock": null,
+      "notes": "Asegurar consultas optimizadas (<1s) y vista hora por hora."
+    },
+    {
+      "id": "T-05",
+      "phase": "Fase 1 · Desarrollo (Sem 1–8)",
+      "module": "Módulo 3 · Terminal Piso T1–T6",
+      "title": "Consola Táctil Tablet-First, Lector QR cámara, Modo Rampa y Paros",
+      "status": "todo",
+      "assignee": "Andrés",
+      "priority": "alta",
+      "aiLock": null,
+      "notes": "Login PIN 4 dígitos RBAC + selección de operador al depositar lote."
+    },
+    {
+      "id": "T-06",
+      "phase": "Fase 1 · Desarrollo (Sem 1–8)",
+      "module": "Módulo 4 · Calidad C1–C5",
+      "title": "Flujo Aprobar/Rechazar y Dictamen (Reproceso, Segunda, Merma) sin frenar lote",
+      "status": "todo",
+      "assignee": "Ricardo",
+      "priority": "alta",
+      "aiLock": null,
+      "notes": "Retornos automáticos: C2->Refuerzo, C3->Pintura, C4->Alineado, C5->Adorno."
+    },
+    {
+      "id": "T-07",
+      "phase": "Fase 1 · Desarrollo (Sem 1–8)",
+      "module": "Módulo 5 · Subensambles y Fotos",
+      "title": "Semáforo de Tafiletes/Toquillas (T5) y Visor Multiperspectiva en AWS S3",
+      "status": "todo",
+      "assignee": "Andrés",
+      "priority": "media",
+      "aiLock": null,
+      "notes": "Semáforo Verde/Ámbar/Rojo por talla y modelo en Adorno."
+    },
+    {
+      "id": "T-08",
+      "phase": "Fase 1 · Desarrollo (Sem 1–8)",
+      "module": "Módulo 6 · Pre-Nómina Destajo",
+      "title": "Acumulado semanal por operador (piezas x $/pza) y exportación nativa Excel",
+      "status": "todo",
+      "assignee": "Ricardo",
+      "priority": "media",
+      "aiLock": null,
+      "notes": "Corte de los viernes con descarga .xlsx / .csv en 1 clic."
+    },
+    {
+      "id": "T-09",
+      "phase": "Fase 1 · Desarrollo (Sem 1–8)",
+      "module": "Módulo 7 · Puente CONTPAQi SQL",
+      "title": "Microservicio LAN: Lectura pedidos/BOM + Escritura PT (Folio MES) y Salida MP",
+      "status": "todo",
+      "assignee": "Ambos",
+      "priority": "alta",
+      "aiLock": null,
+      "notes": "Validar Stored Procedures en ambiente de pruebas CONTPAQi 11.3.1 ($0 SDK)."
+    },
+    {
+      "id": "T-10",
+      "phase": "Fase 2 · UAT Planta (Sem 9)",
+      "module": "Módulo 8 · Implementación",
+      "title": "Pruebas piloto en piso con supervisores, inspectores y tarjetas QR reales",
+      "status": "todo",
+      "assignee": "Ambos",
+      "priority": "alta",
+      "aiLock": null,
+      "notes": "Validar cierre en 1 clic desde T6 y reflejo exacto en CONTPAQi."
+    },
+    {
+      "id": "T-11",
+      "phase": "Fase 3 · Refinamiento (Sem 10–11)",
+      "module": "Módulo 8 · Implementación",
+      "title": "Ajustes táctiles, afinación de vistas Andon y verificación de descargas SQL",
+      "status": "todo",
+      "assignee": "Ambos",
+      "priority": "media",
+      "aiLock": null,
+      "notes": "Atender feedback directo de pruebas UAT en nave."
+    },
+    {
+      "id": "T-12",
+      "phase": "Fase 4 · Go-Live & Garantía (Sem 12–15)",
+      "module": "Módulo 8 · Implementación",
+      "title": "Capacitación oficial, arranque productivo T1–T6 y 3 semanas de garantía",
+      "status": "todo",
+      "assignee": "Ambos",
+      "priority": "alta",
+      "aiLock": null,
+      "notes": "Al finalizar garantía, activar póliza ($6,000/mes) o entrega autónoma."
+    }
+  ],
+  "milestones": [
+    {
+      "id": "M-01",
+      "label": "40% Anticipo · Arranque Fase 1",
+      "amountMxn": 44000,
+      "status": "pendiente",
+      "dueRef": "Al confirmar arranque",
+      "notes": "Sobre $110,000 MXN + IVA de desarrollo software."
+    },
+    {
+      "id": "M-02",
+      "label": "30% Avance · Inicio UAT en Planta",
+      "amountMxn": 33000,
+      "status": "pendiente",
+      "dueRef": "Semana 9",
+      "notes": "Al desplegar piloto en nave."
+    },
+    {
+      "id": "M-03",
+      "label": "30% Cierre · Go-Live Productivo",
+      "amountMxn": 33000,
+      "status": "pendiente",
+      "dueRef": "Semana 12",
+      "notes": "Contra arranque en las 6 estaciones."
+    },
+    {
+      "id": "M-04",
+      "label": "Póliza Mensual Opcional (Post-Garantía)",
+      "amountMxn": 6000,
+      "status": "pendiente",
+      "dueRef": "Semana 16+",
+      "notes": "Monitoreo, backups diarios, soporte prioritario y ajustes menores."
+    }
+  ],
+  "decisions": [
+    {
+      "id": "ADR-01",
+      "date": "2026-11-17",
+      "type": "acuerdo",
+      "title": "Subdivisión de lotes/sublotes configurada a nivel Producto",
+      "detail": "Ya no se captura manualmente por cada orden de producción; la orden hereda la partición configurada en el catálogo del producto.",
+      "status": "vigente"
+    },
+    {
+      "id": "ADR-02",
+      "date": "2026-11-17",
+      "type": "acuerdo",
+      "title": "Presupuesto cerrado MVP en $110,000 MXN Software + $20,000 MXN Hardware",
+      "detail": "Sin tarifas por hora expuestas en documentos oficiales. Enlace CONTPAQi vía puente SQL local ($0 SDK).",
+      "status": "vigente"
+    }
+  ],
+  "aiHandoff": [
+    {
+      "id": "H-01",
+      "timestamp": "2026-11-24T01:40:00-06:00",
+      "actor": "Andrés · Antigravity",
+      "summary": "Se publicó la presentación web interactiva estilo Medelsa y se inicializó el panel privado de seguimiento multi-IA ($0 USD).",
+      "completed": [
+        "Presentación web desplegada en https://uanify.github.io/propuesta-tombstone-mes/",
+        "Propuesta Markdown final en docs/Oficial 2/propuesta_comercial_tombstone_mes.md",
+        "Creación del repositorio privado Uanify/tombstone-mes-ops con ops-status.json"
+      ],
+      "nextSteps": [
+        "Invitar a Ricardo como colaborador en Uanify/tombstone-mes-ops",
+        "Generar Fine-Grained PAT (solo lectura/escritura de Contents en este repo) para acceso al panel web",
+        "Esperar luz verde del cliente para pasar a Fase 1 y activar startDate"
+      ],
+      "touchedFiles": [
+        "ops-status.json",
+        "AI_SYNC_PROTOCOL.md"
+      ]
+    }
+  ]
+}

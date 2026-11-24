@@ -741,7 +741,7 @@
               autocomplete="off"
             />
             <span class="field-hint">
-              Se conecta directo al repositorio privado <code>Uanify/tombstone-mes-ops</code>. No se envía a ningún servidor externo.
+              Se conecta directo al repositorio <code>Uanify/propuesta-tombstone-mes</code> (<code>ops-data/ops-status.json</code>). No se envía a ningún servidor externo.
             </span>
           </div>
 
@@ -764,7 +764,7 @@
             <div id="helpContent" class="accordion-content">
               <ol>
                 <li>En GitHub ve a <strong>Settings → Developer settings → Personal access tokens → Fine-grained tokens</strong>.</li>
-                <li>En <em>Repository access</em> elige <strong>Only select repositories</strong> y selecciona <code>Uanify/tombstone-mes-ops</code>.</li>
+                <li>En <em>Repository access</em> elige <strong>Only select repositories</strong> y selecciona <code>Uanify/propuesta-tombstone-mes</code>.</li>
                 <li>En <em>Repository permissions → Contents</em> elige <strong>Read and write</strong>, genera y pégalo arriba.</li>
               </ol>
             </div>
@@ -1151,7 +1151,7 @@
         </div>
         <form class="modal-body" onsubmit="commitToGitHub(event)">
           <p class="field-hint" style="margin-bottom: 12px">
-            Se enviará un commit a <code>Uanify/tombstone-mes-ops/ops-status.json</code> validando el SHA para no sobrescribir avances de otra sesión.
+            Se enviará un commit a <code>Uanify/propuesta-tombstone-mes/ops-data/ops-status.json</code> validando el SHA para no sobrescribir avances de otra sesión.
           </p>
           <div class="form-group">
             <label class="field-label" for="commitMessageInput">Mensaje breve del avance</label>
@@ -1194,8 +1194,8 @@
 
     <script>
       const REPO_OWNER = "Uanify";
-      const REPO_NAME = "tombstone-mes-ops";
-      const FILE_PATH = "ops-status.json";
+      const REPO_NAME = "propuesta-tombstone-mes";
+      const FILE_PATH = "ops-data/ops-status.json";
       const SESSION_KEY = "uanify_tombstone_ops_session";
 
       let authToken = "";
@@ -1317,7 +1317,7 @@
 
           if (!res.ok) {
             if (res.status === 401 || res.status === 403) {
-              showToast("Token inválido o sin permiso de lectura en Uanify/tombstone-mes-ops.", "error");
+              showToast("Token inválido o sin permiso de lectura en Uanify/propuesta-tombstone-mes.", "error");
             } else {
               showToast(`Error al leer GitHub (${res.status}). Verifica acceso al repo privado.`, "error");
             }
