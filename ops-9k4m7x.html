@@ -4,35 +4,37 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="robots" content="noindex, nofollow, noarchive" />
-    <title>Mission Control · Tombstone Hats MES (Privado)</title>
+    <title>Uanify Ops · Control Interno de Implementación</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&family=Outfit:wght@500;600;700&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&family=Space+Grotesk:wght@500;600;700&display=swap"
       rel="stylesheet"
     />
     <style>
       :root {
-        --bg: #f8fafc;
-        --surface: #ffffff;
-        --surface-soft: #f1f5f9;
-        --fg: #0f172a;
-        --body: #334155;
-        --muted: #64748b;
-        --border: #e2e8f0;
-        --brand: #8b5e3c;
-        --brand-dark: #6e482c;
-        --brand-soft: rgba(139, 94, 60, 0.1);
-        --brand-ring: rgba(139, 94, 60, 0.16);
-        --ok: #15803d;
-        --ok-bg: #dcfce7;
-        --warn: #b45309;
-        --warn-bg: #fef3c7;
-        --err: #b91c1c;
-        --err-bg: #fee2e2;
-        --info: #1d4ed8;
-        --info-bg: #dbeafe;
-        --radius: 12px;
+        color-scheme: dark;
+        --bg: #0b0d12;
+        --surface: #121620;
+        --surface-soft: #1a2030;
+        --surface-hover: #21283b;
+        --fg: #f1f5f9;
+        --body: #cbd5e1;
+        --muted: #8b98b0;
+        --border: #252e42;
+        --brand: #6366f1;
+        --brand-dark: #4f46e5;
+        --brand-soft: rgba(99, 102, 241, 0.16);
+        --brand-ring: rgba(99, 102, 241, 0.32);
+        --cyan: #38bdf8;
+        --ok: #4ade80;
+        --ok-bg: rgba(34, 197, 94, 0.14);
+        --warn: #fbbf24;
+        --warn-bg: rgba(245, 158, 11, 0.15);
+        --err: #f87171;
+        --err-bg: rgba(239, 68, 68, 0.14);
+        --info: #60a5fa;
+        --info-bg: rgba(59, 130, 246, 0.15);
         --form-h: 42px;
       }
 
@@ -57,11 +59,11 @@
       input[type="checkbox"],
       label,
       .sub-tab-btn,
-      .accordion-btn {
+      .rte-btn {
         cursor: pointer !important;
       }
 
-      /* Formularios y botones estandarizados */
+      /* Formularios y botones */
       .form-group {
         display: flex;
         flex-direction: column;
@@ -69,7 +71,7 @@
         margin-bottom: 14px;
       }
       .field-label {
-        font-size: 0.78rem;
+        font-size: 0.77rem;
         font-weight: 600;
         color: var(--fg);
       }
@@ -85,16 +87,16 @@
         padding: 9px 12px;
         border: 1px solid var(--border);
         border-radius: 10px;
-        background: #ffffff;
+        background: #0e121b;
         color: var(--fg);
         font-family: "Inter", sans-serif;
-        font-size: 0.86rem;
+        font-size: 0.85rem;
         transition: border-color 0.2s, box-shadow 0.2s;
       }
       textarea.form-input {
         min-height: 90px;
         resize: vertical;
-        line-height: 1.45;
+        line-height: 1.48;
       }
       .form-input:focus,
       .custom-select:focus {
@@ -106,7 +108,7 @@
       .form-input.input-sm {
         min-height: 36px;
         padding: 6px 10px;
-        font-size: 0.8rem;
+        font-size: 0.79rem;
       }
 
       .btn-primary,
@@ -120,7 +122,7 @@
         padding: 0 16px;
         border-radius: 10px;
         font-family: "Inter", sans-serif;
-        font-size: 0.82rem;
+        font-size: 0.81rem;
         font-weight: 600;
         border: 1px solid transparent;
         transition: all 0.18s ease;
@@ -135,30 +137,115 @@
         background: var(--brand-dark);
       }
       .btn-secondary {
-        background: #ffffff;
+        background: var(--surface-soft);
         color: var(--fg);
         border-color: var(--border);
       }
       .btn-secondary:hover {
-        background: var(--surface-soft);
-        border-color: #cbd5e1;
+        background: var(--surface-hover);
+        border-color: #3a4763;
       }
       .btn-danger {
         background: var(--err-bg);
         color: var(--err);
-        border-color: #fecaca;
+        border-color: rgba(239, 68, 68, 0.3);
       }
       .btn-danger:hover {
-        background: var(--err);
+        background: #dc2626;
         color: #ffffff;
       }
       .btn-sm {
-        min-height: 36px;
+        min-height: 35px;
         padding: 0 12px;
-        font-size: 0.77rem;
+        font-size: 0.76rem;
       }
       .btn-full {
         width: 100%;
+      }
+
+      /* Rich Text / Markdown Visual Editor */
+      .rte-wrap {
+        border: 1px solid var(--border);
+        border-radius: 10px;
+        overflow: hidden;
+        background: #0e121b;
+      }
+      .rte-wrap:focus-within {
+        border-color: var(--brand);
+        box-shadow: 0 0 0 3px var(--brand-ring);
+      }
+      .rte-toolbar {
+        display: flex;
+        align-items: center;
+        gap: 4px;
+        flex-wrap: wrap;
+        padding: 7px 8px;
+        background: var(--surface-soft);
+        border-bottom: 1px solid var(--border);
+      }
+      .rte-btn {
+        min-height: 30px;
+        padding: 0 9px;
+        border-radius: 6px;
+        border: 1px solid transparent;
+        background: transparent;
+        color: var(--body);
+        font-family: "JetBrains Mono", monospace;
+        font-size: 0.74rem;
+        font-weight: 600;
+        transition: all 0.15s;
+      }
+      .rte-btn:hover {
+        background: var(--surface-hover);
+        border-color: var(--border);
+        color: #ffffff;
+      }
+      .rte-editor {
+        min-height: 135px;
+        max-height: 260px;
+        overflow-y: auto;
+        padding: 12px 13px;
+        color: var(--fg);
+        font-size: 0.85rem;
+        line-height: 1.55;
+        outline: none;
+      }
+      .rte-editor:empty::before {
+        content: attr(data-placeholder);
+        color: var(--muted);
+        pointer-events: none;
+      }
+      .rte-editor h3,
+      .rich-preview h3 {
+        font-family: "Space Grotesk", sans-serif;
+        font-size: 0.96rem;
+        color: #ffffff;
+        margin: 8px 0 4px;
+      }
+      .rte-editor ul,
+      .rte-editor ol,
+      .rich-preview ul,
+      .rich-preview ol {
+        padding-left: 20px;
+        margin: 5px 0;
+      }
+      .rte-editor code,
+      .rich-preview code {
+        font-family: "JetBrains Mono", monospace;
+        font-size: 0.78rem;
+        background: var(--surface-soft);
+        border: 1px solid var(--border);
+        color: var(--cyan);
+        padding: 1px 5px;
+        border-radius: 5px;
+      }
+      .rich-preview {
+        font-size: 0.78rem;
+        color: var(--muted);
+        line-height: 1.48;
+        margin-top: 4px;
+        max-height: 82px;
+        overflow: hidden;
       }
 
       /* Login Gate */
@@ -168,97 +255,54 @@
         align-items: center;
         justify-content: center;
         padding: 24px 16px;
+        background:
+          radial-gradient(circle at 20% 20%, rgba(99, 102, 241, 0.14), transparent 40%),
+          radial-gradient(circle at 80% 80%, rgba(56, 189, 248, 0.08), transparent 45%),
+          var(--bg);
       }
       .login-card {
         width: 100%;
-        max-width: 470px;
+        max-width: 440px;
         background: var(--surface);
         border: 1px solid var(--border);
         border-radius: 18px;
-        box-shadow: 0 24px 50px -24px rgba(15, 23, 42, 0.16);
+        box-shadow: 0 28px 60px rgba(0, 0, 0, 0.45);
         overflow: hidden;
       }
       .login-head {
-        background: #1e293b;
-        color: #ffffff;
+        background: linear-gradient(135deg, #161b2a 0%, #111521 100%);
         padding: 24px 26px;
-        border-bottom: 3px solid var(--brand);
+        border-bottom: 1px solid var(--border);
       }
       .login-head-tag {
         font-family: "JetBrains Mono", monospace;
-        font-size: 0.68rem;
+        font-size: 0.67rem;
         letter-spacing: 0.14em;
         text-transform: uppercase;
-        color: #e2b88d;
+        color: var(--cyan);
         margin-bottom: 6px;
       }
       .login-head h1 {
-        font-family: "Outfit", sans-serif;
-        font-size: 1.42rem;
+        font-family: "Space Grotesk", sans-serif;
+        font-size: 1.38rem;
         font-weight: 700;
         letter-spacing: -0.02em;
       }
       .login-head p {
         font-size: 0.8rem;
-        color: #cbd5e1;
+        color: var(--muted);
         margin-top: 4px;
       }
       .login-body {
         padding: 24px 26px;
       }
 
-      .accordion-box {
-        margin-top: 16px;
-        border: 1px solid var(--border);
-        border-radius: 10px;
-        background: var(--bg);
-        overflow: hidden;
-      }
-      .accordion-btn {
-        width: 100%;
-        background: transparent;
-        border: none;
-        padding: 11px 14px;
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        font-size: 0.78rem;
-        font-weight: 600;
-        color: var(--body);
-        text-align: left;
-      }
-      .accordion-content {
-        display: none;
-        padding: 0 14px 14px;
-        font-size: 0.76rem;
-        color: var(--body);
-        line-height: 1.5;
-      }
-      .accordion-content.open {
-        display: block;
-      }
-      .accordion-content ol {
-        padding-left: 18px;
-        margin-top: 6px;
-        display: flex;
-        flex-direction: column;
-        gap: 4px;
-      }
-      .accordion-content code {
-        font-family: "JetBrains Mono", monospace;
-        font-size: 0.73rem;
-        background: #ffffff;
-        border: 1px solid var(--border);
-        padding: 1px 5px;
-        border-radius: 4px;
-      }
-
       /* Dashboard Shell */
       .app-shell {
         display: none;
-        max-width: 1360px;
+        max-width: 1380px;
         margin: 0 auto;
-        padding: 20px 20px 48px;
+        padding: 20px 20px 56px;
       }
       .app-shell.active {
         display: block;
@@ -288,8 +332,8 @@
         flex-wrap: wrap;
       }
       .brand-title h1 {
-        font-family: "Outfit", sans-serif;
-        font-size: 1.32rem;
+        font-family: "Space Grotesk", sans-serif;
+        font-size: 1.28rem;
         font-weight: 700;
         letter-spacing: -0.02em;
       }
@@ -300,12 +344,13 @@
         padding: 4px 10px;
         border-radius: 999px;
         font-family: "JetBrains Mono", monospace;
-        font-size: 0.7rem;
+        font-size: 0.69rem;
         font-weight: 600;
       }
       .pill-brand {
-        background: var(--brand);
-        color: #ffffff;
+        background: var(--brand-soft);
+        color: #a5b4fc;
+        border: 1px solid rgba(99, 102, 241, 0.35);
       }
       .pill-slate {
         background: var(--surface-soft);
@@ -350,7 +395,7 @@
       }
       .meta-ctrl label {
         font-family: "JetBrains Mono", monospace;
-        font-size: 0.66rem;
+        font-size: 0.65rem;
         text-transform: uppercase;
         letter-spacing: 0.08em;
         color: var(--muted);
@@ -374,20 +419,20 @@
       }
       .kpi-label {
         font-family: "JetBrains Mono", monospace;
-        font-size: 0.68rem;
+        font-size: 0.67rem;
         text-transform: uppercase;
         letter-spacing: 0.08em;
         color: var(--muted);
       }
       .kpi-val {
-        font-family: "Outfit", sans-serif;
-        font-size: 1.75rem;
+        font-family: "Space Grotesk", sans-serif;
+        font-size: 1.72rem;
         font-weight: 700;
-        color: var(--fg);
+        color: #ffffff;
         line-height: 1.05;
       }
       .kpi-sub {
-        font-size: 0.77rem;
+        font-size: 0.76rem;
         color: var(--muted);
       }
       .progress-track {
@@ -400,7 +445,7 @@
       }
       .progress-fill {
         height: 100%;
-        background: var(--brand);
+        background: linear-gradient(90deg, var(--brand), var(--cyan));
         transition: width 0.25s ease;
       }
 
@@ -422,14 +467,14 @@
         background: var(--surface);
         color: var(--body);
         font-family: "Inter", sans-serif;
-        font-size: 0.83rem;
+        font-size: 0.82rem;
         font-weight: 600;
         white-space: nowrap;
         transition: all 0.18s;
       }
       .sub-tab-btn:hover {
         border-color: var(--brand);
-        color: var(--brand);
+        color: #ffffff;
       }
       .sub-tab-btn.active {
         background: var(--brand);
@@ -490,13 +535,13 @@
       th {
         text-align: left;
         font-family: "JetBrains Mono", monospace;
-        font-size: 0.68rem;
+        font-size: 0.67rem;
         text-transform: uppercase;
         letter-spacing: 0.08em;
         color: var(--muted);
         padding: 10px 12px;
-        border-bottom: 2px solid var(--border);
-        background: var(--bg);
+        border-bottom: 1px solid var(--border);
+        background: #0e121b;
         white-space: nowrap;
       }
       td {
@@ -511,27 +556,16 @@
         color: var(--fg);
         margin-bottom: 3px;
       }
-      .task-notes {
-        font-size: 0.77rem;
-        color: var(--muted);
-        line-height: 1.4;
-      }
       .lock-box {
-        margin-top: 6px;
         padding: 7px 10px;
-        border-radius: 8px;
+        border-radius: 9px;
         background: var(--warn-bg);
-        border: 1px solid #fde68a;
+        border: 1px solid rgba(251, 191, 36, 0.35);
         font-size: 0.74rem;
-        color: #92400e;
+        color: var(--warn);
         display: flex;
         flex-direction: column;
-        gap: 3px;
-      }
-      .lock-files {
-        font-family: "JetBrains Mono", monospace;
-        font-size: 0.7rem;
-        word-break: break-all;
+        gap: 5px;
       }
 
       /* Prereqs & Handoff Cards */
@@ -564,7 +598,7 @@
         line-height: 1.5;
       }
       .protocol-banner {
-        background: #ffffff;
+        background: var(--surface);
         border: 1px solid var(--border);
         border-radius: 14px;
         padding: 16px 18px;
@@ -574,27 +608,28 @@
         gap: 12px;
       }
       .proto-step {
-        background: var(--bg);
+        background: #0e121b;
         border: 1px solid var(--border);
         border-radius: 10px;
         padding: 11px 12px;
         font-size: 0.77rem;
-        line-height: 1.4;
+        line-height: 1.42;
+        color: var(--body);
       }
       .proto-step strong {
         display: block;
-        color: var(--brand);
+        color: var(--cyan);
         font-family: "JetBrains Mono", monospace;
-        font-size: 0.72rem;
+        font-size: 0.71rem;
         margin-bottom: 4px;
       }
 
-      /* Modals (4-part required structure) */
+      /* Modals */
       .modal-backdrop {
         position: fixed;
         inset: 0;
-        background: rgba(15, 23, 42, 0.55);
-        backdrop-filter: blur(3px);
+        background: rgba(5, 7, 12, 0.75);
+        backdrop-filter: blur(4px);
         display: none;
         align-items: center;
         justify-content: center;
@@ -606,12 +641,12 @@
       }
       .modal-box {
         width: 100%;
-        max-width: 520px;
+        max-width: 620px;
         max-height: 90vh;
-        background: #ffffff;
+        background: var(--surface);
         border-radius: 16px;
         border: 1px solid var(--border);
-        box-shadow: 0 24px 60px rgba(15, 23, 42, 0.28);
+        box-shadow: 0 28px 64px rgba(0, 0, 0, 0.55);
         display: flex;
         flex-direction: column;
         overflow: hidden;
@@ -625,8 +660,8 @@
         flex-shrink: 0;
       }
       .modal-header h3 {
-        font-family: "Outfit", sans-serif;
-        font-size: 1.08rem;
+        font-family: "Space Grotesk", sans-serif;
+        font-size: 1.06rem;
         font-weight: 700;
       }
       .modal-close {
@@ -634,9 +669,9 @@
         height: 34px;
         border-radius: 8px;
         border: 1px solid var(--border);
-        background: #ffffff;
+        background: var(--surface-soft);
         color: var(--fg);
-        font-size: 1rem;
+        font-size: 0.95rem;
       }
       .modal-body {
         padding: 18px 20px;
@@ -646,7 +681,7 @@
       .modal-footer {
         padding: 14px 20px;
         border-top: 1px solid var(--border);
-        background: var(--bg);
+        background: #0e121b;
         display: flex;
         align-items: center;
         justify-content: space-between;
@@ -666,13 +701,14 @@
         max-width: 360px;
       }
       .toast {
-        background: #1e293b;
-        color: #ffffff;
+        background: #1a2030;
+        color: #f8fafc;
         padding: 12px 15px;
         border-radius: 11px;
-        font-size: 0.81rem;
+        font-size: 0.8rem;
         line-height: 1.4;
-        box-shadow: 0 12px 28px rgba(15, 23, 42, 0.25);
+        border: 1px solid var(--border);
+        box-shadow: 0 12px 28px rgba(0, 0, 0, 0.45);
         border-left: 4px solid var(--brand);
       }
       .toast.success {
@@ -700,13 +736,13 @@
     </style>
   </head>
   <body>
-    <!-- PANTALLA DE ACCESO PRIVADO -->
+    <!-- PANTALLA DE ACCESO (1 BOTÓN) -->
     <main id="loginView" class="login-wrap">
-      <section class="login-card" aria-label="Acceso privado al panel">
+      <section class="login-card" aria-label="Acceso interno al panel">
         <div class="login-head">
-          <div class="login-head-tag">Uanify · Control Interno $0 USD</div>
-          <h1>Tombstone Hats MES · Ops</h1>
-          <p>Seguimiento de implementación y sincronización Claude ↔ Antigravity</p>
+          <div class="login-head-tag">Uanify DevOps · Panel Oculto $0 USD</div>
+          <h1>Control de Implementación</h1>
+          <p>Seguimiento técnico multi-IA (Claude ↔ Antigravity)</p>
         </div>
 
         <form id="loginForm" class="login-body" onsubmit="handleLogin(event)">
@@ -721,13 +757,7 @@
 
           <div class="form-group" id="customActorGroup" style="display: none">
             <label class="field-label" for="customActorName">Nombre del colaborador</label>
-            <input
-              type="text"
-              id="customActorName"
-              class="form-input"
-              placeholder="Ej. Laura · QA"
-              autocomplete="off"
-            />
+            <input type="text" id="customActorName" class="form-input" placeholder="Ej. Laura · QA" autocomplete="off" />
           </div>
 
           <div class="form-group" style="flex-direction: row; align-items: center; gap: 8px; margin-bottom: 18px">
@@ -744,26 +774,19 @@
       </section>
     </main>
 
-    <!-- DASHBOARD PRIVADO MISSION CONTROL -->
+    <!-- DASHBOARD INTERNO -->
     <div id="appShell" class="app-shell">
       <header class="topbar">
         <div class="topbar-row">
           <div class="brand-title">
-            <h1>Mission Control · Tombstone MES</h1>
+            <h1>Uanify Ops · Implementación MES</h1>
             <span class="pill pill-brand" id="activeActorPill">Conectado</span>
-            <span class="pill pill-warn" id="dirtyPill" style="display: none">Cambios sin guardar</span>
             <span class="pill pill-slate" id="lastSyncPill">Sincronizado</span>
           </div>
 
           <div class="actions-bar">
             <button type="button" class="btn-secondary btn-sm" onclick="fetchFromGitHub(true)">
               ↻ Sincronizar
-            </button>
-            <button type="button" class="btn-secondary btn-sm" onclick="copyAiContext()">
-              Copiar Contexto IA
-            </button>
-            <button type="button" class="btn-primary btn-sm" id="btnSaveTop" onclick="openSaveModal()">
-              Guardar en GitHub
             </button>
             <button type="button" class="btn-secondary btn-sm" onclick="logout()">
               Salir
@@ -792,7 +815,7 @@
               <option value="Fase 1 · Desarrollo (Sem 1–8)">Fase 1 · Desarrollo (Sem 1–8)</option>
               <option value="Fase 2 · UAT Planta (Sem 9)">Fase 2 · UAT Planta (Sem 9)</option>
               <option value="Fase 3 · Refinamiento (Sem 10–11)">Fase 3 · Refinamiento (Sem 10–11)</option>
-              <option value="Fase 4 · Go-Live & Garantía (Sem 12–15)">Fase 4 · Go-Live & Garantía (Sem 12–15)</option>
+              <option value="Fase 4 · Go-Live & Garantía (Sem 12–15)">Fase 4 · Go-Live &amp; Garantía (Sem 12–15)</option>
             </select>
           </div>
 
@@ -803,7 +826,7 @@
 
           <div class="meta-ctrl">
             <label>Go-Live (12 Sem) / Fin Garantía</label>
-            <div class="form-input input-sm" id="metaDatesReadout" style="display: flex; align-items: center; background: var(--bg); color: var(--muted)">
+            <div class="form-input input-sm" id="metaDatesReadout" style="display: flex; align-items: center; color: var(--muted)">
               Sin fecha de arranque aún
             </div>
           </div>
@@ -826,9 +849,9 @@
         </article>
 
         <article class="kpi-card">
-          <div class="kpi-label">Locks Activos de IA</div>
+          <div class="kpi-label">Tareas Tomadas (Lock IA)</div>
           <div class="kpi-val" id="kpiLocksVal">0</div>
-          <div class="kpi-sub" id="kpiLocksSub">Claude ↔ Antigravity sin conflictos</div>
+          <div class="kpi-sub" id="kpiLocksSub">Sin tareas tomadas actualmente</div>
         </article>
 
         <article class="kpi-card">
@@ -895,7 +918,7 @@
                   <th>Módulo y Tarea</th>
                   <th>Estatus</th>
                   <th>Responsable</th>
-                  <th>Coordinación IA (Lock)</th>
+                  <th>Lock IA &amp; Detalle</th>
                 </tr>
               </thead>
               <tbody id="tasksTableBody"></tbody>
@@ -913,20 +936,20 @@
       <section id="tab-handoff" class="sub-tab-content">
         <div class="protocol-banner">
           <div class="proto-step">
-            <strong>1. PULL (Leer primero)</strong>
-            Sincronizar o hacer <code>git pull</code> de <code>ops-status.json</code> y leer el último handoff antes de tocar código.
+            <strong>1. PULL (Leer estado)</strong>
+            Hacer <code>git pull</code> de <code>ops-data/ops-status.json</code> y leer el último handoff antes de empezar.
           </div>
           <div class="proto-step">
-            <strong>2. LOCK (Reclamar tarea)</strong>
-            Tomar el Lock IA indicando los archivos que se van a editar para que la otra IA no los toque en paralelo.
+            <strong>2. LOCK (Tomar tarea)</strong>
+            Marcar con 1 clic qué tarea está tomando Claude o Antigravity para evitar trabajo duplicado.
           </div>
           <div class="proto-step">
-            <strong>3. HANDOFF (Documentar)</strong>
-            Liberar el Lock y registrar qué se completó, archivos tocados y el siguiente paso exacto.
+            <strong>3. PR &amp; REVIEW</strong>
+            Cualquier cruce de archivos entre ramas se revisa y resuelve de forma limpia en el Pull Request.
           </div>
           <div class="proto-step">
-            <strong>4. PUSH (Validación SHA)</strong>
-            Guardar en GitHub. Si la otra persona guardó antes, el sistema bloquea sobrescritura por SHA para re-sincronizar.
+            <strong>4. HANDOFF (Documentar)</strong>
+            Registrar qué quedó terminado y cuál es el siguiente paso para la otra IA al hacer commit/merge.
           </div>
         </div>
 
@@ -944,7 +967,7 @@
       <section id="tab-finance" class="sub-tab-content">
         <div class="panel-card" style="margin-bottom: 16px">
           <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; flex-wrap: wrap; gap: 10px">
-            <h2 style="font-family: 'Outfit', sans-serif; font-size: 1.08rem">Hitos de Pago e Ingresos (Interno Uanify)</h2>
+            <h2 style="font-family: 'Space Grotesk', sans-serif; font-size: 1.06rem">Hitos de Pago e Ingresos (Interno Uanify)</h2>
             <span class="pill pill-slate">Base Desarrollo: $110,000 MXN + IVA</span>
           </div>
           <div class="table-wrap">
@@ -965,7 +988,7 @@
 
         <div class="panel-card">
           <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; flex-wrap: wrap; gap: 10px">
-            <h2 style="font-family: 'Outfit', sans-serif; font-size: 1.08rem">Bitácora de Acuerdos, Riesgos y Cambios (ADR)</h2>
+            <h2 style="font-family: 'Space Grotesk', sans-serif; font-size: 1.06rem">Bitácora de Acuerdos, Riesgos y Cambios (ADR)</h2>
             <button type="button" class="btn-primary btn-sm" onclick="openDecisionModal()">+ Nuevo Registro</button>
           </div>
           <div id="decisionsList"></div>
@@ -973,77 +996,88 @@
       </section>
     </div>
 
-    <!-- MODAL: TOMAR LOCK IA -->
-    <div id="modalLock" class="modal-backdrop">
+    <!-- MODAL: CREAR / EDITAR TAREA CON EDITOR FORMATEADO -->
+    <div id="modalTaskForm" class="modal-backdrop">
       <div class="modal-box">
         <div class="modal-header">
-          <h3>Tomar Lock IA en Tarea</h3>
-          <button type="button" class="modal-close" onclick="closeModal('modalLock')">✕</button>
+          <h3 id="taskModalTitle">Registrar Nueva Tarea</h3>
+          <button type="button" class="modal-close" onclick="closeModal('modalTaskForm')">✕</button>
         </div>
-        <form class="modal-body" onsubmit="confirmTakeLock(event)">
-          <input type="hidden" id="lockTaskId" />
-          <p style="font-size: 0.83rem; color: var(--body); margin-bottom: 12px" id="lockTaskDesc"></p>
-          <div class="form-group">
-            <label class="field-label" for="lockFilesInput">Archivos / módulos que vas a modificar (separados por coma)</label>
-            <input
-              type="text"
-              id="lockFilesInput"
-              class="form-input"
-              placeholder="Ej. backend/routes/orders.ts, js/engineer.js"
-              required
-            />
-            <span class="field-hint">Esto avisa a la otra IA (Claude o Antigravity) para evitar conflictos de edición.</span>
+        <form class="modal-body" onsubmit="saveTaskForm(event)">
+          <input type="hidden" id="editingTaskId" />
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px">
+            <div class="form-group">
+              <label class="field-label" for="taskPhaseInput">Fase</label>
+              <select id="taskPhaseInput" class="custom-select">
+                <option value="Fase 0 · Arranque">Fase 0 · Arranque</option>
+                <option value="Fase 1 · Desarrollo (Sem 1–8)" selected>Fase 1 · Desarrollo (Sem 1–8)</option>
+                <option value="Fase 2 · UAT Planta (Sem 9)">Fase 2 · UAT Planta (Sem 9)</option>
+                <option value="Fase 3 · Refinamiento (Sem 10–11)">Fase 3 · Refinamiento (Sem 10–11)</option>
+                <option value="Fase 4 · Go-Live & Garantía (Sem 12–15)">Fase 4 · Go-Live &amp; Garantía (Sem 12–15)</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label class="field-label" for="taskAssigneeInput">Responsable</label>
+              <select id="taskAssigneeInput" class="custom-select">
+                <option value="Andrés">Andrés</option>
+                <option value="Ricardo">Ricardo</option>
+                <option value="Ambos" selected>Ambos</option>
+                <option value="Colaborador">Colaborador</option>
+              </select>
+            </div>
           </div>
-          <div class="modal-footer" style="padding: 14px 0 0; border-top: 1px solid var(--border); background: transparent">
-            <button type="button" class="btn-secondary" onclick="closeModal('modalLock')">Cancelar</button>
-            <button type="submit" class="btn-primary">Activar Lock y Pasar a En Curso</button>
-          </div>
-        </form>
-      </div>
-    </div>
 
-    <!-- MODAL: NUEVA TAREA -->
-    <div id="modalNewTask" class="modal-backdrop">
-      <div class="modal-box">
-        <div class="modal-header">
-          <h3>Registrar Nueva Tarea</h3>
-          <button type="button" class="modal-close" onclick="closeModal('modalNewTask')">✕</button>
-        </div>
-        <form class="modal-body" onsubmit="saveNewTask(event)">
           <div class="form-group">
-            <label class="field-label" for="newTaskPhase">Fase</label>
-            <select id="newTaskPhase" class="custom-select">
-              <option value="Fase 0 · Arranque">Fase 0 · Arranque</option>
-              <option value="Fase 1 · Desarrollo (Sem 1–8)" selected>Fase 1 · Desarrollo (Sem 1–8)</option>
-              <option value="Fase 2 · UAT Planta (Sem 9)">Fase 2 · UAT Planta (Sem 9)</option>
-              <option value="Fase 3 · Refinamiento (Sem 10–11)">Fase 3 · Refinamiento (Sem 10–11)</option>
-              <option value="Fase 4 · Go-Live & Garantía (Sem 12–15)">Fase 4 · Go-Live &amp; Garantía (Sem 12–15)</option>
+            <label class="field-label" for="taskModuleSelect">Módulo del Sistema</label>
+            <select id="taskModuleSelect" class="custom-select" onchange="toggleCustomModule()">
+              <option value="Comercial & Kickoff">Comercial &amp; Kickoff</option>
+              <option value="Infraestructura Cloud">Infraestructura Cloud</option>
+              <option value="Módulo 1 · Programación y QR">Módulo 1 · Programación y QR</option>
+              <option value="Módulo 2 · Andon y 5 KPIs">Módulo 2 · Andon y 5 KPIs</option>
+              <option value="Módulo 3 · Terminal Piso T1–T6">Módulo 3 · Terminal Piso T1–T6</option>
+              <option value="Módulo 4 · Calidad C1–C5">Módulo 4 · Calidad C1–C5</option>
+              <option value="Módulo 5 · Subensambles y Fotos">Módulo 5 · Subensambles y Fotos</option>
+              <option value="Módulo 6 · Pre-Nómina Destajo">Módulo 6 · Pre-Nómina Destajo</option>
+              <option value="Módulo 7 · Puente CONTPAQi SQL">Módulo 7 · Puente CONTPAQi SQL</option>
+              <option value="Módulo 8 · Implementación">Módulo 8 · Implementación</option>
+              <option value="Otro">Otro (especificar)</option>
             </select>
           </div>
-          <div class="form-group">
-            <label class="field-label" for="newTaskModule">Módulo</label>
-            <input type="text" id="newTaskModule" class="form-input" placeholder="Ej. Módulo 7 · Puente CONTPAQi SQL" required />
+
+          <div class="form-group" id="customModuleGroup" style="display: none">
+            <label class="field-label" for="taskModuleCustom">Nombre del módulo personalizado</label>
+            <input type="text" id="taskModuleCustom" class="form-input" placeholder="Ej. Seguridad & Auditoría" />
           </div>
+
           <div class="form-group">
-            <label class="field-label" for="newTaskTitle">Título de la tarea</label>
-            <input type="text" id="newTaskTitle" class="form-input" placeholder="Descripción clara de lo que se va a construir" required />
+            <label class="field-label" for="taskTitleInput">Título de la tarea</label>
+            <input type="text" id="taskTitleInput" class="form-input" placeholder="Descripción clara de lo que se va a construir" required />
           </div>
+
           <div class="form-group">
-            <label class="field-label" for="newTaskAssignee">Responsable</label>
-            <select id="newTaskAssignee" class="custom-select">
-              <option value="Andrés">Andrés</option>
-              <option value="Ricardo">Ricardo</option>
-              <option value="Ambos" selected>Ambos</option>
-              <option value="Colaborador">Colaborador</option>
-            </select>
+            <label class="field-label">Descripción detallada (formato visual sin escribir código Markdown)</label>
+            <div class="rte-wrap">
+              <div class="rte-toolbar">
+                <button type="button" class="rte-btn" onclick="rteCmd('bold')" title="Negrita"><b>B</b></button>
+                <button type="button" class="rte-btn" onclick="rteCmd('italic')" title="Cursiva"><i>I</i></button>
+                <button type="button" class="rte-btn" onclick="rteBlock('H3')" title="Subtítulo">H3</button>
+                <button type="button" class="rte-btn" onclick="rteCmd('insertUnorderedList')" title="Lista con viñetas">• Lista</button>
+                <button type="button" class="rte-btn" onclick="rteCmd('insertOrderedList')" title="Lista numerada">1. Lista</button>
+                <button type="button" class="rte-btn" onclick="rteInsertCode()" title="Código inline">&lt;/&gt; Código</button>
+                <button type="button" class="rte-btn" onclick="rteInsertCheck()" title="Insertar punto de checklist">☑ Check</button>
+              </div>
+              <div
+                id="taskNotesEditor"
+                class="rte-editor"
+                contenteditable="true"
+                data-placeholder="Escribe criterios de aceptación, endpoints, reglas de negocio o pasos técnicos..."
+              ></div>
+            </div>
           </div>
-          <div class="form-group">
-            <label class="field-label" for="newTaskNotes">Notas técnicas</label>
-            <textarea id="newTaskNotes" class="form-input" placeholder="Criterios de aceptación o detalles"></textarea>
-          </div>
+
           <div class="modal-footer" style="padding: 14px 0 0; border-top: 1px solid var(--border); background: transparent">
-            <button type="button" class="btn-secondary" onclick="closeModal('modalNewTask')">Cancelar</button>
-            <button type="submit" class="btn-primary">Agregar Tarea</button>
+            <button type="button" class="btn-secondary" onclick="closeModal('modalTaskForm')">Cancelar</button>
+            <button type="submit" class="btn-primary" id="btnSaveTaskForm">Guardar Tarea</button>
           </div>
         </form>
       </div>
@@ -1051,7 +1085,7 @@
 
     <!-- MODAL: NUEVO HANDOFF MULTI-IA -->
     <div id="modalHandoff" class="modal-backdrop">
-      <div class="modal-box" style="max-width: 600px">
+      <div class="modal-box">
         <div class="modal-header">
           <h3>Registrar Handoff de Sesión (Claude ↔ Antigravity)</h3>
           <button type="button" class="modal-close" onclick="closeModal('modalHandoff')">✕</button>
@@ -1059,19 +1093,15 @@
         <form class="modal-body" onsubmit="saveHandoff(event)">
           <div class="form-group">
             <label class="field-label" for="hoSummary">Resumen ejecutivo de la sesión</label>
-            <input type="text" id="hoSummary" class="form-input" placeholder="Ej. Se conectó lectura de órdenes desde vistas SQL de CONTPAQi" required />
+            <input type="text" id="hoSummary" class="form-input" placeholder="Ej. Se conectó lectura de órdenes desde vistas SQL" required />
           </div>
           <div class="form-group">
             <label class="field-label" for="hoCompleted">Lo que quedó terminado (una línea por punto)</label>
-            <textarea id="hoCompleted" class="form-input" placeholder="Endpoint /api/orders listo&#10;Pruebas locales con SQL Server ok"></textarea>
+            <textarea id="hoCompleted" class="form-input" placeholder="Endpoint /api/orders listo&#10;Pruebas locales ok"></textarea>
           </div>
           <div class="form-group">
             <label class="field-label" for="hoNext">Siguientes pasos para la otra IA (una línea por punto)</label>
-            <textarea id="hoNext" class="form-input" placeholder="Conectar UI de impresión QR con el nuevo endpoint&#10;Validar loteo heredado por modelo"></textarea>
-          </div>
-          <div class="form-group">
-            <label class="field-label" for="hoFiles">Archivos modificados (separados por coma)</label>
-            <input type="text" id="hoFiles" class="form-input" placeholder="backend/sql/orders.sql, src/api/orders.ts" />
+            <textarea id="hoNext" class="form-input" placeholder="Conectar UI de impresión QR&#10;Validar loteo por producto"></textarea>
           </div>
           <div class="modal-footer" style="padding: 14px 0 0; border-top: 1px solid var(--border); background: transparent">
             <button type="button" class="btn-secondary" onclick="closeModal('modalHandoff')">Cancelar</button>
@@ -1113,67 +1143,6 @@
       </div>
     </div>
 
-    <!-- MODAL: GUARDAR EN GITHUB -->
-    <div id="modalSave" class="modal-backdrop">
-      <div class="modal-box">
-        <div class="modal-header">
-          <h3>Guardar o Exportar Avances</h3>
-          <button type="button" class="modal-close" onclick="closeModal('modalSave')">✕</button>
-        </div>
-        <form class="modal-body" onsubmit="commitToGitHub(event)">
-          <p class="field-hint" style="margin-bottom: 12px">
-            Sincroniza directo a <code>Uanify/propuesta-tombstone-mes/ops-data/ops-status.json</code> (validando SHA), o bien descarga/copia el JSON para pasarlo a Claude o Antigravity.
-          </p>
-          <div class="form-group">
-            <label class="field-label" for="commitMessageInput">Mensaje breve del avance</label>
-            <input
-              type="text"
-              id="commitMessageInput"
-              class="form-input"
-              value="Actualización de estado e implementación Tombstone MES"
-              required
-            />
-          </div>
-          <div class="form-group">
-            <label class="field-label" for="savePatInput">Token GitHub (opcional para escribir directo al repo)</label>
-            <input
-              type="password"
-              id="savePatInput"
-              class="form-input"
-              placeholder="github_pat_... (solo si deseas push directo desde aquí)"
-              autocomplete="off"
-            />
-          </div>
-          <div class="modal-footer" style="padding: 14px 0 0; border-top: 1px solid var(--border); background: transparent; flex-wrap: wrap">
-            <div style="display: flex; gap: 8px">
-              <button type="button" class="btn-secondary btn-sm" onclick="downloadLocalBackup()">Descargar JSON</button>
-              <button type="button" class="btn-secondary btn-sm" onclick="copyFullJson()">Copiar JSON</button>
-            </div>
-            <button type="submit" id="btnConfirmPush" class="btn-primary btn-sm">Confirmar y Guardar</button>
-          </div>
-        </form>
-      </div>
-    </div>
-
-    <!-- MODAL: CONFLICTO SHA -->
-    <div id="modalConflict" class="modal-backdrop">
-      <div class="modal-box">
-        <div class="modal-header">
-          <h3>Conflicto de Sincronización (SHA)</h3>
-          <button type="button" class="modal-close" onclick="closeModal('modalConflict')">✕</button>
-        </div>
-        <div class="modal-body">
-          <p style="font-size: 0.85rem; color: var(--body); line-height: 1.5; margin-bottom: 14px">
-            Ricardo, Claude o Antigravity guardaron una versión más reciente en GitHub mientras editabas esta pantalla. Para proteger ambos trabajos, se detuvo el guardado automático.
-          </p>
-          <div class="modal-footer" style="padding: 14px 0 0; border-top: 1px solid var(--border); background: transparent">
-            <button type="button" class="btn-secondary" onclick="downloadLocalBackup()">Descargar Respaldo JSON</button>
-            <button type="button" class="btn-primary" onclick="reloadAfterConflict()">Recargar Última Versión</button>
-          </div>
-        </div>
-      </div>
-    </div>
-
     <div id="toastContainer" class="toast-container"></div>
 
     <script>
@@ -1181,12 +1150,23 @@
       const REPO_NAME = "propuesta-tombstone-mes";
       const FILE_PATH = "ops-data/ops-status.json";
       const SESSION_KEY = "uanify_tombstone_ops_session";
+      const DRAFT_KEY = "uanify_tombstone_ops_draft";
 
-      let authToken = "";
+      const STANDARD_MODULES = [
+        "Comercial & Kickoff",
+        "Infraestructura Cloud",
+        "Módulo 1 · Programación y QR",
+        "Módulo 2 · Andon y 5 KPIs",
+        "Módulo 3 · Terminal Piso T1–T6",
+        "Módulo 4 · Calidad C1–C5",
+        "Módulo 5 · Subensambles y Fotos",
+        "Módulo 6 · Pre-Nómina Destajo",
+        "Módulo 7 · Puente CONTPAQi SQL",
+        "Módulo 8 · Implementación",
+      ];
+
       let activeActor = "";
-      let currentSha = "";
       let state = null;
-      let isDirty = false;
 
       function showToast(message, type = "info") {
         const container = document.getElementById("toastContainer");
@@ -1194,27 +1174,14 @@
         el.className = `toast ${type}`;
         el.textContent = message;
         container.appendChild(el);
-        setTimeout(() => {
-          el.remove();
-        }, 4200);
-      }
-
-      function encodeUtf8Base64(str) {
-        const bytes = new TextEncoder().encode(str);
-        let binary = "";
-        bytes.forEach((b) => {
-          binary += String.fromCharCode(b);
-        });
-        return btoa(binary);
+        setTimeout(() => el.remove(), 3800);
       }
 
       function decodeUtf8Base64(b64) {
         const clean = b64.replace(/\s/g, "");
         const binary = atob(clean);
         const bytes = new Uint8Array(binary.length);
-        for (let i = 0; i < binary.length; i++) {
-          bytes[i] = binary.charCodeAt(i);
-        }
+        for (let i = 0; i < binary.length; i++) bytes[i] = binary.charCodeAt(i);
         return new TextDecoder("utf-8").decode(bytes);
       }
 
@@ -1223,16 +1190,9 @@
         document.getElementById("customActorGroup").style.display = sel === "Colaborador" ? "flex" : "none";
       }
 
-      function toggleHelpAccordion() {
-        const content = document.getElementById("helpContent");
-        const chev = document.getElementById("helpChevron");
-        const isOpen = content.classList.toggle("open");
-        chev.textContent = isOpen ? "−" : "+";
-      }
-
-      function setDirty(flag) {
-        isDirty = flag;
-        document.getElementById("dirtyPill").style.display = flag ? "inline-flex" : "none";
+      function toggleCustomModule() {
+        const sel = document.getElementById("taskModuleSelect").value;
+        document.getElementById("customModuleGroup").style.display = sel === "Otro" ? "flex" : "none";
       }
 
       function openModal(id) {
@@ -1247,6 +1207,48 @@
         document.querySelectorAll(".sub-tab-content").forEach((c) => c.classList.remove("active"));
         btnEl.classList.add("active");
         document.getElementById(`tab-${tabId}`).classList.add("active");
+      }
+
+      function persistLocalDraft() {
+        if (!state) return;
+        state.meta.lastUpdated = new Date().toISOString();
+        state.meta.lastUpdatedBy = activeActor;
+        localStorage.setItem(DRAFT_KEY, JSON.stringify(state));
+        renderHeaderMeta();
+      }
+
+      /* Rich Text Editor helpers (sin escribir sintaxis Markdown a mano) */
+      function rteCmd(cmd) {
+        document.getElementById("taskNotesEditor").focus();
+        document.execCommand(cmd, false, null);
+      }
+      function rteBlock(tag) {
+        document.getElementById("taskNotesEditor").focus();
+        document.execCommand("formatBlock", false, tag);
+      }
+      function rteInsertCode() {
+        const editor = document.getElementById("taskNotesEditor");
+        editor.focus();
+        const sel = window.getSelection();
+        const txt = sel && sel.toString() ? sel.toString() : "codigo";
+        document.execCommand("insertHTML", false, `<code>${escapeHtml(txt)}</code>&nbsp;`);
+      }
+      function rteInsertCheck() {
+        const editor = document.getElementById("taskNotesEditor");
+        editor.focus();
+        document.execCommand("insertHTML", false, `<div>☐&nbsp;</div>`);
+      }
+
+      function sanitizeRichHtml(raw) {
+        if (!raw) return "";
+        const doc = new DOMParser().parseFromString(raw, "text/html");
+        doc.querySelectorAll("script,style,iframe,object,embed").forEach((n) => n.remove());
+        doc.querySelectorAll("*").forEach((el) => {
+          Array.from(el.attributes).forEach((attr) => {
+            if (attr.name.startsWith("on") || attr.name === "style") el.removeAttribute(attr.name);
+          });
+        });
+        return doc.body.innerHTML;
       }
 
       async function handleLogin(e) {
@@ -1265,7 +1267,7 @@
 
         if (ok) {
           if (document.getElementById("rememberChk").checked) {
-            localStorage.setItem(SESSION_KEY, JSON.stringify({ actor: activeActor, token: authToken }));
+            localStorage.setItem(SESSION_KEY, JSON.stringify({ actor: activeActor }));
           } else {
             localStorage.removeItem(SESSION_KEY);
           }
@@ -1278,160 +1280,54 @@
 
       function logout() {
         localStorage.removeItem(SESSION_KEY);
-        authToken = "";
         state = null;
-        currentSha = "";
-        setDirty(false);
         document.getElementById("appShell").classList.remove("active");
         document.getElementById("loginView").style.display = "flex";
       }
 
-      async function fetchFromGitHub(notify) {
+      async function fetchFromGitHub(forceRemote) {
         try {
-          const url = `https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/contents/${FILE_PATH}?t=${Date.now()}`;
-          const headers = { Accept: "application/vnd.github+json" };
-          if (authToken) headers.Authorization = `Bearer ${authToken}`;
-
-          const res = await fetch(url, { headers });
-
-          if (res.ok) {
-            const data = await res.json();
-            currentSha = data.sha;
-            state = JSON.parse(decodeUtf8Base64(data.content));
-            setDirty(false);
-            renderAll();
-            if (notify) showToast("Estado actualizado desde GitHub.", "success");
-            return true;
-          }
-
-          // Fallback estático cuando la API pública excede rate-limit sin token
-          const fallbackRes = await fetch(`./${FILE_PATH}?t=${Date.now()}`);
-          if (fallbackRes.ok) {
-            state = await fallbackRes.json();
-            currentSha = "";
-            setDirty(false);
-            renderAll();
-            if (notify) showToast("Estado cargado desde copia publicada (solo lectura sin token).", "info");
-            return true;
-          }
-
-          showToast(`No se pudo cargar el estado (${res.status}).`, "error");
-          return false;
-        } catch (err) {
-          showToast("Error de red al cargar los datos del proyecto.", "error");
-          return false;
-        }
-      }
-
-      function openSaveModal() {
-        if (!state) return;
-        const patEl = document.getElementById("savePatInput");
-        if (patEl) patEl.value = authToken || "";
-        openModal("modalSave");
-      }
-
-      async function copyFullJson() {
-        if (!state) return;
-        try {
-          await navigator.clipboard.writeText(JSON.stringify(state, null, 2));
-          showToast("JSON completo copiado al portapapeles.", "success");
-        } catch {
-          showToast("No se pudo acceder al portapapeles.", "warning");
-        }
-      }
-
-      async function commitToGitHub(e) {
-        e.preventDefault();
-        if (!state) return;
-        const enteredToken = (document.getElementById("savePatInput")?.value || "").trim();
-        if (enteredToken) {
-          authToken = enteredToken;
-          if (localStorage.getItem(SESSION_KEY)) {
-            localStorage.setItem(SESSION_KEY, JSON.stringify({ actor: activeActor, token: authToken }));
-          }
-        }
-        if (!authToken) {
-          showToast("Para guardar directo en GitHub pega tu token arriba, o usa Descargar / Copiar JSON.", "warning");
-          return;
-        }
-
-        const msg = document.getElementById("commitMessageInput").value.trim() || "Actualización operativa";
-        const btn = document.getElementById("btnConfirmPush");
-        btn.disabled = true;
-        btn.textContent = "Guardando...";
-
-        state.meta.lastUpdated = new Date().toISOString();
-        state.meta.lastUpdatedBy = activeActor;
-
-        try {
-          const url = `https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/contents/${FILE_PATH}`;
-          if (!currentSha) {
-            const headRes = await fetch(`${url}?t=${Date.now()}`, {
-              headers: { Authorization: `Bearer ${authToken}`, Accept: "application/vnd.github+json" },
-            });
-            if (headRes.ok) {
-              const headData = await headRes.json();
-              currentSha = headData.sha;
+          if (!forceRemote) {
+            const localDraft = localStorage.getItem(DRAFT_KEY);
+            if (localDraft) {
+              state = JSON.parse(localDraft);
+              renderAll();
+              return true;
             }
           }
 
-          const res = await fetch(url, {
-            method: "PUT",
-            headers: {
-              Authorization: `Bearer ${authToken}`,
-              Accept: "application/vnd.github+json",
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-              message: `ops(${activeActor}): ${msg}`,
-              content: encodeUtf8Base64(JSON.stringify(state, null, 2) + "\n"),
-              sha: currentSha,
-            }),
-          });
+          const url = `https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/contents/${FILE_PATH}?t=${Date.now()}`;
+          const res = await fetch(url, { headers: { Accept: "application/vnd.github+json" } });
 
-          btn.disabled = false;
-          btn.textContent = "Confirmar y Guardar";
-
-          if (res.status === 409 || res.status === 422) {
-            closeModal("modalSave");
-            openModal("modalConflict");
-            return;
-          }
-          if (!res.ok) {
-            showToast(`No se pudo guardar en GitHub (HTTP ${res.status}). Revisa permisos Contents: Read & write.`, "error");
-            return;
+          if (res.ok) {
+            const data = await res.json();
+            state = JSON.parse(decodeUtf8Base64(data.content));
+            localStorage.setItem(DRAFT_KEY, JSON.stringify(state));
+            renderAll();
+            if (forceRemote) showToast("Estado sincronizado desde los últimos commits en GitHub.", "success");
+            return true;
           }
 
-          const out = await res.json();
-          currentSha = out.content.sha;
-          setDirty(false);
-          closeModal("modalSave");
-          renderAll();
-          showToast("Cambios guardados y sincronizados en GitHub.", "success");
-        } catch (err) {
-          btn.disabled = false;
-          btn.textContent = "Confirmar y Guardar";
-          showToast("Error de red al guardar en GitHub.", "error");
+          const fallbackRes = await fetch(`./${FILE_PATH}?t=${Date.now()}`);
+          if (fallbackRes.ok) {
+            state = await fallbackRes.json();
+            localStorage.setItem(DRAFT_KEY, JSON.stringify(state));
+            renderAll();
+            if (forceRemote) showToast("Estado sincronizado desde la versión publicada.", "info");
+            return true;
+          }
+
+          showToast(`No se pudo sincronizar el estado (${res.status}).`, "error");
+          return false;
+        } catch {
+          showToast("Error de red al sincronizar el estado.", "error");
+          return false;
         }
-      }
-
-      function downloadLocalBackup() {
-        const blob = new Blob([JSON.stringify(state, null, 2)], { type: "application/json" });
-        const a = document.createElement("a");
-        a.href = URL.createObjectURL(blob);
-        a.download = `respaldo-ops-status-${Date.now()}.json`;
-        a.click();
-        showToast("Respaldo descargado en tu equipo.", "info");
-      }
-
-      async function reloadAfterConflict() {
-        closeModal("modalConflict");
-        await fetchFromGitHub(true);
       }
 
       function updateMetaField(field, val) {
         state.meta[field] = val;
-        setDirty(true);
+        persistLocalDraft();
       }
 
       function addDaysIso(isoDate, days) {
@@ -1445,8 +1341,7 @@
         state.meta.startDate = val || null;
         state.meta.targetGoLiveDate = addDaysIso(val, 84);
         state.meta.warrantyEndDate = addDaysIso(val, 105);
-        setDirty(true);
-        renderHeaderMeta();
+        persistLocalDraft();
       }
 
       function renderAll() {
@@ -1488,8 +1383,8 @@
         const locks = state.tasks.filter((t) => t.aiLock);
         document.getElementById("kpiLocksVal").textContent = locks.length;
         document.getElementById("kpiLocksSub").textContent = locks.length
-          ? locks.map((l) => `${l.id}: ${l.aiLock.user}`).join(" · ")
-          : "Sin archivos bloqueados actualmente";
+          ? locks.map((l) => `${l.id} (${l.aiLock.user})`).join(" · ")
+          : "Sin tareas tomadas actualmente";
 
         const collected = state.milestones
           .filter((m) => m.id !== "M-04" && m.status === "cobrado")
@@ -1516,24 +1411,22 @@
 
         filtered.forEach((t) => {
           const tr = document.createElement("tr");
-
           const lockHtml = t.aiLock
             ? `<div class="lock-box">
-                 <strong>Lock: ${t.aiLock.user}</strong>
-                 <span class="lock-files">${(t.aiLock.files || []).join(", ")}</span>
-                 <button type="button" class="btn-secondary btn-sm" style="margin-top:4px; min-height:30px" onclick="releaseLock('${t.id}')">Liberar Lock</button>
+                 <strong>🔒 En curso: ${escapeHtml(t.aiLock.user)}</strong>
+                 <button type="button" class="btn-secondary btn-sm" style="min-height:28px" onclick="releaseLock('${t.id}')">Liberar Lock</button>
                </div>`
-            : `<button type="button" class="btn-secondary btn-sm" onclick="openLockModal('${t.id}')">Tomar Lock IA</button>`;
+            : `<button type="button" class="btn-secondary btn-sm" onclick="takeLock('${t.id}')">Tomar Lock IA</button>`;
 
           tr.innerHTML = `
             <td>
-              <div style="font-family:'JetBrains Mono',monospace; font-weight:600; color:var(--brand)">${t.id}</div>
-              <div style="font-size:0.73rem; color:var(--muted); margin-top:2px">${t.phase}</div>
+              <div style="font-family:'JetBrains Mono',monospace; font-weight:600; color:var(--cyan)">${t.id}</div>
+              <div style="font-size:0.72rem; color:var(--muted); margin-top:2px">${escapeHtml(t.phase)}</div>
             </td>
-            <td style="min-width:260px">
-              <div style="font-size:0.72rem; font-weight:600; color:var(--brand); text-transform:uppercase">${t.module}</div>
+            <td style="min-width:280px">
+              <div style="font-size:0.71rem; font-weight:600; color:#a5b4fc; text-transform:uppercase">${escapeHtml(t.module)}</div>
               <div class="task-title">${escapeHtml(t.title)}</div>
-              <div class="task-notes">${escapeHtml(t.notes || "")}</div>
+              <div class="rich-preview">${sanitizeRichHtml(t.notes || "")}</div>
             </td>
             <td>
               <select class="custom-select select-sm" onchange="updateTaskField('${t.id}', 'status', this.value)">
@@ -1552,7 +1445,12 @@
                 <option value="Colaborador" ${t.assignee === "Colaborador" ? "selected" : ""}>Colaborador</option>
               </select>
             </td>
-            <td style="min-width:190px">${lockHtml}</td>
+            <td style="min-width:175px">
+              <div style="display:flex; flex-direction:column; gap:6px">
+                ${lockHtml}
+                <button type="button" class="btn-secondary btn-sm" style="min-height:30px" onclick="openEditTaskModal('${t.id}')">Ver / Editar</button>
+              </div>
+            </td>
           `;
           tbody.appendChild(tr);
         });
@@ -1562,81 +1460,110 @@
         const task = state.tasks.find((t) => t.id === id);
         if (!task) return;
         task[field] = val;
-        if (field === "status" && val === "done" && task.aiLock) {
-          task.aiLock = null;
-        }
-        setDirty(true);
+        if (field === "status" && val === "done" && task.aiLock) task.aiLock = null;
+        persistLocalDraft();
         renderKpis();
         if (field === "status") renderTasks();
       }
 
-      function openLockModal(id) {
-        const task = state.tasks.find((t) => t.id === id);
-        if (!task) return;
-        document.getElementById("lockTaskId").value = id;
-        document.getElementById("lockTaskDesc").textContent = `${task.id} · ${task.title}`;
-        document.getElementById("lockFilesInput").value = "";
-        openModal("modalLock");
-      }
-
-      function confirmTakeLock(e) {
-        e.preventDefault();
-        const id = document.getElementById("lockTaskId").value;
-        const files = document
-          .getElementById("lockFilesInput")
-          .value.split(",")
-          .map((s) => s.trim())
-          .filter(Boolean);
+      function takeLock(id) {
         const task = state.tasks.find((t) => t.id === id);
         if (!task) return;
         task.aiLock = {
           user: activeActor,
-          files,
+          taskId: task.id,
           since: new Date().toISOString(),
         };
         task.status = "in_progress";
-        setDirty(true);
-        closeModal("modalLock");
+        persistLocalDraft();
         renderKpis();
         renderTasks();
-        showToast(`Lock asignado en ${id}. Recuerda guardar en GitHub.`, "warning");
+        showToast(`Tarea ${id} tomada por ${activeActor}.`, "success");
       }
 
       function releaseLock(id) {
         const task = state.tasks.find((t) => t.id === id);
         if (!task) return;
         task.aiLock = null;
-        setDirty(true);
+        persistLocalDraft();
         renderKpis();
         renderTasks();
         showToast(`Lock liberado en ${id}.`, "info");
       }
 
       function openNewTaskModal() {
-        openModal("modalNewTask");
+        document.getElementById("editingTaskId").value = "";
+        document.getElementById("taskModalTitle").textContent = "Registrar Nueva Tarea";
+        document.getElementById("btnSaveTaskForm").textContent = "Agregar Tarea";
+        document.getElementById("taskPhaseInput").value = "Fase 1 · Desarrollo (Sem 1–8)";
+        document.getElementById("taskAssigneeInput").value = "Ambos";
+        document.getElementById("taskModuleSelect").value = "Módulo 1 · Programación y QR";
+        document.getElementById("customModuleGroup").style.display = "none";
+        document.getElementById("taskModuleCustom").value = "";
+        document.getElementById("taskTitleInput").value = "";
+        document.getElementById("taskNotesEditor").innerHTML = "";
+        openModal("modalTaskForm");
       }
 
-      function saveNewTask(e) {
+      function openEditTaskModal(id) {
+        const task = state.tasks.find((t) => t.id === id);
+        if (!task) return;
+        document.getElementById("editingTaskId").value = task.id;
+        document.getElementById("taskModalTitle").textContent = `Detalle / Editar ${task.id}`;
+        document.getElementById("btnSaveTaskForm").textContent = "Guardar Cambios";
+        document.getElementById("taskPhaseInput").value = task.phase;
+        document.getElementById("taskAssigneeInput").value = task.assignee;
+        if (STANDARD_MODULES.includes(task.module)) {
+          document.getElementById("taskModuleSelect").value = task.module;
+          document.getElementById("customModuleGroup").style.display = "none";
+          document.getElementById("taskModuleCustom").value = "";
+        } else {
+          document.getElementById("taskModuleSelect").value = "Otro";
+          document.getElementById("customModuleGroup").style.display = "flex";
+          document.getElementById("taskModuleCustom").value = task.module;
+        }
+        document.getElementById("taskTitleInput").value = task.title;
+        document.getElementById("taskNotesEditor").innerHTML = sanitizeRichHtml(task.notes || "");
+        openModal("modalTaskForm");
+      }
+
+      function saveTaskForm(e) {
         e.preventDefault();
-        const nextNum = state.tasks.length + 1;
-        const id = `T-${String(nextNum).padStart(2, "0")}`;
-        state.tasks.push({
-          id,
-          phase: document.getElementById("newTaskPhase").value,
-          module: document.getElementById("newTaskModule").value.trim(),
-          title: document.getElementById("newTaskTitle").value.trim(),
-          status: "todo",
-          assignee: document.getElementById("newTaskAssignee").value,
-          priority: "media",
-          aiLock: null,
-          notes: document.getElementById("newTaskNotes").value.trim(),
-        });
-        setDirty(true);
-        closeModal("modalNewTask");
-        e.target.reset();
+        const editId = document.getElementById("editingTaskId").value;
+        const modSel = document.getElementById("taskModuleSelect").value;
+        const modVal = modSel === "Otro" ? document.getElementById("taskModuleCustom").value.trim() || "General" : modSel;
+        const cleanNotes = sanitizeRichHtml(document.getElementById("taskNotesEditor").innerHTML.trim());
+
+        if (editId) {
+          const task = state.tasks.find((t) => t.id === editId);
+          if (task) {
+            task.phase = document.getElementById("taskPhaseInput").value;
+            task.assignee = document.getElementById("taskAssigneeInput").value;
+            task.module = modVal;
+            task.title = document.getElementById("taskTitleInput").value.trim();
+            task.notes = cleanNotes;
+          }
+          showToast(`Tarea ${editId} actualizada.`, "success");
+        } else {
+          const id = `T-${String(state.tasks.length + 1).padStart(2, "0")}`;
+          state.tasks.push({
+            id,
+            phase: document.getElementById("taskPhaseInput").value,
+            module: modVal,
+            title: document.getElementById("taskTitleInput").value.trim(),
+            status: "todo",
+            assignee: document.getElementById("taskAssigneeInput").value,
+            priority: "media",
+            aiLock: null,
+            notes: cleanNotes,
+          });
+          showToast(`Tarea ${id} agregada.`, "success");
+        }
+
+        persistLocalDraft();
+        closeModal("modalTaskForm");
         renderKpis();
         renderTasks();
-        showToast(`Tarea ${id} agregada.`, "success");
       }
 
       function renderPrereqs() {
@@ -1655,10 +1582,10 @@
           div.className = "panel-card";
           div.innerHTML = `
             <div style="display:flex; justify-content:space-between; align-items:center; gap:8px; margin-bottom:8px">
-              <span style="font-family:'JetBrains Mono',monospace; font-weight:700; color:var(--brand)">${p.id} · ${escapeHtml(p.owner)}</span>
+              <span style="font-family:'JetBrains Mono',monospace; font-weight:700; color:var(--cyan)">${p.id} · ${escapeHtml(p.owner)}</span>
               <span class="pill ${badgeClass}">${p.status.toUpperCase()}</span>
             </div>
-            <h3 style="font-size:0.95rem; margin-bottom:6px">${escapeHtml(p.title)}</h3>
+            <h3 style="font-size:0.94rem; margin-bottom:6px; color:#fff">${escapeHtml(p.title)}</h3>
             <p style="font-size:0.8rem; color:var(--muted); line-height:1.45; margin-bottom:12px">${escapeHtml(p.detail)}</p>
             <div style="display:grid; grid-template-columns: 160px 1fr; gap:8px; align-items:center">
               <select class="custom-select select-sm" onchange="updatePrereq('${p.id}', 'status', this.value)">
@@ -1678,7 +1605,7 @@
         const item = state.prereqs.find((p) => p.id === id);
         if (!item) return;
         item[field] = val;
-        setDirty(true);
+        persistLocalDraft();
         renderKpis();
         if (field === "status") renderPrereqs();
       }
@@ -1694,26 +1621,21 @@
             <div class="handoff-head">
               <div>
                 <span class="pill pill-brand">${escapeHtml(h.actor)}</span>
-                <strong style="margin-left:8px; font-size:0.9rem">${escapeHtml(h.id)}</strong>
+                <strong style="margin-left:8px; font-size:0.9rem; color:#fff">${escapeHtml(h.id)}</strong>
               </div>
               <span style="font-family:'JetBrains Mono',monospace; font-size:0.74rem; color:var(--muted)">${dt}</span>
             </div>
-            <p style="font-size:0.86rem; font-weight:600; color:var(--fg); margin-bottom:8px">${escapeHtml(h.summary)}</p>
+            <p style="font-size:0.86rem; font-weight:600; color:#fff; margin-bottom:8px">${escapeHtml(h.summary)}</p>
             <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px">
               <div>
                 <span style="font-family:'JetBrains Mono',monospace; font-size:0.68rem; color:var(--ok); font-weight:700">COMPLETADO</span>
                 <ul class="handoff-list">${(h.completed || []).map((c) => `<li>${escapeHtml(c)}</li>`).join("")}</ul>
               </div>
               <div>
-                <span style="font-family:'JetBrains Mono',monospace; font-size:0.68rem; color:var(--brand); font-weight:700">SIGUIENTES PASOS</span>
+                <span style="font-family:'JetBrains Mono',monospace; font-size:0.68rem; color:var(--cyan); font-weight:700">SIGUIENTES PASOS</span>
                 <ul class="handoff-list">${(h.nextSteps || []).map((n) => `<li>${escapeHtml(n)}</li>`).join("")}</ul>
               </div>
             </div>
-            ${
-              (h.touchedFiles || []).length
-                ? `<div style="margin-top:10px; font-family:'JetBrains Mono',monospace; font-size:0.72rem; color:var(--muted)">Archivos: ${h.touchedFiles.map(escapeHtml).join(", ")}</div>`
-                : ""
-            }
           `;
           list.appendChild(div);
         });
@@ -1728,8 +1650,6 @@
         const nextId = `H-${String(state.aiHandoff.length + 1).padStart(2, "0")}`;
         const completed = document.getElementById("hoCompleted").value.split("\n").map((s) => s.trim()).filter(Boolean);
         const nextSteps = document.getElementById("hoNext").value.split("\n").map((s) => s.trim()).filter(Boolean);
-        const touchedFiles = document.getElementById("hoFiles").value.split(",").map((s) => s.trim()).filter(Boolean);
-
         state.aiHandoff.unshift({
           id: nextId,
           timestamp: new Date().toISOString(),
@@ -1737,13 +1657,13 @@
           summary: document.getElementById("hoSummary").value.trim(),
           completed,
           nextSteps,
-          touchedFiles,
+          touchedFiles: [],
         });
-        setDirty(true);
+        persistLocalDraft();
         closeModal("modalHandoff");
         e.target.reset();
         renderHandoff();
-        showToast("Handoff agregado al inicio del historial.", "success");
+        showToast("Handoff agregado al historial.", "success");
       }
 
       function renderFinance() {
@@ -1752,9 +1672,9 @@
         state.milestones.forEach((m) => {
           const tr = document.createElement("tr");
           tr.innerHTML = `
-            <td><strong>${escapeHtml(m.label)}</strong></td>
+            <td><strong style="color:#fff">${escapeHtml(m.label)}</strong></td>
             <td>${escapeHtml(m.dueRef)}</td>
-            <td style="font-family:'JetBrains Mono',monospace; font-weight:600">$${Number(m.amountMxn).toLocaleString("es-MX")} MXN</td>
+            <td style="font-family:'JetBrains Mono',monospace; font-weight:600; color:var(--cyan)">$${Number(m.amountMxn).toLocaleString("es-MX")} MXN</td>
             <td>
               <select class="custom-select select-sm" onchange="updateMilestone('${m.id}', 'status', this.value)">
                 <option value="pendiente" ${m.status === "pendiente" ? "selected" : ""}>Pendiente</option>
@@ -1773,13 +1693,13 @@
         decList.innerHTML = "";
         state.decisions.forEach((d) => {
           const div = document.createElement("div");
-          div.style.cssText = "padding:12px 14px; border:1px solid var(--border); border-radius:10px; margin-bottom:10px; background:var(--bg)";
+          div.style.cssText = "padding:12px 14px; border:1px solid var(--border); border-radius:10px; margin-bottom:10px; background:#0e121b";
           div.innerHTML = `
             <div style="display:flex; justify-content:space-between; align-items:center; gap:8px; margin-bottom:4px">
               <span class="pill pill-slate">${escapeHtml(d.id)} · ${escapeHtml(d.type.toUpperCase())}</span>
               <span style="font-family:'JetBrains Mono',monospace; font-size:0.73rem; color:var(--muted)">${escapeHtml(d.date)}</span>
             </div>
-            <strong style="font-size:0.88rem; display:block; margin-bottom:3px">${escapeHtml(d.title)}</strong>
+            <strong style="font-size:0.88rem; display:block; margin-bottom:3px; color:#fff">${escapeHtml(d.title)}</strong>
             <p style="font-size:0.8rem; color:var(--body); line-height:1.45">${escapeHtml(d.detail)}</p>
           `;
           decList.appendChild(div);
@@ -1790,7 +1710,7 @@
         const m = state.milestones.find((x) => x.id === id);
         if (!m) return;
         m[field] = val;
-        setDirty(true);
+        persistLocalDraft();
         renderKpis();
       }
 
@@ -1809,41 +1729,11 @@
           detail: document.getElementById("decDetail").value.trim(),
           status: "vigente",
         });
-        setDirty(true);
+        persistLocalDraft();
         closeModal("modalDecision");
         e.target.reset();
         renderFinance();
         showToast("Registro agregado a bitácora.", "success");
-      }
-
-      async function copyAiContext() {
-        if (!state) return;
-        const done = state.tasks.filter((t) => t.status === "done").length;
-        const locks = state.tasks.filter((t) => t.aiLock);
-        const pendingPrereqs = state.prereqs.filter((p) => p.status !== "validated");
-        const lastHo = state.aiHandoff[0];
-
-        const txt = [
-          `# CONTEXTO ACTUAL · TOMBSTONE HATS MES`,
-          `- Estatus: ${state.meta.projectStatus} | Fase: ${state.meta.currentPhase}`,
-          `- Avance tareas: ${done}/${state.tasks.length} | Arranque: ${state.meta.startDate || "Pendiente"}`,
-          `- Locks activos de IA (${locks.length}):`,
-          ...(locks.length
-            ? locks.map((l) => `  * ${l.id} (${l.aiLock.user}): archivos [${(l.aiLock.files || []).join(", ")}]`)
-            : ["  * Ninguno (vía libre)"]),
-          `- Pre-requisitos cliente pendientes (${pendingPrereqs.length}):`,
-          ...pendingPrereqs.map((p) => `  * ${p.id} [${p.status}]: ${p.title}`),
-          lastHo
-            ? `- Último Handoff (${lastHo.actor} · ${lastHo.timestamp}): ${lastHo.summary}\n  * Siguientes pasos: ${(lastHo.nextSteps || []).join(" | ")}`
-            : "- Sin handoffs previos.",
-        ].join("\n");
-
-        try {
-          await navigator.clipboard.writeText(txt);
-          showToast("Contexto copiado al portapapeles para Claude o Antigravity.", "success");
-        } catch {
-          showToast("No se pudo acceder al portapapeles del navegador.", "warning");
-        }
       }
 
       function escapeHtml(str) {
@@ -1854,7 +1744,6 @@
           .replace(/"/g, "&quot;");
       }
 
-      // Restaurar sesión previa si el usuario eligió recordar acceso
       window.addEventListener("DOMContentLoaded", async () => {
         const saved = localStorage.getItem(SESSION_KEY);
         if (!saved) return;
@@ -1862,7 +1751,6 @@
           const parsed = JSON.parse(saved);
           if (parsed && parsed.actor) {
             activeActor = parsed.actor;
-            authToken = parsed.token || "";
             const ok = await fetchFromGitHub(false);
             if (ok) {
               document.getElementById("loginView").style.display = "none";
