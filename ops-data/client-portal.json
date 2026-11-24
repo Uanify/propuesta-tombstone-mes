@@ -1,0 +1,179 @@
+{
+  "schemaVersion": "1.0.0",
+  "project": {
+    "client": "Tombstone Hats",
+    "location": "Planta Matriz · San Francisco del Rincón, Guanajuato",
+    "systemName": "Sistema MES & Tablero Andon Digital",
+    "healthStatus": "Listo para Arranque",
+    "healthTone": "info",
+    "currentPhase": "Fase 0 · Confirmación y Preparación",
+    "overallProgressPct": 10,
+    "startDate": null,
+    "targetGoLive": "12 semanas a partir del arranque",
+    "warrantySummary": "3 semanas de soporte correctivo directo post Go-Live",
+    "lastUpdated": "2026-11-24"
+  },
+  "phases": [
+    {
+      "id": "F1",
+      "name": "Fase 1 · Desarrollo e Integraciones",
+      "weeks": "Semanas 1 – 8",
+      "status": "pending",
+      "summary": "Construcción de los 7 módulos operativos, tablero Andon en vivo y puente SQL con CONTPAQi Comercial."
+    },
+    {
+      "id": "F2",
+      "name": "Fase 2 · Pruebas UAT en Planta",
+      "weeks": "Semana 9",
+      "status": "pending",
+      "summary": "Despliegue piloto en las 6 estaciones físicas con supervisores, inspectores y tarjetas viajeras QR reales."
+    },
+    {
+      "id": "F3",
+      "name": "Fase 3 · Refinamiento Operativo",
+      "weeks": "Semanas 10 – 11",
+      "status": "pending",
+      "summary": "Ajustes finos de ergonomía táctil, afinación de vistas y verificación de entradas/salidas en CONTPAQi."
+    },
+    {
+      "id": "F4",
+      "name": "Fase 4 · Capacitación y Go-Live",
+      "weeks": "Semana 12",
+      "status": "pending",
+      "summary": "Puesta en marcha oficial en nave industrial e inicio de las 3 semanas de garantía directa."
+    }
+  ],
+  "modules": [
+    {
+      "code": "M1",
+      "name": "Programación, Loteo por Producto e Impresión QR",
+      "desc": "Ingesta de pedidos CONTPAQi, fecha compromiso OTIF, loteo heredado por modelo y tarjetas QR en hoja carta.",
+      "status": "demo"
+    },
+    {
+      "code": "M2",
+      "name": "Tablero Andon en Vivo y 5 KPIs",
+      "desc": "Mapa WIP en 14 almacenes buffer, piezas producidas por área, avance hora por hora y semáforos.",
+      "status": "demo"
+    },
+    {
+      "code": "M3",
+      "name": "Terminal Táctil de Piso (T1–T6) y Modo Rampa",
+      "desc": "Escaneo óptico QR en salida, fraccionamiento de lote madre a sublotes y bitácora de paros.",
+      "status": "demo"
+    },
+    {
+      "code": "M4",
+      "name": "Filtros de Calidad C1–C5",
+      "desc": "Aprobación/rechazo y dictamen supervisado (Reproceso, Segunda o Merma) sin frenar piezas conformes.",
+      "status": "demo"
+    },
+    {
+      "code": "M5",
+      "name": "Semáforo de Subensambles (T5) y Fotos Oficiales",
+      "desc": "Control preventivo de tafiletes/toquillas por talla y visor fotográfico multiperspectiva en Adorno y C5.",
+      "status": "demo"
+    },
+    {
+      "code": "M6",
+      "name": "Pre-Nómina Automática de Destajo (Excel)",
+      "desc": "Firma de operador por escaneo, cálculo automático $/pza y exportación semanal en 1 clic.",
+      "status": "demo"
+    },
+    {
+      "code": "M7",
+      "name": "Conector Bidireccional CONTPAQi SQL ($0 SDK)",
+      "desc": "Lectura de pedidos/BOM y escritura automática de Producto Terminado (Folio MES) y descarga de MP.",
+      "status": "pending"
+    },
+    {
+      "code": "M8",
+      "name": "Implementación Cloud, UAT y Arranque en Nave",
+      "desc": "Infraestructura AWS, pruebas en piso, capacitación a personal clave y Go-Live oficial.",
+      "status": "pending"
+    }
+  ],
+  "clientInputs": [
+    {
+      "id": "IN-01",
+      "title": "Acceso local a SQL Server (CONTPAQi Comercial 11.3.1)",
+      "area": "Sistemas / Soporte CONTPAQi",
+      "detail": "Usuario dedicado en red interna de planta para vistas de lectura y procedimientos de entrada/salida.",
+      "status": "pending"
+    },
+    {
+      "id": "IN-02",
+      "title": "Cobertura Wi-Fi estable en las 6 estaciones de piso",
+      "area": "Mantenimiento / Infraestructura",
+      "detail": "Señal continua en Prensas (T1), Endopado (T2), Pintura (T3), Hidráulicas (T4), Tafiletes (T5) y Embarque (T6).",
+      "status": "pending"
+    },
+    {
+      "id": "IN-03",
+      "title": "Equipamiento de 6 estaciones táctiles (Tablets Android 11\")",
+      "area": "Compras / Administración",
+      "detail": "6 tablets con cámara trasera, fundas de uso rudo y soportes articulados conforme a la ficha técnica sugerida.",
+      "status": "pending"
+    },
+    {
+      "id": "IN-04",
+      "title": "Reglas de loteo por producto y rutas de fabricación",
+      "area": "Ingeniería de Planta",
+      "detail": "Confirmación del tamaño de lote madre y sublotes por modelo para precarga automática en catálogo.",
+      "status": "pending"
+    },
+    {
+      "id": "IN-05",
+      "title": "Padrón de operadores y tarifas fijas de destajo ($/pza)",
+      "area": "Recursos Humanos / Ingeniería",
+      "detail": "Listado oficial de operadores por departamento y tarifa por operación para el corte semanal a Excel.",
+      "status": "pending"
+    },
+    {
+      "id": "IN-06",
+      "title": "Fotografías oficiales de muestras autorizadas",
+      "area": "Calidad / Adorno",
+      "detail": "Imágenes en varios ángulos por modelo (copa, falda, toquilla, herraje) para cotejo visual en pantalla.",
+      "status": "pending"
+    }
+  ],
+  "agreements": [
+    {
+      "date": "Noviembre 2026",
+      "title": "Loteo y sublotes heredados automáticamente desde el Producto",
+      "detail": "La subdivisión en lotes y sublotes se configura en la ficha de cada sombrero; cada orden de producción nace ya segmentada sin captura repetitiva."
+    },
+    {
+      "date": "Noviembre 2026",
+      "title": "Integración directa con CONTPAQi Comercial 11 sin costo en licencias SDK",
+      "detail": "Conexión en red local mediante vistas y procedimientos almacenados en SQL Server, insertando el Folio del Lote MES en observaciones."
+    },
+    {
+      "date": "Noviembre 2026",
+      "title": "5 Filtros de Calidad (C1–C5) sin detener el avance de piezas conformes",
+      "detail": "El inspector aprueba o rechaza; Supervisión dictamina Reproceso, Segunda o Merma con causa raíz mientras el resto del lote sigue a empaque."
+    },
+    {
+      "date": "Noviembre 2026",
+      "title": "Operación en Turno Único y Cero Login para Operarios",
+      "detail": "El acceso con PIN de 4 dígitos aplica para Ingeniería, Supervisores e Inspectores; el destajo se acredita con la firma del supervisor en cada escaneo."
+    }
+  ],
+  "nextMeeting": {
+    "title": "Sesión de Arranque (Kickoff) y Validación de Accesos",
+    "schedule": "Por definir al confirmar inicio del proyecto",
+    "location": "Planta Matriz · San Francisco del Rincón o Videollamada",
+    "agenda": [
+      "Confirmación formal de fecha de arranque (Semana 1) y calendario de 12 semanas.",
+      "Revisión de accesos al servidor local SQL Server de CONTPAQi Comercial 11.3.1.",
+      "Validación final de puntos de Wi-Fi y especificación de compra de las 6 tablets."
+    ]
+  },
+  "contact": {
+    "company": "Uanify · Ingeniería de Software Industrial",
+    "email": "contacto@uanify.com",
+    "whatsappUrl": "https://wa.me/?text=Hola%20equipo%20Uanify%2C%20me%20comunico%20en%20seguimiento%20al%20portal%20del%20proyecto%20MES%20Tombstone%20Hats.",
+    "demoUrl": "https://uanify.github.io/uanify-mes-sombreros/",
+    "proposalUrl": "https://uanify.github.io/propuesta-tombstone-mes/"
+  }
+}

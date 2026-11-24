@@ -1,0 +1,793 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="robots" content="noindex, nofollow" />
+    <title>Portal de Seguimiento · Sistema MES Tombstone Hats</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&family=Outfit:wght@500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        --bg: #f8fafc;
+        --surface: #ffffff;
+        --soft: #f5f2ee;
+        --fg: #0f172a;
+        --body: #334155;
+        --muted: #64748b;
+        --border: #e2e8f0;
+        --brand: #8b5e3c;
+        --brand-dark: #6f492e;
+        --brand-soft: rgba(139, 94, 60, 0.1);
+        --ok: #15803d;
+        --ok-bg: #dcfce7;
+        --warn: #b45309;
+        --warn-bg: #fef3c7;
+        --info: #1d4ed8;
+        --info-bg: #dbeafe;
+      }
+
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+
+      html,
+      body {
+        background: var(--bg);
+        color: var(--fg);
+        font-family: "Inter", system-ui, -apple-system, sans-serif;
+        overflow-x: hidden;
+        min-height: 100vh;
+      }
+
+      a,
+      button,
+      .sub-tab-btn {
+        cursor: pointer !important;
+      }
+
+      .page-wrap {
+        max-width: 1220px;
+        margin: 0 auto;
+        padding: 24px 20px 64px;
+      }
+
+      /* 1. HERO EJECUTIVO DE ESTADO */
+      .hero-card {
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-top: 4px solid var(--brand);
+        border-radius: 18px;
+        padding: 26px 28px;
+        box-shadow: 0 18px 42px -28px rgba(15, 23, 42, 0.18);
+        margin-bottom: 20px;
+      }
+      .hero-top {
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+        gap: 18px;
+        flex-wrap: wrap;
+        margin-bottom: 20px;
+      }
+      .eyebrow {
+        font-family: "JetBrains Mono", monospace;
+        font-size: 0.7rem;
+        text-transform: uppercase;
+        letter-spacing: 0.14em;
+        color: var(--brand);
+        font-weight: 600;
+        margin-bottom: 6px;
+      }
+      .hero-title {
+        font-family: "Outfit", sans-serif;
+        font-size: clamp(1.55rem, 3vw, 2.2rem);
+        font-weight: 700;
+        letter-spacing: -0.025em;
+        color: var(--fg);
+        line-height: 1.1;
+      }
+      .hero-sub {
+        font-size: 0.88rem;
+        color: var(--muted);
+        margin-top: 6px;
+      }
+
+      .pill {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 5px 12px;
+        border-radius: 999px;
+        font-family: "JetBrains Mono", monospace;
+        font-size: 0.71rem;
+        font-weight: 600;
+      }
+      .pill-brand {
+        background: var(--brand-soft);
+        color: var(--brand);
+      }
+      .pill-ok {
+        background: var(--ok-bg);
+        color: var(--ok);
+      }
+      .pill-warn {
+        background: var(--warn-bg);
+        color: var(--warn);
+      }
+      .pill-info {
+        background: var(--info-bg);
+        color: var(--info);
+      }
+      .pill-slate {
+        background: #f1f5f9;
+        color: var(--body);
+        border: 1px solid var(--border);
+      }
+
+      .hero-metrics {
+        display: grid;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        gap: 14px;
+        padding-top: 18px;
+        border-top: 1px solid var(--border);
+      }
+      .metric-box {
+        background: var(--bg);
+        border: 1px solid var(--border);
+        border-radius: 12px;
+        padding: 14px 16px;
+      }
+      .metric-label {
+        font-family: "JetBrains Mono", monospace;
+        font-size: 0.66rem;
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+        color: var(--muted);
+      }
+      .metric-val {
+        font-family: "Outfit", sans-serif;
+        font-size: 1.35rem;
+        font-weight: 700;
+        color: var(--fg);
+        margin-top: 4px;
+      }
+      .metric-sub {
+        font-size: 0.76rem;
+        color: var(--muted);
+        margin-top: 2px;
+      }
+      .progress-track {
+        width: 100%;
+        height: 7px;
+        background: #e2e8f0;
+        border-radius: 999px;
+        overflow: hidden;
+        margin-top: 8px;
+      }
+      .progress-fill {
+        height: 100%;
+        background: var(--brand);
+        transition: width 0.3s ease;
+      }
+
+      /* NAVEGACIÓN POR SUB-PESTAÑAS */
+      .sub-nav-tabs {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+        padding-bottom: 6px;
+        margin-bottom: 18px;
+      }
+      .sub-tab-btn {
+        min-height: 44px;
+        padding: 0 18px;
+        border-radius: 11px;
+        border: 1px solid var(--border);
+        background: var(--surface);
+        color: var(--body);
+        font-family: "Inter", sans-serif;
+        font-size: 0.85rem;
+        font-weight: 600;
+        white-space: nowrap;
+        transition: all 0.18s;
+      }
+      .sub-tab-btn:hover {
+        border-color: var(--brand);
+        color: var(--brand);
+      }
+      .sub-tab-btn.active {
+        background: var(--brand);
+        border-color: var(--brand);
+        color: #ffffff;
+      }
+      .sub-tab-content {
+        display: none;
+      }
+      .sub-tab-content.active {
+        display: block;
+      }
+
+      /* BOTONES ESTANDARIZADOS */
+      .btn-primary,
+      .btn-secondary {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 7px;
+        min-height: 42px;
+        padding: 0 16px;
+        border-radius: 10px;
+        font-size: 0.83rem;
+        font-weight: 600;
+        text-decoration: none;
+        border: 1px solid transparent;
+        transition: all 0.18s;
+        white-space: nowrap;
+      }
+      .btn-primary {
+        background: var(--brand);
+        color: #ffffff;
+      }
+      .btn-primary:hover {
+        background: var(--brand-dark);
+      }
+      .btn-secondary {
+        background: #ffffff;
+        color: var(--fg);
+        border-color: var(--border);
+      }
+      .btn-secondary:hover {
+        background: var(--soft);
+        border-color: #cbd5e1;
+      }
+
+      /* CARDS & GRIDS */
+      .section-card {
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: 16px;
+        padding: 22px 24px;
+        margin-bottom: 16px;
+      }
+      .section-heading {
+        font-family: "Outfit", sans-serif;
+        font-size: 1.15rem;
+        font-weight: 700;
+        color: var(--fg);
+        margin-bottom: 4px;
+      }
+      .section-desc {
+        font-size: 0.84rem;
+        color: var(--muted);
+        margin-bottom: 16px;
+        line-height: 1.48;
+      }
+
+      .grid-4 {
+        display: grid;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        gap: 14px;
+      }
+      .grid-2 {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 14px;
+      }
+
+      .item-card {
+        background: var(--bg);
+        border: 1px solid var(--border);
+        border-radius: 13px;
+        padding: 16px 18px;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        gap: 10px;
+      }
+      .item-card.white {
+        background: #ffffff;
+      }
+      .item-title {
+        font-size: 0.94rem;
+        font-weight: 600;
+        color: var(--fg);
+        line-height: 1.3;
+      }
+      .item-text {
+        font-size: 0.81rem;
+        color: var(--muted);
+        line-height: 1.48;
+      }
+
+      /* BANNER CONTACTO UANIFY (BLOQUE 7) */
+      .support-banner {
+        background: #1e1b18;
+        color: #f8fafc;
+        border-radius: 16px;
+        padding: 22px 26px;
+        margin-top: 22px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 18px;
+        flex-wrap: wrap;
+      }
+      .support-banner h2 {
+        font-family: "Outfit", sans-serif;
+        font-size: 1.18rem;
+        margin-bottom: 4px;
+      }
+      .support-banner p {
+        font-size: 0.84rem;
+        color: #cbd5e1;
+      }
+
+      /* MODALES (ESTRUCTURA 4 PARTES) */
+      .modal-backdrop {
+        position: fixed;
+        inset: 0;
+        background: rgba(15, 23, 42, 0.55);
+        backdrop-filter: blur(3px);
+        display: none;
+        align-items: center;
+        justify-content: center;
+        padding: 16px;
+        z-index: 300;
+      }
+      .modal-backdrop.active {
+        display: flex;
+      }
+      .modal-box {
+        width: 100%;
+        max-width: 600px;
+        max-height: 90vh;
+        background: #ffffff;
+        border-radius: 16px;
+        border: 1px solid var(--border);
+        box-shadow: 0 24px 60px rgba(15, 23, 42, 0.28);
+        display: flex;
+        flex-direction: column;
+        overflow: hidden;
+      }
+      .modal-header {
+        padding: 16px 20px;
+        border-bottom: 1px solid var(--border);
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        flex-shrink: 0;
+      }
+      .modal-header h3 {
+        font-family: "Outfit", sans-serif;
+        font-size: 1.08rem;
+        font-weight: 700;
+      }
+      .modal-close {
+        width: 34px;
+        height: 34px;
+        border-radius: 8px;
+        border: 1px solid var(--border);
+        background: #ffffff;
+        color: var(--fg);
+      }
+      .modal-body {
+        padding: 18px 20px;
+        overflow-y: auto;
+        overflow-x: hidden;
+        font-size: 0.86rem;
+        color: var(--body);
+        line-height: 1.55;
+      }
+      .modal-footer {
+        padding: 14px 20px;
+        border-top: 1px solid var(--border);
+        background: var(--bg);
+        display: flex;
+        justify-content: flex-end;
+        flex-shrink: 0;
+      }
+      .spec-list {
+        padding-left: 18px;
+        margin-top: 8px;
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+      }
+
+      @media (max-width: 960px) {
+        .hero-metrics,
+        .grid-4,
+        .grid-2 {
+          grid-template-columns: 1fr;
+        }
+        .hero-card,
+        .section-card {
+          padding: 18px 16px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="page-wrap">
+      <!-- BLOQUE 1: RESUMEN EJECUTIVO DE ESTADO -->
+      <header class="hero-card">
+        <div class="hero-top">
+          <div>
+            <div class="eyebrow">Portal de Seguimiento del Proyecto · Uanify</div>
+            <h1 class="hero-title" id="projTitle">Sistema MES &amp; Tablero Andon Digital</h1>
+            <p class="hero-sub" id="projLocation">Tombstone Hats · Planta Matriz · San Francisco del Rincón, Guanajuato</p>
+          </div>
+          <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap">
+            <span class="pill pill-info" id="healthPill">Listo para Arranque</span>
+            <span class="pill pill-slate" id="updatedPill">Actualizado: —</span>
+          </div>
+        </div>
+
+        <div class="hero-metrics">
+          <div class="metric-box">
+            <div class="metric-label">Avance General</div>
+            <div class="metric-val" id="metricPct">10%</div>
+            <div class="progress-track"><div class="progress-fill" id="metricBar" style="width: 10%"></div></div>
+          </div>
+          <div class="metric-box">
+            <div class="metric-label">Etapa Actual</div>
+            <div class="metric-val" style="font-size: 1.05rem; margin-top: 6px" id="metricPhase">Fase 0 · Preparación</div>
+            <div class="metric-sub">Plan integral de 12 semanas</div>
+          </div>
+          <div class="metric-box">
+            <div class="metric-label">Meta de Puesta en Marcha</div>
+            <div class="metric-val" style="font-size: 1.05rem; margin-top: 6px" id="metricGoLive">12 semanas desde arranque</div>
+            <div class="metric-sub" id="metricWarranty">Incluye 3 semanas de garantía directa</div>
+          </div>
+          <div class="metric-box">
+            <div class="metric-label">Insumos de Planta</div>
+            <div class="metric-val" id="metricInputs">0 / 6</div>
+            <div class="metric-sub">Pre-requisitos listos para arranque</div>
+          </div>
+        </div>
+      </header>
+
+      <!-- NAVEGACIÓN POR SUB-PESTAÑAS -->
+      <nav class="sub-nav-tabs" aria-label="Secciones del portal del cliente">
+        <button type="button" class="sub-tab-btn active" onclick="switchTab('roadmap', this)">
+          1. Fases y Módulos del Sistema
+        </button>
+        <button type="button" class="sub-tab-btn" onclick="switchTab('inputs', this)">
+          2. Qué Necesitamos de Planta (6)
+        </button>
+        <button type="button" class="sub-tab-btn" onclick="switchTab('resources', this)">
+          3. Centro de Accesos y Guías
+        </button>
+        <button type="button" class="sub-tab-btn" onclick="switchTab('agreements', this)">
+          4. Acuerdos y Próxima Sesión
+        </button>
+      </nav>
+
+      <!-- BLOQUE 2: LÍNEA DE TIEMPO DE 4 FASES Y 8 MÓDULOS -->
+      <section id="tab-roadmap" class="sub-tab-content active">
+        <div class="section-card">
+          <h2 class="section-heading">Ruta de Implementación (12 Semanas)</h2>
+          <p class="section-desc">Seguimiento visual de las 4 etapas desde el arranque hasta la puesta en marcha oficial en piso.</p>
+          <div id="phasesGrid" class="grid-4"></div>
+        </div>
+
+        <div class="section-card">
+          <h2 class="section-heading">Estado de los 8 Módulos del Sistema MES</h2>
+          <p class="section-desc">Transparencia en vivo sobre el avance de cada módulo incluido en el alcance acordado.</p>
+          <div id="modulesGrid" class="grid-2"></div>
+        </div>
+      </section>
+
+      <!-- BLOQUE 4: PENDIENTES DEL CLIENTE -->
+      <section id="tab-inputs" class="sub-tab-content">
+        <div class="section-card">
+          <h2 class="section-heading">Insumos de Planta para Avanzar sin Contratiempos</h2>
+          <p class="section-desc">
+            Estos 6 puntos nos permiten conectar el sistema a su operación real y cumplir puntualmente con las 12 semanas del cronograma.
+          </p>
+          <div id="inputsGrid" class="grid-2"></div>
+        </div>
+      </section>
+
+      <!-- BLOQUE 5: CENTRO DE ACCESOS Y RECURSOS OFICIALES -->
+      <section id="tab-resources" class="sub-tab-content">
+        <div class="section-card">
+          <h2 class="section-heading">Centro de Accesos y Recursos Oficiales</h2>
+          <p class="section-desc">Todos los accesos, guías rápidas y fichas técnicas del proyecto reunidos en un solo lugar.</p>
+
+          <div class="grid-2">
+            <article class="item-card white">
+              <div>
+                <span class="pill pill-brand">Entorno Interactivo</span>
+                <h3 class="item-title" style="margin-top: 8px">Demo Funcional del Sistema MES en Vivo</h3>
+                <p class="item-text" style="margin-top: 4px">
+                  Explora el Tablero Andon de 5 KPIs, la Terminal Táctil de Piso, el Modo Rampa y el Padrón de Operadores.
+                </p>
+              </div>
+              <a id="linkDemo" href="https://uanify.github.io/uanify-mes-sombreros/" target="_blank" rel="noopener noreferrer" class="btn-primary">
+                Abrir Demo en Vivo ↗
+              </a>
+            </article>
+
+            <article class="item-card white">
+              <div>
+                <span class="pill pill-brand">Documentación Comercial</span>
+                <h3 class="item-title" style="margin-top: 8px">Presentación Interactiva y Propuesta Completa</h3>
+                <p class="item-text" style="margin-top: 4px">
+                  Consulta las 7 láminas ejecutivas, el documento formal íntegro y el simulador de módulos.
+                </p>
+              </div>
+              <a id="linkProposal" href="https://uanify.github.io/propuesta-tombstone-mes/" target="_blank" rel="noopener noreferrer" class="btn-secondary">
+                Ver Presentación y Propuesta ↗
+              </a>
+            </article>
+
+            <article class="item-card white">
+              <div>
+                <span class="pill pill-info">Referencia de Compras</span>
+                <h3 class="item-title" style="margin-top: 8px">Ficha Técnica de Hardware para 6 Estaciones</h3>
+                <p class="item-text" style="margin-top: 4px">
+                  Especificaciones recomendadas de las 6 tablets Android 11", fundas de uso rudo y soportes de mesa para adquirir sin errores.
+                </p>
+              </div>
+              <button type="button" class="btn-secondary" onclick="openModal('modalHardware')">
+                Consultar Ficha de Hardware
+              </button>
+            </article>
+
+            <article class="item-card white">
+              <div>
+                <span class="pill pill-ok">Capacitación de Planta</span>
+                <h3 class="item-title" style="margin-top: 8px">Guía Rápida de Operación por Rol (3 Perfiles)</h3>
+                <p class="item-text" style="margin-top: 4px">
+                  Resumen práctico de 1 minuto sobre qué hace Ingeniería, Supervisión y Calidad en la operación diaria.
+                </p>
+              </div>
+              <button type="button" class="btn-secondary" onclick="openModal('modalRoles')">
+                Ver Guía Rápida por Rol
+              </button>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <!-- BLOQUE 6: ACUERDOS VALIDADOS Y PRÓXIMA SESIÓN -->
+      <section id="tab-agreements" class="sub-tab-content">
+        <div class="section-card">
+          <div style="display: flex; align-items: center; justify-content: space-between; gap: 10px; flex-wrap: wrap; margin-bottom: 10px">
+            <h2 class="section-heading" style="margin: 0">Próxima Sesión de Seguimiento</h2>
+            <span class="pill pill-brand" id="nextMeetingSchedule">Por definir</span>
+          </div>
+          <p class="item-title" id="nextMeetingTitle" style="margin-bottom: 4px">—</p>
+          <p class="item-text" id="nextMeetingLocation" style="margin-bottom: 10px">—</p>
+          <ul id="nextMeetingAgenda" class="spec-list" style="font-size: 0.84rem; color: var(--body)"></ul>
+        </div>
+
+        <div class="section-card">
+          <h2 class="section-heading">Acuerdos Operativos Validados</h2>
+          <p class="section-desc">Decisiones de proceso confirmadas para asegurar que el software refleje exactamente la operación de la fábrica.</p>
+          <div id="agreementsGrid" class="grid-2"></div>
+        </div>
+      </section>
+
+      <!-- BLOQUE 7: CONTACTO Y SOPORTE DIRECTO UANIFY -->
+      <footer class="support-banner">
+        <div>
+          <h2>¿Alguna duda o comentario sobre el avance del proyecto?</h2>
+          <p id="supportCompany">Equipo de Ingeniería de Software · Uanify · Atención directa a Dirección e Ingeniería de Planta</p>
+        </div>
+        <div style="display: flex; gap: 10px; flex-wrap: wrap">
+          <a id="btnWhatsApp" href="#" target="_blank" rel="noopener noreferrer" class="btn-primary">
+            Escribir por WhatsApp ↗
+          </a>
+          <a id="btnEmail" href="mailto:contacto@uanify.com" class="btn-secondary">
+            Enviar Correo
+          </a>
+        </div>
+      </footer>
+    </div>
+
+    <!-- MODAL: FICHA TÉCNICA DE HARDWARE -->
+    <div id="modalHardware" class="modal-backdrop">
+      <div class="modal-box">
+        <div class="modal-header">
+          <h3>Ficha Técnica de Hardware · 6 Estaciones (T1–T6)</h3>
+          <button type="button" class="modal-close" onclick="closeModal('modalHardware')">✕</button>
+        </div>
+        <div class="modal-body">
+          <p><strong>Equipamiento recomendado para adquisición directa por planta:</strong></p>
+          <ul class="spec-list">
+            <li><strong>6 Tablets Android de 11" (Opción recomendada: Xiaomi Redmi Pad SE 11" o Samsung Galaxy Tab A9+):</strong> Mínimo 4 GB RAM, 128 GB almacenamiento, Wi-Fi doble banda 5 GHz y cámara trasera con autoenfoque para lectura ágil de códigos QR.</li>
+            <li><strong>6 Fundas de Uso Rudo Industrial:</strong> Carcasa antichoque tricapa con soporte rotativo 360° y correa de sujeción para manejo seguro en piso.</li>
+            <li><strong>6 Soportes Articulados Metálicos de Mesa:</strong> Fijación firme en mesas de Prensas (T1), Endopado (T2), Pintura (T3), Hidráulicas/Rampa (T4), Tafiletes (T5) y Embarque (T6).</li>
+            <li><strong>Impresión de Tarjetas Viajeras:</strong> Se utiliza la impresora láser de oficina existente en hoja tamaño carta estándar (no se requieren impresoras térmicas ni etiquetas especiales).</li>
+          </ul>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn-primary" onclick="closeModal('modalHardware')">Entendido</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- MODAL: GUÍA RÁPIDA POR ROL -->
+    <div id="modalRoles" class="modal-backdrop">
+      <div class="modal-box">
+        <div class="modal-header">
+          <h3>Guía Rápida de Operación por Perfil (PIN 4 Dígitos)</h3>
+          <button type="button" class="modal-close" onclick="closeModal('modalRoles')">✕</button>
+        </div>
+        <div class="modal-body">
+          <ul class="spec-list">
+            <li><strong>1. Ingeniería / Dirección (Admin Mayor):</strong> Sincroniza pedidos desde CONTPAQi en 1 clic, asigna fechas compromiso, emite e imprime las hojas carta de tarjetas viajeras QR (con loteo heredado por producto), audita los 5 KPIs en el Tablero Andon y descarga la pre-nómina de destajo en Excel los viernes.</li>
+            <li><strong>2. Supervisores de Planta:</strong> Ingresan con su PIN de 4 dígitos, escanean el QR al depositar lotes en el almacén intermedio, seleccionan al operador responsable (firma de destajo), fraccionan torres en Modo Rampa (T4), registran paros con cronómetro y dictaminan reprocesos/segundas.</li>
+            <li><strong>3. Inspectores de Calidad:</strong> Acceden únicamente a los filtros C1 a C5, comparan físicamente el sombrero contra las fotografías oficiales en pantalla y eligen <em>Aprobar</em> o <em>Rechazar</em>.</li>
+            <li><strong>Operadores de Máquina:</strong> No requieren login, usuario ni teléfono en planta; su producción queda acreditada automáticamente con cada escaneo de salida.</li>
+          </ul>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn-primary" onclick="closeModal('modalRoles')">Cerrar</button>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      function switchTab(tabId, btnEl) {
+        document.querySelectorAll(".sub-tab-btn").forEach((b) => b.classList.remove("active"));
+        document.querySelectorAll(".sub-tab-content").forEach((c) => c.classList.remove("active"));
+        btnEl.classList.add("active");
+        document.getElementById(`tab-${tabId}`).classList.add("active");
+      }
+
+      function openModal(id) {
+        document.getElementById(id).classList.add("active");
+      }
+      function closeModal(id) {
+        document.getElementById(id).classList.remove("active");
+      }
+
+      function escapeHtml(str) {
+        return String(str)
+          .replace(/&/g, "&amp;")
+          .replace(/</g, "&lt;")
+          .replace(/>/g, "&gt;")
+          .replace(/"/g, "&quot;");
+      }
+
+      function statusBadge(status) {
+        const map = {
+          done: { text: "Aprobado en Planta", cls: "pill-ok" },
+          approved: { text: "Aprobado en Planta", cls: "pill-ok" },
+          validated: { text: "Recibido ✓", cls: "pill-ok" },
+          received: { text: "En Revisión", cls: "pill-info" },
+          demo: { text: "Listo en Demo", cls: "pill-info" },
+          in_progress: { text: "En Construcción", cls: "pill-warn" },
+          pending: { text: "Pendiente", cls: "pill-slate" },
+        };
+        const cfg = map[status] || { text: status, cls: "pill-slate" };
+        return `<span class="pill ${cfg.cls}">${cfg.text}</span>`;
+      }
+
+      function renderPortal(data) {
+        const p = data.project;
+        document.getElementById("projTitle").textContent = p.systemName;
+        document.getElementById("projLocation").textContent = `${p.client} · ${p.location}`;
+        document.getElementById("healthPill").textContent = p.healthStatus;
+        document.getElementById("updatedPill").textContent = `Actualizado: ${p.lastUpdated}`;
+
+        document.getElementById("metricPct").textContent = `${p.overallProgressPct}%`;
+        document.getElementById("metricBar").style.width = `${p.overallProgressPct}%`;
+        document.getElementById("metricPhase").textContent = p.currentPhase;
+        document.getElementById("metricGoLive").textContent = p.targetGoLive;
+        document.getElementById("metricWarranty").textContent = p.warrantySummary;
+
+        const readyInputs = data.clientInputs.filter((i) => i.status === "validated").length;
+        document.getElementById("metricInputs").textContent = `${readyInputs} / ${data.clientInputs.length}`;
+
+        // Phases
+        document.getElementById("phasesGrid").innerHTML = data.phases
+          .map(
+            (ph) => `
+          <article class="item-card">
+            <div>
+              <div style="display:flex; justify-content:space-between; align-items:center; gap:6px; margin-bottom:8px">
+                <span class="pill pill-brand">${escapeHtml(ph.weeks)}</span>
+                ${statusBadge(ph.status)}
+              </div>
+              <h3 class="item-title">${escapeHtml(ph.name)}</h3>
+              <p class="item-text" style="margin-top:6px">${escapeHtml(ph.summary)}</p>
+            </div>
+          </article>
+        `
+          )
+          .join("");
+
+        // Modules
+        document.getElementById("modulesGrid").innerHTML = data.modules
+          .map(
+            (m) => `
+          <article class="item-card white">
+            <div>
+              <div style="display:flex; justify-content:space-between; align-items:center; gap:8px; margin-bottom:8px">
+                <span style="font-family:'JetBrains Mono',monospace; font-weight:700; color:var(--brand)">${escapeHtml(m.code)}</span>
+                ${statusBadge(m.status)}
+              </div>
+              <h3 class="item-title">${escapeHtml(m.name)}</h3>
+              <p class="item-text" style="margin-top:4px">${escapeHtml(m.desc)}</p>
+            </div>
+          </article>
+        `
+          )
+          .join("");
+
+        // Client Inputs
+        document.getElementById("inputsGrid").innerHTML = data.clientInputs
+          .map(
+            (inp) => `
+          <article class="item-card white">
+            <div>
+              <div style="display:flex; justify-content:space-between; align-items:center; gap:8px; margin-bottom:8px">
+                <span style="font-family:'JetBrains Mono',monospace; font-size:0.72rem; color:var(--brand); font-weight:700">${escapeHtml(inp.area)}</span>
+                ${statusBadge(inp.status)}
+              </div>
+              <h3 class="item-title">${escapeHtml(inp.title)}</h3>
+              <p class="item-text" style="margin-top:4px">${escapeHtml(inp.detail)}</p>
+            </div>
+          </article>
+        `
+          )
+          .join("");
+
+        // Next Meeting & Agreements
+        const nm = data.nextMeeting;
+        document.getElementById("nextMeetingSchedule").textContent = nm.schedule;
+        document.getElementById("nextMeetingTitle").textContent = nm.title;
+        document.getElementById("nextMeetingLocation").textContent = nm.location;
+        document.getElementById("nextMeetingAgenda").innerHTML = nm.agenda.map((a) => `<li>${escapeHtml(a)}</li>`).join("");
+
+        document.getElementById("agreementsGrid").innerHTML = data.agreements
+          .map(
+            (ag) => `
+          <article class="item-card">
+            <div>
+              <span class="pill pill-slate" style="margin-bottom:8px">${escapeHtml(ag.date)}</span>
+              <h3 class="item-title">${escapeHtml(ag.title)}</h3>
+              <p class="item-text" style="margin-top:4px">${escapeHtml(ag.detail)}</p>
+            </div>
+          </article>
+        `
+          )
+          .join("");
+
+        // Links & Contact
+        if (data.contact) {
+          document.getElementById("supportCompany").textContent = `${data.contact.company} · Atención directa a Dirección e Ingeniería de Planta`;
+          document.getElementById("linkDemo").href = data.contact.demoUrl;
+          document.getElementById("linkProposal").href = data.contact.proposalUrl;
+          document.getElementById("btnWhatsApp").href = data.contact.whatsappUrl;
+          document.getElementById("btnEmail").href = `mailto:${data.contact.email}?subject=Seguimiento%20Sistema%20MES%20Tombstone%20Hats`;
+        }
+      }
+
+      window.addEventListener("DOMContentLoaded", async () => {
+        try {
+          const res = await fetch(`./ops-data/client-portal.json?t=${Date.now()}`);
+          if (res.ok) {
+            const data = await res.json();
+            renderPortal(data);
+          }
+        } catch {
+          // Mantiene vista base si se abre localmente sin servidor HTTP
+        }
+      });
+    </script>
+  </body>
+</html>
