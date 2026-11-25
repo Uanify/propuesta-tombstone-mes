@@ -1414,14 +1414,14 @@
 
             <div class="stat-card col-4" style="background: #ffffff">
               <span class="badge">02 · Cloud Hosting (AWS)</span>
-              <div class="big-stat">~$1,200</div>
+              <div class="big-stat">≈ $1,200</div>
               <div class="stat-title">MXN / mes (Pago Directo Cloud)</div>
-              <p class="stat-desc">Instancia de aplicación, PostgreSQL gestionada con respaldos diarios cifrados, bucket S3 para fotos y SSL incluido.</p>
+              <p class="stat-desc">Servidor ≈ $560 + Base de datos con respaldos ≈ $480 + Fotos de fichas técnicas ≈ $160 + SSL incluido, facturado directo a Tombstone.</p>
               <div class="chip-list" style="margin-top: 4px">
-                <span class="chip">AWS EC2 / Container</span>
-                <span class="chip">PostgreSQL + Snapshots</span>
-                <span class="chip">AWS S3 Fotos</span>
-                <span class="chip">HTTPS / SSL</span>
+                <span class="chip">Servidor ≈ $560</span>
+                <span class="chip">BD + Backups ≈ $480</span>
+                <span class="chip">Fotos S3 ≈ $160</span>
+                <span class="chip">SSL Incluido</span>
               </div>
             </div>
 
@@ -1595,8 +1595,8 @@
                 <div style="display: flex; align-items: center; gap: 11px">
                   <input type="checkbox" checked onchange="recalcQuote()" id="mod5" data-price="20000" data-kind="hw" />
                   <div>
-                    <strong style="color: #ffffff; font-size: 0.87rem">Hardware Base: 6 Estaciones Táctiles (T1–T6)</strong>
-                    <p style="font-size: 0.73rem; color: #d6cec5">6 Tablets Android 11" + fundas uso rudo + soportes de mesa (adquiribles directo por planta).</p>
+                    <strong style="color: #ffffff; font-size: 0.87rem">Hardware Base: 6 Estaciones Táctiles ($20,000 aprox.)</strong>
+                    <p style="font-size: 0.73rem; color: #d6cec5">Opción A: 6 tablets Android 11" con cámara trasera (Opción B: sumar lectores 2D en estaciones clave).</p>
                   </div>
                 </div>
                 <span class="mono-price" style="color: var(--primary-on-dark)">+$20,000 MXN</span>
@@ -1606,16 +1606,16 @@
             <div class="quote-box col-5">
               <div style="display: flex; align-items: center; justify-content: space-between">
                 <span class="badge">Inversión Inicial Estimada</span>
-                <span style="font-family: 'JetBrains Mono', monospace; font-size: 0.67rem; color: var(--muted)">+ IVA · Llave en Mano</span>
+                <span style="font-family: 'JetBrains Mono', monospace; font-size: 0.67rem; color: var(--muted)">MXN + IVA · Llave en Mano</span>
               </div>
               <div class="quote-total" id="totalAmount">$130,000 MXN</div>
               <p style="font-size: 0.77rem; color: var(--muted); font-weight: 500" id="packageLabel">
-                MVP Integral ($110,000 Software + $20,000 Hardware 6 Tablets)
+                MVP Integral ($110,000 Software + $20,000 aprox. Hardware 6 Tablets)
               </p>
 
               <div style="margin-top: 14px; padding-top: 12px; border-top: 1px solid var(--border)">
                 <div style="font-family: 'JetBrains Mono', monospace; font-size: 0.62rem; text-transform: uppercase; letter-spacing: 0.11em; color: var(--muted); margin-bottom: 7px">
-                  Esquema de Pagos sobre Desarrollo (<span id="swSubLabel">$110,000 MXN</span>)
+                  Esquema Sugerido sobre Desarrollo (<span id="swSubLabel">$110,000 MXN</span>)
                 </div>
                 <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px">
                   <div style="background: #ffffff; border: 1px solid var(--border); padding: 9px 10px; border-radius: 11px">
@@ -1635,16 +1635,19 @@
 
               <div style="margin-top: 14px; display: flex; flex-direction: column; gap: 7px; font-size: 0.75rem; color: var(--body)">
                 <div style="display: flex; justify-content: space-between; border-bottom: 1px solid var(--border); padding-bottom: 5px">
-                  <span>Licencias SDK CONTPAQi Comercial</span>
-                  <strong style="color: var(--ok)">$0 MXN (Puente SQL)</strong>
+                  <span>Póliza de mantenimiento y soporte</span>
+                  <strong>$6,000 MXN / mes</strong>
                 </div>
                 <div style="display: flex; justify-content: space-between; border-bottom: 1px solid var(--border); padding-bottom: 5px">
-                  <span>Infraestructura Cloud AWS (pago directo)</span>
-                  <strong>~$1,200 MXN / mes</strong>
+                  <span>Operación en la nube (pago directo)</span>
+                  <strong>≈ $1,200 MXN / mes</strong>
                 </div>
-                <div style="display: flex; justify-content: space-between">
-                  <span>Póliza Soporte Uanify (opcional post-garantía)</span>
-                  <strong style="color: var(--primary)">$6,000 MXN / mes</strong>
+                <div style="display: flex; justify-content: space-between; border-bottom: 1px solid var(--border); padding-bottom: 5px">
+                  <span>Total mensual post-garantía (3 sem)</span>
+                  <strong style="color: var(--primary)">$7,200 MXN / mes</strong>
+                </div>
+                <div style="font-size: 0.7rem; color: var(--muted); line-height: 1.35">
+                  Cambios fuera de póliza se cotizan por alcance (costos por hora varían por año). Servicios de Uanify más IVA.
                 </div>
               </div>
             </div>
@@ -1894,8 +1897,8 @@
                 </tr>
                 <tr class="total-row">
                   <td><strong>Total Estimado de Operación Cloud</strong></td>
-                  <td><em>Facturado directo por el proveedor cloud a Tombstone Hats</em></td>
-                  <td class="num-col" style="color: var(--primary)">$45 – $80 USD / mes<br /><small>(~$900 – $1,600 MXN)</small></td>
+                  <td><em>Servidor ≈ $560 · Base de datos con respaldos ≈ $480 · Fotos S3 ≈ $160 · SSL incluido (facturado directo a Tombstone)</em></td>
+                  <td class="num-col" style="color: var(--primary)">≈ $1,200 MXN / mes<br /><small>($45 – $80 USD)</small></td>
                 </tr>
               </tbody>
             </table>
@@ -2022,8 +2025,8 @@
               <tbody>
                 <tr>
                   <td><strong>Pago Único (Proyecto Inicial)</strong></td>
-                  <td>Desarrollo completo del MVP de Software<br />Hardware base recomendado: 6 Tablets Android 11" + fundas uso rudo + soportes <em>(adquisición directa opcional)</em></td>
-                  <td class="num-col">$110,000 MXN<br />$20,000 MXN</td>
+                  <td>Desarrollo completo del MVP de Software<br />Hardware base: 6 Tablets Android 11" (Opción A con cámara trasera; Opción B opcional con lectores 2D)</td>
+                  <td class="num-col">$110,000 MXN<br />$20,000 aprox.</td>
                 </tr>
                 <tr class="total-row">
                   <td><strong>TOTAL INICIAL DE INVERSIÓN</strong></td>
@@ -2033,15 +2036,20 @@
                 <tr>
                   <td><strong>Mensual (Post-Garantía)</strong></td>
                   <td>Póliza opcional de mantenimiento y soporte técnico Uanify<br />Operación estimada de infraestructura en la nube AWS <em>(pago directo a proveedor)</em></td>
-                  <td class="num-col">$6,000 MXN / mes<br />~$1,200 MXN / mes</td>
+                  <td class="num-col">$6,000 MXN / mes<br />≈ $1,200 MXN / mes</td>
+                </tr>
+                <tr class="total-row">
+                  <td><strong>TOTAL AL MES</strong></td>
+                  <td><strong>Continuidad operativa, soporte Uanify e infraestructura cloud</strong></td>
+                  <td class="num-col" style="color: var(--primary)">$7,200 MXN / mes</td>
                 </tr>
               </tbody>
             </table>
           </div>
 
           <ul class="doc-list">
-            <li><strong>Esquema de Pagos sobre Desarrollo de Software ($110,000 MXN + IVA):</strong> <strong>40% Anticipo</strong> al arranque de Fase 1 ($44,000 MXN) · <strong>30% al iniciar UAT en Planta</strong> en Semana 9 ($33,000 MXN) · <strong>30% Contra Entrega y Go-Live</strong> en Semana 12 ($33,000 MXN).</li>
-            <li><strong>Alcance de la Póliza Opcional ($6,000 MXN + IVA / mes, inicia tras las 3 semanas de garantía):</strong> Incluye monitoreo proactivo de servidor y puente SQL CONTPAQi, respaldos diarios cifrados en nube, optimización de consultas para escaneo en <code>&lt;1s</code>, mesa de ayuda prioritaria vía WhatsApp/llamada para Ingeniería y Supervisores, y ajustes menores continuos en vistas táctiles y tarjetas QR. Nuevos módulos estructurales se cotizan por alcance acordado.</li>
+            <li><strong>Esquema Sugerido de Pagos sobre Desarrollo ($110,000 MXN + IVA):</strong> <strong>40% Anticipo</strong> al arranque de Fase 1 ($44,000 MXN) · <strong>30% al iniciar UAT en Planta</strong> en Semana 9 ($33,000 MXN) · <strong>30% Contra Entrega y Go-Live</strong> en Semana 12 ($33,000 MXN).</li>
+            <li><strong>Alcance de la Póliza Opcional ($6,000 MXN + IVA / mes, inicia tras las 3 semanas de garantía):</strong> Incluye monitoreo proactivo de servidor y puente SQL CONTPAQi, respaldos diarios cifrados en nube, optimización de consultas para escaneo en <code>&lt;1s</code>, mesa de ayuda prioritaria vía WhatsApp/llamada para Ingeniería y Supervisores, y ajustes menores continuos en vistas táctiles y tarjetas QR. Cambios estructurales o desarrollos fuera de póliza se cotizan por alcance (los costos por hora varían por año).</li>
           </ul>
         </div>
       </article>

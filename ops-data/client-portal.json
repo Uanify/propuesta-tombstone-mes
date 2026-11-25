@@ -96,44 +96,44 @@
   "clientInputs": [
     {
       "id": "IN-01",
-      "title": "Acceso local a SQL Server (CONTPAQi Comercial 11.3.1)",
-      "area": "Sistemas / Soporte CONTPAQi",
-      "detail": "Usuario dedicado en red interna de planta para vistas de lectura y procedimientos de entrada/salida.",
+      "title": "Wi-Fi estable en la nave (6 estaciones)",
+      "area": "Mantenimiento / Infraestructura",
+      "detail": "El sistema opera 100% en línea: sin red, el WIP no se actualiza entre almacenes (T1 Prensas, T2 Endopado, T3 Pintura, T4 Hidráulicas/Rampa, T5 Tafiletes y T6 Embarque).",
       "status": "pending"
     },
     {
       "id": "IN-02",
-      "title": "Cobertura Wi-Fi estable en las 6 estaciones de piso",
-      "area": "Mantenimiento / Infraestructura",
-      "detail": "Señal continua en Prensas (T1), Endopado (T2), Pintura (T3), Hidráulicas (T4), Tafiletes (T5) y Embarque (T6).",
+      "title": "6 tablets (Opción A) o lectores 2D (Opción B)",
+      "area": "Compras / Administración",
+      "detail": "Opción A: 6 tablets Android 11\" con cámara trasera para leer QR, fundas de uso rudo y soportes (aprox. $20,000 MXN). Opción B: lectores ópticos industriales 2D en estaciones clave.",
       "status": "pending"
     },
     {
       "id": "IN-03",
-      "title": "Equipamiento de 6 estaciones táctiles (Tablets Android 11\")",
-      "area": "Compras / Administración",
-      "detail": "6 tablets con cámara trasera, fundas de uso rudo y soportes articulados conforme a la ficha técnica sugerida.",
+      "title": "Acceso local a SQL Server (CONTPAQi Comercial 11.3.1)",
+      "area": "Sistemas / Soporte CONTPAQi",
+      "detail": "Usuario dedicado en el servidor de CONTPAQi para el puente local (vistas de pedidos/BOM y escritura de producto terminado/MP sin licencias SDK).",
       "status": "pending"
     },
     {
       "id": "IN-04",
-      "title": "Reglas de loteo por producto y rutas de fabricación",
-      "area": "Ingeniería de Planta",
-      "detail": "Confirmación del tamaño de lote madre y sublotes por modelo para precarga automática en catálogo.",
+      "title": "Fotos de muestras oficiales",
+      "area": "Calidad / Adorno",
+      "detail": "Por modelo y desde varios ángulos (armado, toquilla, herraje, doblado) para integrar las fichas técnicas visuales en Adorno e Inspección Final.",
       "status": "pending"
     },
     {
       "id": "IN-05",
-      "title": "Padrón de operadores y tarifas fijas de destajo ($/pza)",
+      "title": "Tarifas, padrón y loteo por sombrero",
       "area": "Recursos Humanos / Ingeniería",
-      "detail": "Listado oficial de operadores por departamento y tarifa por operación para el corte semanal a Excel.",
+      "detail": "Operadores fijos por área, tarifa fija por pieza ($/pza) de cada operación del sombrero y tamaño de lotes/sublotes por producto.",
       "status": "pending"
     },
     {
       "id": "IN-06",
-      "title": "Fotografías oficiales de muestras autorizadas",
-      "area": "Calidad / Adorno",
-      "detail": "Imágenes en varios ángulos por modelo (copa, falda, toquilla, herraje) para cotejo visual en pantalla.",
+      "title": "Usuarios clave para pruebas en planta (UAT)",
+      "area": "Ingeniería / Supervisión / Calidad",
+      "detail": "Supervisores e inspectores designados para validar el recorrido físico, filtros C1–C5 y tarjetas QR en las pruebas piloto (Semana 9).",
       "status": "pending"
     }
   ],
@@ -164,9 +164,9 @@
     "schedule": "Por definir al confirmar inicio del proyecto",
     "location": "Planta Matriz · San Francisco del Rincón o Videollamada",
     "agenda": [
-      "Confirmación formal de fecha de arranque (Semana 1) y calendario de 12 semanas.",
-      "Revisión de accesos al servidor local SQL Server de CONTPAQi Comercial 11.3.1.",
-      "Validación final de puntos de Wi-Fi y especificación de compra de las 6 tablets."
+      "1. Validar el recorrido: revisar con supervisores que los puntos de escaneo y filtros C1–C5 coinciden con la operación real.",
+      "2. Elegir Opción A o B: solo 6 tablets con cámara trasera, o tablets más lectores QR industriales 2D.",
+      "3. Confirmar accesos a SQL Server, catálogos/loteo por sombrero, tarifas y fotos para arrancar Fase 1."
     ]
   },
   "contact": {

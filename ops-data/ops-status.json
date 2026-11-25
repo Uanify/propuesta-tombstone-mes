@@ -19,51 +19,51 @@
   "prereqs": [
     {
       "id": "PR-01",
+      "title": "Wi-Fi estable en la nave (6 estaciones T1–T6)",
+      "detail": "El sistema trabaja 100% en línea: sin red, el WIP no se actualiza entre almacenes.",
+      "status": "pending",
+      "owner": "Cliente · Planta",
+      "notes": "Sin modo offline."
+    },
+    {
+      "id": "PR-02",
+      "title": "6 tablets (Opción A) o lectores industriales 2D (Opción B)",
+      "detail": "Opción A: 6 tablets Android 11\" con cámara trasera (~$20,000 MXN aprox.). Opción B: lectores QR 2D en estaciones clave.",
+      "status": "pending",
+      "owner": "Cliente · Compras",
+      "notes": "Confirmar Opción A o B antes del Kickoff."
+    },
+    {
+      "id": "PR-03",
       "title": "Acceso a Microsoft SQL Server (CONTPAQi Comercial 11.3.1)",
-      "detail": "Usuario dedicado en red LAN con permisos de lectura de pedidos/BOM y ejecución de SPs para entrada PT y salida MP.",
+      "detail": "Usuario dedicado en el servidor de CONTPAQi para el puente local (lectura pedidos/BOM y escritura PT/MP sin licencias SDK).",
       "status": "pending",
       "owner": "Cliente · TI / Soporte CONTPAQi",
       "notes": "Indispensable para iniciar integración real del Módulo 7."
     },
     {
-      "id": "PR-02",
-      "title": "Cobertura Wi-Fi estable en las 6 estaciones de nave",
-      "detail": "Validar señal continua en T1 Prensas, T2 Endopado, T3 Pintura, T4 Hidráulicas/Rampa, T5 Tafiletes y T6 Embarque.",
-      "status": "pending",
-      "owner": "Cliente · Planta",
-      "notes": "El sistema opera 100% en línea sin modo offline."
-    },
-    {
-      "id": "PR-03",
-      "title": "Adquisición de 6 Tablets Android 11\" + Fundas Uso Rudo + Soportes",
-      "detail": "Hardware base para estaciones T1–T6 con cámara trasera funcional para lectura QR ($20,000 MXN est.).",
-      "status": "pending",
-      "owner": "Cliente · Compras",
-      "notes": "Entregar ficha técnica recomendada al confirmar arranque."
-    },
-    {
       "id": "PR-04",
-      "title": "Catálogo de Productos y Reglas de Subdivisión (Lotes / Sublotes)",
-      "detail": "Definir por modelo/producto el tamaño de lote madre (ej. 60 pzas) y cantidad de sublotes (ej. 4 x 15 pzas) + rutas.",
+      "title": "Fotos de muestras oficiales multiperspectiva",
+      "detail": "Por modelo y desde varios ángulos (armado, toquilla, herraje, doblado) para fichas técnicas y AWS S3.",
       "status": "pending",
-      "owner": "Cliente · Ingeniería",
-      "notes": "La subdivisión ahora se hereda automáticamente desde el producto."
+      "owner": "Cliente · Calidad / Adorno",
+      "notes": "Habilita cotejo visual en Adorno y C5."
     },
     {
       "id": "PR-05",
-      "title": "Padrón oficial de 108 Operadores y Tarifas de Destajo ($/pza)",
-      "detail": "Lista con No. nómina, nombre, departamento fijo, máquina asignada y tarifa fija en pesos por operación.",
+      "title": "Tarifas, padrón de 108 operadores y loteo por sombrero",
+      "detail": "Operadores por área, tarifa fija por pieza ($/pza) de cada operación y tamaño de lotes/sublotes por producto.",
       "status": "pending",
       "owner": "Cliente · RH / Ingeniería",
-      "notes": "Necesario para alimentar el Módulo 6 (Pre-nómina de viernes)."
+      "notes": "Loteo heredado por producto + alimentación del Módulo 6 (Destajo)."
     },
     {
       "id": "PR-06",
-      "title": "Fotografías oficiales multiperspectiva de muestras autorizadas",
-      "detail": "Fotos por modelo (frente, copa, falda, toquilla, herraje, tafilete) para cargar al bucket AWS S3.",
+      "title": "Usuarios clave designados para pruebas en planta (UAT)",
+      "detail": "Supervisores e inspectores de calidad disponibles en Semana 9 para validar recorrido, filtros C1–C5 y tarjetas QR.",
       "status": "pending",
-      "owner": "Cliente · Calidad / Adorno",
-      "notes": "Para habilitar las fichas técnicas visuales en Adorno y C5."
+      "owner": "Cliente · Ingeniería / Supervisión",
+      "notes": "Requerido para Fase 2 (Pruebas UAT en Planta)."
     }
   ],
   "tasks": [
